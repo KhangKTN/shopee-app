@@ -1,21 +1,18 @@
-import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup'
+import { useForm } from 'react-hook-form'
 import { Link } from 'react-router-dom'
-import { rules } from '~/utils/validateField';
-
-interface FormData {
-    email: string,
-    password: string
-}
+import Input from '~/components/Input'
+import { loginSchema } from '~/utils/validateField'
 
 const Login = () => {
     const {
         handleSubmit,
         register,
         formState: { errors }
-    } = useForm<FormData>() 
+    } = useForm<loginSchema>({ resolver: yupResolver(loginSchema) })
 
     const onSubmit = handleSubmit(data => {
-        console.log(data);
+        console.log(data)
     })
 
     return (
@@ -23,25 +20,22 @@ const Login = () => {
             <div className='mb-6'>
                 <h6 className='text-2xl'>Sign in</h6>
             </div>
-            <div className='w-full mb-1'>
-                <input
-                    className='w-full border-gray-400 border-[1px] px-4 py-2 outline-none rounded focus:border-gray-500 focus:shadow'
-                    type='text'
-                    placeholder='Email/Số điện thoại/Tên đăng nhập'
-                    {...register('email', rules().email)}
-                    autoFocus
-                />
-                <p className='error'>{errors?.email?.message}</p>
-            </div>
-            <div className='w-full mb-1'>
-                <input
-                    className='w-full border-gray-400 border-[1px] px-4 py-2 outline-none rounded focus:border-gray-500 focus:shadow'
-                    type='password'
-                    placeholder='Mật khẩu'
-                    {...register('password', rules().password)}
-                />
-                <p className='error'>{errors?.password?.message}</p>
-            </div>
+            <Input
+                name='email'
+                register={register}
+                type='text'
+                placeholder='Email/Số điện thoại/Tên đăng nhập'
+                errorMsg={errors?.email?.message}
+                autoComplete={'email'}
+            />
+            <Input
+                name='password'
+                register={register}
+                type='password'
+                placeholder='Mật khẩu'
+                errorMsg={errors?.password?.message}
+                autoComplete={'on'}
+            />
             <div className='w-full mb-3'>
                 <button className='w-full uppercase bg-primary py-2 px-4 text-white rounded'>Đăng nhập</button>
             </div>
