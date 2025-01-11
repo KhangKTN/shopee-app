@@ -1,18 +1,43 @@
 import { yupResolver } from '@hookform/resolvers/yup'
+import { useMutation } from '@tanstack/react-query'
 import { useForm } from 'react-hook-form'
 import { Link } from 'react-router-dom'
+import { loginAccount } from '~/apis/auth.api'
 import Input from '~/components/Input'
-import { loginSchema } from '~/utils/validateField'
+import { isAxiosUnprocessaleEntityError } from '~/utils/helper'
+import { loginSchema, LoginSchema } from '~/utils/validateField'
 
 const Login = () => {
     const {
         handleSubmit,
         register,
+        setError,
         formState: { errors }
-    } = useForm<loginSchema>({ resolver: yupResolver(loginSchema) })
+    } = useForm<LoginSchema>({ resolver: yupResolver(loginSchema) })
 
-    const onSubmit = handleSubmit(data => {
-        console.log(data)
+    const loginMutation = useMutation({
+        mutationFn: (body: LoginSchema) => loginAccount(body)
+    })
+
+    const onSubmit = handleSubmit(loginData => {
+        loginMutation.mutate(loginData, {
+            onSuccess: data => {
+                console.log(data)
+            },
+            onError: error => {
+                if (isAxiosUnprocessaleEntityError<ResponseApi<LoginSchema>>(error)) {
+                    const formError = error.response?.data.data
+                    if (!formError) {
+                        return
+                    }
+                    for (const i in formError) {
+                        setError(i as keyof LoginSchema, {
+                            message: formError[i as keyof LoginSchema]
+                        })
+                    }
+                }
+            }
+        })
     })
 
     return (

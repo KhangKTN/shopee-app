@@ -1,3 +1,4 @@
+import { ToastContainer } from "react-toastify"
 import useRouteCompenent from "./hooks/useRouteCompenent"
 
 const App = () => {
@@ -6,6 +7,7 @@ const App = () => {
     return (
         <div>
             {routeComponent}
+            <ToastContainer theme='dark' newestOnTop />
         </div>
     )
 }

@@ -1,9 +1,9 @@
 import { RegisterOptions, UseFormGetValues } from 'react-hook-form'
 import * as Yup from 'yup'
 
-/* 
-* Define schema object use Yup
-*/
+/**
+ * Define schema object use Yup
+ */
 export const registerSchema = Yup.object({
     email: Yup.string()
         .email('Email định dạng không hợp lệ')
@@ -26,16 +26,17 @@ export const registerSchema = Yup.object({
 
 export const loginSchema = registerSchema.omit(['confirm_password'])
 
-/* 
-* Export type schemas
-*/
-export type registerSchema = Yup.InferType<typeof registerSchema>
-export type loginSchema = Yup.InferType<typeof loginSchema>
 
-/* 
-* Define rules for form input
-* Use what is available in the react-hook-form library 
-*/
+/**
+ * Export type schemas
+ */
+export type RegisterSchema = Yup.InferType<typeof registerSchema>
+export type LoginSchema = Yup.InferType<typeof loginSchema>
+
+/**
+ * Define rules for form input
+ * Use what is available in the react-hook-form library 
+ */
 type Rules = { [key in 'email' | 'password' | 'confirm_password']?: RegisterOptions }
 
 export const rules = (getValues?: UseFormGetValues<any>): Rules => ({
