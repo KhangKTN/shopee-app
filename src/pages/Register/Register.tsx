@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom'
 import { registerAccount } from '~/apis/auth.api'
 import Input from '~/components/Input'
 import { isAxiosUnprocessaleEntityError } from '~/utils/helper'
-import { RegisterSchema } from '~/utils/validateField'
+import { registerSchema, RegisterSchema } from '~/utils/validateField'
 
 const Register = () => {
     const {
@@ -14,7 +14,7 @@ const Register = () => {
         register,
         setError,
         formState: { errors }
-    } = useForm<RegisterSchema>({ resolver: yupResolver(RegisterSchema) })
+    } = useForm<RegisterSchema>({ resolver: yupResolver(registerSchema) })
 
     const registerMutation = useMutation({
         mutationFn: (body: Omit<RegisterSchema, 'confirm_password'>) => registerAccount(body)
