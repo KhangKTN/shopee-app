@@ -1,30 +1,9 @@
-import { arrow, FloatingArrow, FloatingPortal, shift, useFloating } from '@floating-ui/react'
-import { AnimatePresence } from 'framer-motion'
-import { motion } from 'motion/react'
-import { useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
+import Popover from '../Popover/Popover'
 
-
+const popoverItemClass = 'py-2 px-3 hover:text-primary hover:bg-slate-100 w-full text-left'
 
 const Header = () => {
-    const [open, setOpen] = useState(true)
-    const arrowRef = useRef(null);
-    const { refs, context, strategy, x, y, middlewareData } = useFloating({
-        open,
-        onOpenChange: setOpen,
-        placement: 'bottom-end',
-        middleware: [
-            arrow({
-                element: arrowRef
-            }),
-            shift()
-        ]
-    })
-
-    const setShowPopover = (status: boolean) => {
-        setOpen(status)
-    }
-
     return (
         <div className='py-2 px-16 bg-primary text-white'>
             <div className='flex justify-between align-items-center'>
@@ -48,48 +27,34 @@ const Header = () => {
                         <i className='fa-solid fa-circle-info text-lg'></i>
                         <span>Hỗ trợ</span>
                     </div>
-                    <button
-                        ref={refs.setReference}
-                        className='flex gap-x-1 mx-2 items-center'
-                        onMouseEnter={() => setShowPopover(true)}
-                        onMouseLeave={() => setShowPopover(false)}
+                    {/* Choose language */}
+                    <Popover
+                        popover={
+                            <>
+                                <button className={popoverItemClass}>Tiếng Việt</button>
+                                <button className={popoverItemClass}>English</button>
+                            </>
+                        }
                     >
-                        <i className='fa-solid fa-globe text-lg'></i>
-                        <span>Tiếng Việt</span>
-                        <i className='fa-solid fa-angle-down'></i>
-                        <FloatingPortal>
-                            <AnimatePresence>
-                                {open && (
-                                    <motion.div
-                                        className='flex flex-col w-[200px] items-start bg-white'
-                                        style={{
-                                            position: strategy,
-                                            top: y ?? 0,
-                                            left: x ?? 0,
-                                            transformOrigin: `${middlewareData.arrow?.x}px top`
-                                        }}
-                                        ref={refs.setFloating}
-                                        initial={{ opacity: 0, transform: 'scale(0)' }}
-                                        animate={{ opacity: 1, transform: 'scale(1)' }}
-                                        exit={{ opacity: 0, transform: 'scale(0)' }}
-                                        transition={{ duration: 0.2 }}
-                                    >
-                                        <button className='py-2 px-3 hover:text-primary w-full text-left'>
-                                            Tiếng Việt
-                                        </button>
-                                        <button className='py-2 px-3 hover:text-primary w-full text-left'>
-                                            English
-                                        </button>
-                                        <FloatingArrow fill='white' ref={arrowRef} context={context} />
-                                    </motion.div>
-                                )}
-                            </AnimatePresence>
-                        </FloatingPortal>
-                    </button>
-                    <div className='flex gap-x-1 items-center'>
+                        <>
+                            <i className='fa-solid fa-globe text-lg'></i>
+                            <span>Tiếng Việt</span>
+                            <i className='fa-solid fa-angle-down'></i>
+                        </>
+                    </Popover>
+                    {/* Account option */}
+                    <Popover
+                        popover={
+                            <>
+                                <Link to='' className={popoverItemClass}>Cài đặt</Link>
+                                <Link to='' className={popoverItemClass}>Đơn hàng</Link>
+                                <button className={popoverItemClass}>Đăng xuất</button>
+                            </>
+                        }
+                    >
                         <i className='fa-solid fa-circle-user text-lg'></i>
                         <span>Account</span>
-                    </div>
+                    </Popover>
                 </div>
             </div>
             <div className='flex gap-x-8 items-end py-4'>
