@@ -1,4 +1,4 @@
-import { arrow, FloatingArrow, FloatingPortal, shift, useFloating } from '@floating-ui/react'
+import { arrow, FloatingArrow, FloatingPortal, type Placement, shift, useFloating } from '@floating-ui/react'
 import { AnimatePresence } from 'framer-motion'
 import { motion } from 'motion/react'
 import React, { ElementType, useRef, useState } from 'react'
@@ -7,22 +7,17 @@ interface Props {
     children: React.ReactNode,
     popover: React.ReactNode,
     className?: string,
-    as?: ElementType
+    as?: ElementType,
+    initStatus?: boolean,
+    position?: Placement
 }
 
-const Popover = ({ children, className, popover, as: Element = 'div' }: Props) => {
-    const [open, setOpen] = useState<boolean>(false)
+const Popover = ({ children, className, popover, as: Element = 'button', initStatus, position }: Props) => {
+    const [open, setOpen] = useState<boolean>(initStatus ?? false)
     const arrowRef = useRef(null)
     const { refs, context, strategy, x, y, middlewareData } = useFloating({
-        open,
-        onOpenChange: setOpen,
-        placement: 'bottom-end',
-        middleware: [
-            arrow({
-                element: arrowRef
-            }),
-            shift()
-        ]
+        placement: position ?? 'bottom-end',
+        middleware: [arrow({ element: arrowRef }), shift()]
     })
 
     const setShowPopover = (status: boolean) => {
@@ -41,7 +36,7 @@ const Popover = ({ children, className, popover, as: Element = 'div' }: Props) =
                 <AnimatePresence>
                     {open && (
                         <motion.div
-                            className='flex flex-col w-[150px] items-start bg-white font-semibold shadow rounded-sm overflow-hidden border'
+                            className='flex flex-col items-start bg-white font-semibold shadow rounded-sm border'
                             style={{
                                 position: strategy,
                                 top: y ?? 0,

@@ -3,6 +3,31 @@ import Popover from '../Popover/Popover'
 
 const popoverItemClass = 'py-2 px-3 hover:text-primary hover:bg-slate-100 w-full text-left'
 
+interface Product {
+    img: string,
+    name: string,
+    quantity?: number,
+    price: number
+}
+
+const sampleProductList: Product[] = [
+    {
+        img: 'https://down-vn.img.susercontent.com/file/vn-11134207-7r98o-lzyl06aja7v1d3@resize_w900_nl.webp',
+        name: 'Giá Huỷ Diệt - Mẫu M -Nhớt Xe số, xe côn GW GULF WESTERN OIL - 100% SYNTHETIC SAE 5W40 ESTER PAO BLEND Dung Tích 1000ML',
+        price: 189000
+    },
+    {
+        img: 'https://down-vn.img.susercontent.com/file/vn-11134207-7r98o-lsur44rvxnkp44.webp',
+        name: 'Nhớt Repsol Moto Racing 10w-40 1L dùng cho xe số và xe côn tay',
+        price: 235000
+    },
+    {
+        img: 'https://down-vn.img.susercontent.com/file/23c748f0df4f43674a847bf77d6a759c.webp',
+        name: 'Xịt Dưỡng Sên Voltronic IX50 400ml',
+        price: 220000
+    }
+]
+
 const Header = () => {
     return (
         <div className='py-2 px-16 bg-primary text-white'>
@@ -29,27 +54,30 @@ const Header = () => {
                     </div>
                     {/* Choose language */}
                     <Popover
+                    position='bottom-start'
                         popover={
-                            <>
+                            <div className='w-[200px]'>
                                 <button className={popoverItemClass}>Tiếng Việt</button>
                                 <button className={popoverItemClass}>English</button>
-                            </>
+                            </div>
                         }
                     >
-                        <>
-                            <i className='fa-solid fa-globe text-lg'></i>
-                            <span>Tiếng Việt</span>
-                            <i className='fa-solid fa-angle-down'></i>
-                        </>
+                        <i className='fa-solid fa-globe text-lg'></i>
+                        <span>Tiếng Việt</span>
+                        <i className='fa-solid fa-angle-down'></i>
                     </Popover>
                     {/* Account option */}
                     <Popover
                         popover={
-                            <>
-                                <Link to='' className={popoverItemClass}>Cài đặt</Link>
-                                <Link to='' className={popoverItemClass}>Đơn hàng</Link>
+                            <div className='w-[150px] flex flex-col'>
+                                <Link to='' className={popoverItemClass}>
+                                    Cài đặt
+                                </Link>
+                                <Link to='' type='button' className={popoverItemClass}>
+                                    Đơn hàng
+                                </Link>
                                 <button className={popoverItemClass}>Đăng xuất</button>
-                            </>
+                            </div>
                         }
                     >
                         <i className='fa-solid fa-circle-user text-lg'></i>
@@ -73,9 +101,39 @@ const Header = () => {
                         <i className='fa-solid fa-magnifying-glass'></i>
                     </button>
                 </form>
-                <Link to='' className='min-w-[60px]'>
-                    <i className='fa-solid fa-cart-shopping text-2xl'></i>
-                </Link>
+                <Popover
+                initStatus={true}
+                    popover={
+                        <div className='w-[400px] min-h-[240px] bg-white rounded-sm p-3'>
+                            <div className='mb-3 text-gray-400'>Sản phẩm mới thêm</div>
+                            {sampleProductList?.length > 0 ? (
+                                <div className=''>
+                                    {sampleProductList.map((item, idx) => (
+                                        <div className='flex gap-x-3'>
+                                            <img className='size-[60px]' src={item.img} alt={`product_${idx}`} />
+                                            <span className='overflow-hidden truncate flex-1'>{item.name}</span>
+                                            <span className='text-primary w-1/5 text-right'>đ{item.price}</span>
+                                        </div>
+                                    ))}
+                                    <div className='mt-3 flex justify-between items-center'>
+                                        <span>1 thêm vào giỏ</span>
+                                        <button className='px-4 py-2 text-white rounded bg-primary ml-auto block'>
+                                            Xem giỏ hàng
+                                        </button>
+                                    </div>
+                                </div>
+                            ) : (
+                                <div className='w-full h-[240px] flex min-h-full items-center justify-center'>
+                                    <span>Chưa có sản phẩm nào</span>
+                                </div>
+                            )}
+                        </div>
+                    }
+                >
+                    <Link to='' className='min-w-[60px]'>
+                        <i className='fa-solid fa-cart-shopping text-2xl'></i>
+                    </Link>
+                </Popover>
             </div>
         </div>
     )
