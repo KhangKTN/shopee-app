@@ -5,4 +5,6 @@ const registerAccount = (body: { email: string, password: string }) => axiosConf
 
 const loginAccount = (body: LoginSchema) => axiosConfig.post<AuthRes>('/login', body)
 
-export { registerAccount, loginAccount }
+const logout = () => axiosConfig.post('/logout')
+
+export default { registerAccount, loginAccount, logout }

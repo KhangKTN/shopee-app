@@ -2,13 +2,14 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { useMutation } from '@tanstack/react-query'
 import _ from 'lodash'
 import { useForm } from 'react-hook-form'
-import { Link } from 'react-router-dom'
-import { registerAccount } from '~/apis/auth.api'
+import { Link, useNavigate } from 'react-router-dom'
+import authApi from '~/apis/auth.api'
 import Input from '~/components/Input'
 import { isAxiosUnprocessaleEntityError } from '~/utils/helper'
 import { registerSchema, RegisterSchema } from '~/utils/validateField'
 
 const Register = () => {
+    const navigate = useNavigate()
     const {
         handleSubmit,
         register,
@@ -17,17 +18,17 @@ const Register = () => {
     } = useForm<RegisterSchema>({ resolver: yupResolver(registerSchema) })
 
     const registerMutation = useMutation({
-        mutationFn: (body: Omit<RegisterSchema, 'confirm_password'>) => registerAccount(body)
+        mutationFn: (body: Omit<RegisterSchema, 'confirm_password'>) => authApi.registerAccount(body)
     })
 
     const onSubmit = handleSubmit(data => {
         const registerData = _.omit(data, ['confirm_password'])
         registerMutation.mutate(registerData, {
-            onSuccess: data => {
-                console.log(data)
+            onSuccess: () => {
+                navigate('/login')
             },
             onError: error => {
-                if (isAxiosUnprocessaleEntityError<ResponseApi<Omit<RegisterSchema, 'confirm_password'>>>(error)) {
+                if (isAxiosUnprocessaleEntityError<ErrorResponse<Omit<RegisterSchema, 'confirm_password'>>>(error)) {
                     const formError = error.response?.data.data
                     if (!formError) {
                         return

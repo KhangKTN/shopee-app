@@ -1,6 +1,8 @@
-import { Link } from 'react-router-dom'
+import { Link, useMatch } from 'react-router-dom';
 
 const RegisterHeader = () => {
+    const match  = useMatch('/register')
+
     return (
         <header className='w-full py-5'>
             <div className='max-w-7xl w-[80%] mx-auto flex justify-between items-center'>
@@ -12,7 +14,7 @@ const RegisterHeader = () => {
                             </g>
                         </svg>
                     </Link>
-                    <span className='text-2xl'>Sign in</span>
+                    <span className='text-2xl'>{match ? 'Đăng ký' : 'Đăng nhập'}</span>
                 </div>
                 <a href='http://'>Help?</a>
             </div>

@@ -1,13 +1,17 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useMutation } from '@tanstack/react-query'
+import { useContext } from 'react'
 import { useForm } from 'react-hook-form'
-import { Link } from 'react-router-dom'
-import { loginAccount } from '~/apis/auth.api'
+import { Link, useNavigate } from 'react-router-dom'
+import authApi from '~/apis/auth.api'
 import Input from '~/components/Input'
+import { AppContext } from '~/contexts/app.context'
 import { isAxiosUnprocessaleEntityError } from '~/utils/helper'
 import { loginSchema, LoginSchema } from '~/utils/validateField'
 
 const Login = () => {
+    const { setAuthenticated } = useContext(AppContext)
+    const navigate = useNavigate()
     const {
         handleSubmit,
         register,
@@ -16,16 +20,17 @@ const Login = () => {
     } = useForm<LoginSchema>({ resolver: yupResolver(loginSchema) })
 
     const loginMutation = useMutation({
-        mutationFn: (body: LoginSchema) => loginAccount(body)
+        mutationFn: (body: LoginSchema) => authApi.loginAccount(body)
     })
 
     const onSubmit = handleSubmit(loginData => {
         loginMutation.mutate(loginData, {
-            onSuccess: data => {
-                console.log(data)
+            onSuccess: () => {
+                setAuthenticated(true)
+                navigate('/')
             },
             onError: error => {
-                if (isAxiosUnprocessaleEntityError<ResponseApi<LoginSchema>>(error)) {
+                if (isAxiosUnprocessaleEntityError<ErrorResponse<LoginSchema>>(error)) {
                     const formError = error.response?.data.data
                     if (!formError) {
                         return
