@@ -4,7 +4,9 @@ import _ from 'lodash'
 import { useForm } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router-dom'
 import authApi from '~/apis/auth.api'
+import Button from '~/components/Button/Button'
 import Input from '~/components/Input'
+import path from '~/constant/path'
 import { isAxiosUnprocessaleEntityError } from '~/utils/helper'
 import { registerSchema, RegisterSchema } from '~/utils/validateField'
 
@@ -25,7 +27,7 @@ const Register = () => {
         const registerData = _.omit(data, ['confirm_password'])
         registerMutation.mutate(registerData, {
             onSuccess: () => {
-                navigate('/login')
+                navigate(path.LOGIN)
             },
             onError: error => {
                 if (isAxiosUnprocessaleEntityError<ErrorResponse<Omit<RegisterSchema, 'confirm_password'>>>(error)) {
@@ -71,12 +73,21 @@ const Register = () => {
                 type='password'
                 placeholder='Xác nhận mật khẩu'
                 errorMsg={errors?.confirm_password?.message}
-                autoComplete={'on'}
+                autoComplete='on'
             />
             <div className='w-full mb-3'>
-                <button className='w-full uppercase bg-primary py-2 px-4 text-white rounded'>Tiếp theo</button>
+                <Button
+                    children='Tiếp theo'
+                    className='w-full uppercase bg-primary py-2 px-4 text-white rounded'
+                    isLoading={registerMutation.isPending}
+                    disabled={registerMutation.isPending}
+                />
             </div>
-            <div className='my-5'>Hoac</div>
+            <div className='my-5 flex items-center gap-x-3'>
+                <div className='h-[1px] bg-slate-300 flex-1'></div>
+                <span className='text-slate-300 uppercase text-xs'>Hoặc</span>
+                <div className='h-[1px] bg-slate-300 flex-1'></div>
+            </div>
             <div className='grid grid-cols-2 gap-x-5 mb-6'>
                 <button className='border-[1px] border-gray-400 px-4 py-2 rounded hover:bg-gray-100 transition'>
                     Facebook
@@ -91,7 +102,7 @@ const Register = () => {
             <div className='mt-6'>
                 <p className='text-center text-gray-300 text-[.875rem]'>
                     Bạn đã có tài khoản?{' '}
-                    <Link className='text-primary font-medium' to='/login'>
+                    <Link className='text-primary font-medium' to={path.LOGIN}>
                         Đăng nhập
                     </Link>
                 </p>

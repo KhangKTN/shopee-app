@@ -1,5 +1,6 @@
 import axios, { AxiosError, HttpStatusCode, type AxiosInstance } from 'axios'
 import { toast } from 'react-toastify'
+import path from '~/constant/path'
 import authUtil from './authUtil'
 
 class Axios {
@@ -33,15 +34,17 @@ class Axios {
         // Handle interceptors for response
         this.instance.interceptors.response.use(
             (response) => {
-                console.log(response)
                 const { url } = response.config
-                if (url === '/login' || url === '/register'){
-                    this.accessToken = (response.data as AuthRes).data.access_token
+                if (url === path.LOGIN){
+                    const resData = (response.data as AuthRes).data
+                    console.log(resData);
+                    this.accessToken = resData.access_token
                     authUtil.persistAccessToken(this.accessToken)
+                    authUtil.persistProfile(resData.user)
                 }
-                if (url === '/logout') {
+                if (url === path.LOGOUT) {
                     this.accessToken = ''
-                    authUtil.clearAccessToken()
+                    authUtil.clearPersistedData()
                 }
                 return response
             },

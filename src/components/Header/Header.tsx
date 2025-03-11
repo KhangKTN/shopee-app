@@ -33,12 +33,13 @@ const sampleProductList: Product[] = [
 ]
 
 const Header = () => {
-    const { isAuthenticated, setAuthenticated } = useContext(AppContext)
+    const { isAuthenticated, setAuthenticated, profile, setProfile } = useContext(AppContext)
 
     const logoutMutation = useMutation({
         mutationFn: authApi.logout,
         onSuccess: () => {
             setAuthenticated(false)
+            setProfile(null)
         }
     })
 
@@ -103,7 +104,7 @@ const Header = () => {
                             }
                         >
                             <i className='fa-solid fa-circle-user text-lg'></i>
-                            <span>Account</span>
+                            <span>{profile?.email}</span>
                         </Popover>
                     ) : (
                         <div className='flex items-center gap-x-3 font-semibold'>
@@ -141,7 +142,7 @@ const Header = () => {
                             {sampleProductList?.length > 0 ? (
                                 <div className=''>
                                     {sampleProductList.map((item, idx) => (
-                                        <div className='flex gap-x-3'>
+                                        <div key={idx} className='flex gap-x-3'>
                                             <img className='size-[60px]' src={item.img} alt={`product_${idx}`} />
                                             <span className='overflow-hidden truncate flex-1'>{item.name}</span>
                                             <span className='text-primary w-1/5 text-right'>đ{item.price}</span>

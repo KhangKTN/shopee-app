@@ -1,5 +1,6 @@
 import { useContext } from 'react'
 import { Navigate, Outlet, useRoutes } from 'react-router-dom'
+import path from '~/constant/path'
 import { AppContext } from '~/contexts/app.context'
 import HomeLayout from '~/layouts/HomeLayout/HomeLayout'
 import RegisterLayout from '~/layouts/RegisterLayout/RegisterLayout'
@@ -12,11 +13,11 @@ import Register from '~/pages/Register'
 const useRouteCompenent = () => {
     const { isAuthenticated } = useContext(AppContext) 
     const ProtectedRoute = () => {
-        return isAuthenticated ? <Outlet /> : <Navigate to='/login' />
+        return isAuthenticated ? <Outlet /> : <Navigate to={path.LOGIN} />
     }
     
     const RejectedRoute = () => {
-        return isAuthenticated ? <Navigate to='/' /> : <Outlet />
+        return isAuthenticated ? <Navigate to={path.HOME} /> : <Outlet />
     }
 
     const useRouteCompenent = useRoutes([
@@ -25,7 +26,7 @@ const useRouteCompenent = () => {
             element: <RejectedRoute />,
             children: [
                 {
-                    path: '/login',
+                    path: path.LOGIN,
                     element: (
                         <RegisterLayout>
                             <Login />
@@ -33,7 +34,7 @@ const useRouteCompenent = () => {
                     )
                 },
                 {
-                    path: '/register',
+                    path: path.REGISTER,
                     element: (
                         <RegisterLayout>
                             <Register />
@@ -43,11 +44,11 @@ const useRouteCompenent = () => {
             ]
         },
         {
-            path: '/',
+            path: path.HOME,
             element: <ProtectedRoute />,
             children: [
                 {
-                    path: '/profile',
+                    path: path.PROFILE,
                     element: (
                         <HomeLayout>
                             <Profile />
@@ -58,7 +59,7 @@ const useRouteCompenent = () => {
         },
         {
             index: true,
-            path: '/',
+            path: path.HOME,
             element: (
                 <HomeLayout>
                     <ProductList />

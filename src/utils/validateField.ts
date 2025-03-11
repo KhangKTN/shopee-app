@@ -26,7 +26,6 @@ export const registerSchema = Yup.object({
 
 export const loginSchema = registerSchema.omit(['confirm_password'])
 
-
 /**
  * Export type schemas
  */
