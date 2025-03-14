@@ -5,17 +5,17 @@ import { AppContext } from '~/contexts/app.context'
 import HomeLayout from '~/layouts/HomeLayout/HomeLayout'
 import RegisterLayout from '~/layouts/RegisterLayout/RegisterLayout'
 import Login from '~/pages/Login'
-import ProductList from '~/pages/ProductList'
+import { ProductList } from '~/pages/ProductList'
 import Profile from '~/pages/Profile/Profile'
 import Register from '~/pages/Register'
 
 
 const useRouteCompenent = () => {
-    const { isAuthenticated } = useContext(AppContext) 
+    const { isAuthenticated } = useContext(AppContext)
     const ProtectedRoute = () => {
         return isAuthenticated ? <Outlet /> : <Navigate to={path.LOGIN} />
     }
-    
+
     const RejectedRoute = () => {
         return isAuthenticated ? <Navigate to={path.HOME} /> : <Outlet />
     }
@@ -67,7 +67,7 @@ const useRouteCompenent = () => {
             )
         },
     ])
-    
+
     return useRouteCompenent
 }
 

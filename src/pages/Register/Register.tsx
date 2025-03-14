@@ -52,6 +52,7 @@ const Register = () => {
             </div>
             <Input
                 name='email'
+                className='mt-5'
                 register={register}
                 // rules={rules().email} // Form use yupResolver then no need use rule
                 type='text'
@@ -61,6 +62,7 @@ const Register = () => {
             />
             <Input
                 name='password'
+                className='mt-5'
                 register={register}
                 type='password'
                 placeholder='Mật khẩu'
@@ -69,6 +71,7 @@ const Register = () => {
             />
             <Input
                 name='confirm_password'
+                className='mt-5'
                 register={register}
                 type='password'
                 placeholder='Xác nhận mật khẩu'
@@ -78,7 +81,7 @@ const Register = () => {
             <div className='w-full mb-3'>
                 <Button
                     children='Tiếp theo'
-                    className='w-full uppercase bg-primary py-2 px-4 text-white rounded'
+                    className='w-full mt-5 uppercase py-2 px-4 rounded'
                     isLoading={registerMutation.isPending}
                     disabled={registerMutation.isPending}
                 />

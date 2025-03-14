@@ -55,6 +55,7 @@ const Login = () => {
             </div>
             <Input
                 name='email'
+                className='mt-5'
                 register={register}
                 type='text'
                 placeholder='Email/Số điện thoại/Tên đăng nhập'
@@ -63,6 +64,7 @@ const Login = () => {
             />
             <Input
                 name='password'
+                className='mt-5'
                 register={register}
                 type='password'
                 placeholder='Mật khẩu'
@@ -72,7 +74,7 @@ const Login = () => {
             <div className='w-full mb-3'>
                 <Button
                     children='Đăng nhập'
-                    className='w-full uppercase bg-primary py-2 px-4 text-white rounded'
+                    className='w-full mt-5 uppercase py-2 px-4 rounded'
                     isLoading={loginMutation.isPending}
                     disabled={loginMutation.isPending}
                 />
