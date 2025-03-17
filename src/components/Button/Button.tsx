@@ -10,7 +10,7 @@ const Button = (props: Props) => {
     return (
         <button
             disabled={disabled}
-            className={`flex justify-center items-center text-white bg-primary gap-x-2 ${className} ${
+            className={`flex justify-center items-center text-white bg-primary hover:opacity-85 transition-opacity duration-300 gap-x-2 ${className} ${
                 disabled && 'cursor-not-allowed bg-primary/50'
             }`}
         >

@@ -9,7 +9,6 @@ import { ProductList } from '~/pages/ProductList'
 import Profile from '~/pages/Profile/Profile'
 import Register from '~/pages/Register'
 
-
 const useRouteCompenent = () => {
     const { isAuthenticated } = useContext(AppContext)
     const ProtectedRoute = () => {

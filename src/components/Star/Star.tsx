@@ -9,11 +9,11 @@ const Star = ({ star, isShowText }: Props) => {
     const id = useId()
 
     return (
-        <div className='flex gap-x-2 mt-2'>
+        <div className='flex items-center gap-x-2 mt-1 cursor-pointer hover:bg-gray-300 w-fit px-1 py-[2px] rounded'>
             {Array(5)
                 .fill(0)
                 .map((_, idx) => (
-                    <div className='cursor-pointer' key={`${id}${idx}`}>
+                    <div key={`${id}${idx}`}>
                         {star > idx ? (
                             <svg viewBox='0 0 9.5 8' className='size-4'>
                                 <defs>

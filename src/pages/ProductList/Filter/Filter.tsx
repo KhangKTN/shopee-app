@@ -52,77 +52,77 @@ const Filter = () => {
                 </Link>
             </div>
             <div className='mt-5 pb-5 border-b-[1px] border-gray-300'>
-                <div className='capitalize text-sm font-semibold my-3'>Theo danh mục</div>
+                <div className='capitalize font-semibold my-3'>Theo danh mục</div>
                 <ul>
-                    <li className='my-2'>
-                        <input type='checkbox' name='' id='a' />
-                        <label htmlFor='a' className='ms-2 text-sm font-medium text-gray-900 dark:text-gray-300'>
+                    <li className='my-2 flex items-center'>
+                        <input type='checkbox' id='a' />
+                        <label htmlFor='a' className='ms-2 font-medium '>
                             Áo thun
                         </label>
                     </li>
-                    <li className='my-2'>
-                        <input type='checkbox' name='' id='b' />
-                        <label htmlFor='b' className='ms-2 text-sm font-medium text-gray-900 dark:text-gray-300'>
+                    <li className='my-2 flex items-center'>
+                        <input type='checkbox' id='b' />
+                        <label htmlFor='b' className='ms-2 font-medium '>
                             Áo thun
                         </label>
                     </li>
-                    <li className='my-2'>
-                        <input type='checkbox' name='' id='c' />
-                        <label htmlFor='c' className='ms-2 text-sm font-medium text-gray-900 dark:text-gray-300'>
+                    <li className='my-2 flex items-center'>
+                        <input type='checkbox' id='c' />
+                        <label htmlFor='c' className='ms-2 font-medium '>
                             Áo thun
                         </label>
                     </li>
                 </ul>
             </div>
             <div className='mt-5 pb-5 border-b-[1px] border-gray-300'>
-                <div className='capitalize text-sm font-semibold my-3'>nơi bán</div>
+                <div className='capitalize font-semibold my-3'>nơi bán</div>
                 <ul>
-                    <li className='my-2'>
-                        <input type='checkbox' name='' id='a' />
-                        <label htmlFor='a' className='ms-2 text-sm font-medium text-gray-900 dark:text-gray-300'>
-                            Áo thun
+                    <li className='my-2 flex items-center'>
+                        <input type='checkbox' id='a' />
+                        <label htmlFor='a' className='ms-2 font-medium '>
+                            Hà Nội
                         </label>
                     </li>
-                    <li className='my-2'>
-                        <input type='checkbox' name='' id='b' />
-                        <label htmlFor='b' className='ms-2 text-sm font-medium text-gray-900 dark:text-gray-300'>
-                            Áo thun
+                    <li className='my-2 flex items-center'>
+                        <input type='checkbox' id='b' />
+                        <label htmlFor='b' className='ms-2 font-medium '>
+                            Tp. Hồ Chí Minh
                         </label>
                     </li>
-                    <li className='my-2'>
-                        <input type='checkbox' name='' id='c' />
-                        <label htmlFor='c' className='ms-2 text-sm font-medium text-gray-900 dark:text-gray-300'>
-                            Áo thun
+                    <li className='my-2 flex items-center'>
+                        <input type='checkbox' id='c' />
+                        <label htmlFor='c' className='ms-2 font-medium '>
+                            Huế
                         </label>
                     </li>
                 </ul>
             </div>
             <div className='mt-5 pb-5 border-b-[1px] border-gray-300'>
-                <div className='capitalize text-sm font-semibold my-3'>đơn vị vận chuyển</div>
+                <div className='capitalize font-semibold my-3'>đơn vị vận chuyển</div>
                 <ul>
-                    <li className='my-2'>
+                    <li className='my-2 flex items-center'>
                         <input type='checkbox' name='' id='a' />
-                        <label htmlFor='a' className='ms-2 text-sm font-medium text-gray-900 dark:text-gray-300'>
-                            Áo thun
+                        <label htmlFor='a' className='ms-2 font-medium capitalize'>
+                            hoả tốc
                         </label>
                     </li>
-                    <li className='my-2'>
+                    <li className='my-2 flex items-center'>
                         <input type='checkbox' name='' id='b' />
-                        <label htmlFor='b' className='ms-2 text-sm font-medium text-gray-900 dark:text-gray-300'>
-                            Áo thun
+                        <label htmlFor='b' className='ms-2 font-medium capitalize'>
+                            nhanh
                         </label>
                     </li>
-                    <li className='my-2'>
+                    <li className='my-2 flex items-center'>
                         <input type='checkbox' name='' id='c' />
-                        <label htmlFor='c' className='ms-2 text-sm font-medium text-gray-900 dark:text-gray-300'>
-                            Áo thun
+                        <label htmlFor='c' className='ms-2 font-medium capitalize'>
+                            tiết kiệm
                         </label>
                     </li>
                 </ul>
             </div>
             {/* Price */}
             <div className='mt-5 pb-5 border-b-[1px] border-gray-300'>
-                <div className='capitalize text-sm font-semibold my-3'>Khoảng giá</div>
+                <div className='capitalize font-semibold my-3'>Khoảng giá</div>
                 <div className='mt-4 flex gap-x-3 items-center'>
                     <Input
                         className='grow'
@@ -144,7 +144,7 @@ const Filter = () => {
             </div>
             {/* Rating */}
             <div className='mt-5 pb-5 border-b-[1px] border-gray-300'>
-                <div className='capitalize text-sm font-semibold my-3'>Đánh giá</div>
+                <div className='capitalize font-semibold my-3'>Đánh giá</div>
                 <Star star={5} />
                 <Star star={4} isShowText />
                 <Star star={3} isShowText />
