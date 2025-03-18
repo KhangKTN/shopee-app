@@ -10,7 +10,7 @@ const Sort = () => {
     return (
         <div className='bg-gray-300/50 px-4 py-3 flex justify-between items-center text-sm rounded-sm'>
             <div className='flex gap-x-3 items-center'>
-                <span>Sắp xếp theo</span>
+                <span className='text-base font-medium'>Sắp xếp theo</span>
                 <Link
                     to=''
                     className={`px-4 py-2 rounded-sm capitalize ${isActive ? 'bg-primary text-white' : 'bg-white'}`}
