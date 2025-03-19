@@ -3,7 +3,7 @@ interface Product {
     images: string[]
     price: number
     rating: number
-    price_befoce_discount: number
+    price_before_discount: number
     quantity: number
     sold: number
     view: number
