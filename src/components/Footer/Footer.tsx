@@ -1,4 +1,3 @@
-
 const Footer = () => {
     return (
         <footer className='w-full py-4 bg-[#f5f5f5]'>

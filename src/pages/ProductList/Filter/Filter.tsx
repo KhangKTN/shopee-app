@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
-import Button from '~/components/Button/Button'
+import Button from '~/components/Button'
 import Input from '~/components/Input'
-import Star from '~/components/Star/Star'
+import Star from '~/components/Star'
 import path from '~/constant/path'
 
 const Filter = () => {

@@ -3,7 +3,7 @@ import { useContext } from 'react'
 import { Link } from 'react-router-dom'
 import authApi from '~/apis/auth.api'
 import { AppContext } from '~/contexts/app.context'
-import Popover from '../Popover/Popover'
+import Popover from '../Popover'
 
 const popoverItemClass = 'py-2 px-3 hover:text-primary hover:bg-slate-100 w-full text-left'
 
