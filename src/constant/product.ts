@@ -1,11 +1,11 @@
-export enum sortBy {
+export enum SortByEnum {
     CREATED_AT = 'createdAt',
     VIEW = 'view',
     SOLD = 'sold',
     PRICE = 'price'
 }
 
-export enum order {
+export enum OrderEnum {
     ASC = 'asc',
     DESC = 'desc'
 }

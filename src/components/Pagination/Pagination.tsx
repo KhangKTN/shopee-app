@@ -1,16 +1,20 @@
-import classNames from 'classnames'
-import { Link } from 'react-router-dom'
+import cx from 'classix'
+import { createSearchParams, Link } from 'react-router-dom'
+import path from '~/constant/path'
+import { QueryConfig } from '~/pages/ProductList/ProductList'
+import PrevNextLink from './PrevNextLink'
 
 interface Prop {
-    page: number
-    setPage: React.Dispatch<React.SetStateAction<number>>
-    totalPage: number
+    totalPage: number | undefined
+    queryConfig: QueryConfig
 }
 
 // Define number of page can display compared to current page
 const PAGE_RANGE = 2
 
-const Pagination = ({ page, setPage, totalPage }: Prop) => {
+const Pagination = ({ queryConfig, totalPage = 0 }: Prop) => {
+    const page = Number(queryConfig.page ?? 1)
+
     const renderPage = () => {
         let isShowAfterDot = false
         let isShowBeforeDot = false
@@ -28,9 +32,9 @@ const Pagination = ({ page, setPage, totalPage }: Prop) => {
                 isShowBeforeDot = true
             }
             return (
-                <button key={idx} className='bg-white rounded px-3 py-2 shadow-sm cursor-default'>
+                <span key={idx} className='bg-white shadow-sm px-3 py-2 rounded cursor-default'>
                     ...
-                </button>
+                </span>
             )
         }
 
@@ -56,38 +60,43 @@ const Pagination = ({ page, setPage, totalPage }: Prop) => {
                     }
                 }
                 // Condition render dot before
-                if (
-                    page >= totalPage - PAGE_RANGE * 2 &&
-                    pageNumber > PAGE_RANGE &&
-                    pageNumber < page - PAGE_RANGE
-                ) {
+                if (page >= totalPage - PAGE_RANGE * 2 && pageNumber > PAGE_RANGE && pageNumber < page - PAGE_RANGE) {
                     return renderDot(idx, 'before')
                 }
 
                 return (
-                    <button
-                        onClick={() => setPage(pageNumber)}
+                    <Link
+                        to={{
+                            pathname: path.HOME,
+                            search: createSearchParams({ ...queryConfig, page: String(pageNumber) }).toString()
+                        }}
                         key={idx}
-                        className={classNames('rounded px-3.5 py-2 shadow-sm', {
-                            'bg-primary text-white': pageNumber === page,
-                            'bg-white': pageNumber !== page
-                        })}
+                        className={cx(
+                            'shadow-sm px-3.5 py-2 rounded',
+                            pageNumber === page ? 'bg-primary text-white' : 'bg-white'
+                        )}
                     >
                         {pageNumber}
-                    </button>
+                    </Link>
                 )
             })
     }
 
     return (
-        <div className='flex gap-x-2 flex-wrap mt-6 justify-center'>
-            <Link to={'/'} className='bg-white rounded px-3 py-2 shadow-sm'>
-                {'<'}
-            </Link>
+        <div className='flex flex-wrap justify-center gap-x-2 mt-6'>
+            <PrevNextLink
+                type='prev'
+                queryConfig={queryConfig}
+                totalPage={totalPage}
+                className='bg-white shadow-sm px-3 py-2 rounded'
+            />
             {renderPage()}
-            <Link to={'/'} className='bg-white rounded px-3 py-2 shadow-sm'>
-                {'>'}
-            </Link>
+            <PrevNextLink
+                type='next'
+                queryConfig={queryConfig}
+                totalPage={totalPage}
+                className='bg-white shadow-sm px-3 py-2 rounded'
+            />
         </div>
     )
 }

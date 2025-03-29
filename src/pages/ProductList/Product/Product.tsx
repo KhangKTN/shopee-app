@@ -2,7 +2,6 @@ import { Link } from 'react-router-dom'
 import productUtil from '~/utils/productUtil'
 
 const Product = ({ product }: { product: Product }) => {
-
     return (
         <Link to='/'>
             <div className='bg-white shadow rounded-sm hover:shadow-md hover:-translate-y-[2px] transition-transform duration-200'>
@@ -13,7 +12,9 @@ const Product = ({ product }: { product: Product }) => {
                     <div className='min-h-[42px] line-clamp-2 font-medium'>{product.name}</div>
                     <div className='mt-2'>
                         <span className='text-primary text-xs'>đ</span>
-                        <span className='text-primary font-semibold text-base'>{productUtil.formatMoney(product.price)}</span>
+                        <span className='text-primary font-semibold text-base'>
+                            {productUtil.formatMoney(product.price)}
+                        </span>
                         {product.price < product.price_before_discount && (
                             <span className='bg-primary/15 text-primary text-sm font-medium rounded-sm px-1 py-[2px] ml-3'>
                                 -{productUtil.calcDiscount(product.price, product.price_before_discount)}%

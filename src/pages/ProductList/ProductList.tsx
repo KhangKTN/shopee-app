@@ -1,44 +1,64 @@
-import { useQuery } from '@tanstack/react-query'
-import { useState } from 'react'
+import { keepPreviousData, useQuery } from '@tanstack/react-query'
+import _ from 'lodash'
+import { useEffect } from 'react'
 import productApi from '~/apis/product.api'
 import Pagination from '~/components/Pagination'
 import useQueryParam from '~/hooks/useQueryParam'
 import { Filter, Product, Sort } from './index'
 
-const ProductList = () => {
-    const queryParam = useQueryParam()
-    const [page, setPage] = useState<number>(5)
+export type QueryConfig = {
+    [key in keyof ProductQuery]?: string
+}
 
-    const { data } = useQuery({
+const ProductList = () => {
+    const queryParam: QueryConfig = useQueryParam()
+    const queryConfig: QueryConfig = _.omitBy(
+        {
+            page: queryParam.page || '1',
+            limit: queryParam.limit,
+            name: queryParam.name,
+            sort_by: queryParam.sort_by,
+            order: queryParam.order,
+            price_min: queryParam.price_min,
+            price_max: queryParam.price_max,
+            exclude: queryParam.exclude
+        },
+        _.isUndefined
+    )
+
+    const { data, isSuccess } = useQuery({
         queryKey: ['products', queryParam],
-        queryFn: () => productApi.getProductList(queryParam)
+        queryFn: () => productApi.getProductList(queryConfig as ProductQuery),
+        placeholderData: keepPreviousData
     })
 
+    const totalPage = data?.data.data.pagination.page_size
+
+    useEffect(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+    }, [queryParam])
+
     return (
-        <div className='bg-gray-200 px-16 py-4'>
+        <section className='bg-gray-200 px-16 py-4'>
             <div className='container'>
-                <div className='grid grid-cols-12 gap-5'>
+                <div className='gap-5 grid grid-cols-12'>
                     <div className='col-span-3'>
                         <Filter />
                     </div>
                     <div className='col-span-9'>
-                        <>
-                            <Sort />
-                            <div className='mt-5 grid gap-x-3 gap-y-2 grid-cols-2 md:grid-cols-3 lg:grid-cols-4'>
+                        <Sort queryConfig={queryConfig} totalPage={totalPage} />
+                        {isSuccess && (
+                            <div className='gap-x-3 gap-y-2 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 mt-5'>
                                 {data?.data.data.products.map((product) => (
                                     <Product key={product._id} product={product} />
                                 ))}
                             </div>
-                        </>
-                        <Pagination
-                            page={page}
-                            setPage={setPage}
-                            totalPage={data?.data.data.pagination.page_size || 1}
-                        />
+                        )}
+                        <Pagination queryConfig={queryConfig} totalPage={totalPage} />
                     </div>
                 </div>
             </div>
-        </div>
+        </section>
     )
 }
 
