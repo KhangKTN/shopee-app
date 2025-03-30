@@ -11,7 +11,7 @@ interface Prop {
 }
 
 const PrevNextLink = ({ type, queryConfig, totalPage, className }: Prop) => {
-    const page = Number(queryConfig.page ?? 1)
+    const page = Number(queryConfig.page)
     const linkPage = type === 'prev' ? page - 1 : page + 1
     const url = {
         pathname: path.HOME,

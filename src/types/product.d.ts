@@ -37,4 +37,5 @@ interface ProductQuery {
     price_max?: number | string
     price_min?: number | string
     name?: string | string
+    category?: string
 }

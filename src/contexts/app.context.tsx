@@ -2,9 +2,9 @@ import React, { createContext, Dispatch, SetStateAction, useState } from 'react'
 import authUtil from '~/utils/authUtil'
 
 interface IAppContext {
-    isAuthenticated: boolean,
-    setAuthenticated: Dispatch<SetStateAction<boolean>>,
-    profile: User | null,
+    isAuthenticated: boolean
+    setAuthenticated: Dispatch<SetStateAction<boolean>>
+    profile: User | null
     setProfile: Dispatch<SetStateAction<User | null>>
 }
 

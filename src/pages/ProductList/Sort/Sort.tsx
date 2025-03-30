@@ -29,7 +29,7 @@ const Sort = ({ queryConfig, totalPage = 0 }: Prop) => {
     const navigate = useNavigate()
 
     const { sort_by = SortByEnum.CREATED_AT } = queryConfig
-    const page = Number(queryConfig.page ?? 1)
+    const page = Number(queryConfig.page)
 
     const isActiveSort = (sortBy: SortByQuery) => {
         return sortBy === sort_by
