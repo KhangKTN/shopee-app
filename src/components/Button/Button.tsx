@@ -1,3 +1,4 @@
+import cx from 'classix'
 import { ButtonHTMLAttributes } from 'react'
 
 interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -5,19 +6,21 @@ interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const Button = (props: Props) => {
-    const { isLoading, className, children, disabled } = props
+    const { isLoading, className, children, ...rest } = props
 
     return (
         <button
-            disabled={disabled}
-            className={`flex justify-center items-center text-white bg-primary hover:opacity-85 transition-opacity duration-300 gap-x-2 ${className} ${
-                disabled && 'cursor-not-allowed bg-primary/50'
-            }`}
+            className={cx(
+                'flex justify-center items-center gap-x-2 bg-primary hover:opacity-85 text-white transition-opacity duration-300',
+                className,
+                rest.disabled && 'cursor-not-allowed bg-primary/50'
+            )}
+            {...rest}
         >
             {isLoading && (
                 <svg
                     aria-hidden='true'
-                    className='inline w-4 h-4 text-gray-200 animate-spin dark:text-gray-600 fill-white'
+                    className='inline fill-white w-4 h-4 text-gray-200 dark:text-gray-600 animate-spin'
                     viewBox='0 0 100 101'
                     fill='none'
                     xmlns='http://www.w3.org/2000/svg'

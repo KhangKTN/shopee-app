@@ -55,7 +55,7 @@ const Login = () => {
             </div>
             <Input
                 name='email'
-                className='mt-5'
+                classNameDiv='mt-5'
                 register={register}
                 type='text'
                 placeholder='Email/Số điện thoại/Tên đăng nhập'
@@ -64,7 +64,7 @@ const Login = () => {
             />
             <Input
                 name='password'
-                className='mt-5'
+                classNameDiv='mt-5'
                 register={register}
                 type='password'
                 placeholder='Mật khẩu'

@@ -23,18 +23,40 @@ export const registerSchema = Yup.object({
         .max(160, 'Độ dài tối đa 160 kí tự')
         .oneOf([Yup.ref('password')], 'Mật khẩu xác nhận không trùng khớp')
 }).required()
-
-export const loginSchema = registerSchema.omit(['confirm_password'])
-
 /**
  * Export type schemas
  */
 export type RegisterSchema = Yup.InferType<typeof registerSchema>
+
+export const loginSchema = registerSchema.omit(['confirm_password'])
+/**
+ * Export type schemas
+ */
 export type LoginSchema = Yup.InferType<typeof loginSchema>
+
+export const priceFilterSchema = Yup.object({
+    min_price: Yup.string()
+        .test('min_price', 'Chỉ được nhập số', (value) => {
+            if (!value) return true
+            return /^\d+$/.test(value)
+        })
+        .test('min_max_price', 'Giá tối thiểu không được lớn hơn giá tối đa', function (minPrice) {
+            const maxPrice = this.parent.max_price
+            if (!minPrice || !maxPrice) {
+                return true
+            }
+            return Number(minPrice) <= Number(maxPrice)
+        }),
+    max_price: Yup.string().test('max_price', 'Chỉ được nhập số', (value) => {
+        if (!value) return true
+        return /^\d+$/.test(value)
+    })
+})
+export type PriceFilterSchema = Yup.InferType<typeof priceFilterSchema>
 
 /**
  * Define rules for form input
- * Use what is available in the react-hook-form library 
+ * Use what is available in the react-hook-form library
  */
 type Rules = { [key in 'email' | 'password' | 'confirm_password']?: RegisterOptions }
 

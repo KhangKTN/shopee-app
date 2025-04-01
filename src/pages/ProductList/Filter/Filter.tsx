@@ -1,9 +1,13 @@
+import { yupResolver } from '@hookform/resolvers/yup'
 import cx from 'classix'
-import { createSearchParams, Link } from 'react-router-dom'
+import _ from 'lodash'
+import { Controller, SubmitHandler, useForm } from 'react-hook-form'
+import { createSearchParams, Link, useNavigate } from 'react-router-dom'
 import Button from '~/components/Button'
-import Input from '~/components/Input'
+import { InputNumber } from '~/components/Input'
 import Star from '~/components/Star'
 import path from '~/constant/path'
+import { PriceFilterSchema, priceFilterSchema } from '~/utils/validateField'
 import { QueryConfig } from '../ProductList'
 
 interface Prop {
@@ -12,10 +16,32 @@ interface Prop {
 }
 
 const Filter = ({ categories, queryConfig }: Prop) => {
+    const navigate = useNavigate()
     const { category } = queryConfig
 
     const getCategoryLink = (id: string) => {
         return { pathname: path.HOME, search: createSearchParams({ ...queryConfig, category: id }).toString() }
+    }
+
+    const {
+        handleSubmit,
+        control,
+        formState: { errors },
+        trigger
+    } = useForm<PriceFilterSchema>({
+        defaultValues: {
+            min_price: '',
+            max_price: ''
+        },
+        resolver: yupResolver(priceFilterSchema)
+    })
+
+    const onSubmit: SubmitHandler<PriceFilterSchema> = ({ min_price = '', max_price = '' }) => {
+        const searchQuery = _.omitBy({ ...queryConfig, price_min: min_price, price_max: max_price }, _.isEmpty)
+        navigate({
+            pathname: path.HOME,
+            search: createSearchParams(searchQuery).toString()
+        })
     }
 
     return (
@@ -30,17 +56,16 @@ const Filter = ({ categories, queryConfig }: Prop) => {
             <div>
                 <ul>
                     {categories.map((e) => (
-                        <li
-                            key={e._id}
-                            className={cx(
-                                'relative py-2 pl-3 font-semibold',
-                                category === e._id ? 'text-primary' : 'hover:text-primary'
-                            )}
-                        >
+                        <li className='relative py-2 pl-3 font-semibold' key={e._id}>
                             {queryConfig.category === e._id && (
                                 <i className='top-1/2 absolute text-primary text-lg -translate-x-[calc(100%+6px)] -translate-y-1/2 fa-caret-right fa-solid'></i>
                             )}
-                            <Link to={getCategoryLink(e._id)}>{e.name}</Link>
+                            <Link
+                                className={cx(category === e._id ? 'text-primary' : 'hover:text-primary')}
+                                to={getCategoryLink(e._id)}
+                            >
+                                {e.name}
+                            </Link>
                         </li>
                     ))}
                 </ul>
@@ -124,24 +149,47 @@ const Filter = ({ categories, queryConfig }: Prop) => {
             {/* Price */}
             <div className='mt-5 pb-5 border-gray-300 border-b-[1px]'>
                 <div className='my-3 font-semibold capitalize'>Khoảng giá</div>
-                <div className='flex items-center gap-x-3 mt-4'>
-                    <Input
-                        className='grow'
-                        classNameInput='w-full py-1 rounded-sm pl-1 outline-none border border-gray-300 focus:border-gray-400'
-                        name='minPrice'
-                        placeholder='đ TỪ'
-                        type='text'
-                    />
-                    <div className='bg-gray-400 w-4 h-[1px]'></div>
-                    <Input
-                        className='grow'
-                        classNameInput='w-full py-1 rounded-sm pl-1 outline-none border border-gray-300 focus:border-gray-400'
-                        name='minPrice'
-                        placeholder='đ ĐẾN'
-                        type='text'
-                    />
-                </div>
-                <Button children='Áp dụng' className='mt-4 px-4 py-2 rounded-sm w-full uppercase' />
+                <form onSubmit={handleSubmit(onSubmit)} className='mt-4'>
+                    <div className='flex items-center gap-x-3 w-full'>
+                        <Controller
+                            name='min_price'
+                            control={control}
+                            render={({ field }) => (
+                                <InputNumber
+                                    onChange={field.onChange}
+                                    classNameDiv='grow'
+                                    className='py-1 pl-1 border border-gray-300 focus:border-gray-400 rounded-sm outline-none w-full'
+                                    placeholder='đ TỪ'
+                                    type='text'
+                                    value={field.value}
+                                />
+                            )}
+                        />
+                        <span className='text-gray-200'>-</span>
+                        <Controller
+                            name='max_price'
+                            control={control}
+                            render={({ field }) => (
+                                <InputNumber
+                                    onChange={(e) => {
+                                        field.onChange(e)
+                                        trigger('min_price')
+                                    }}
+                                    classNameDiv='grow'
+                                    className='py-1 pl-1 border border-gray-300 focus:border-gray-400 rounded-sm outline-none w-full'
+                                    placeholder='đ ĐẾN'
+                                    type='text'
+                                    value={field.value}
+                                />
+                            )}
+                        />
+                    </div>
+                    <div className='grid grid-cols-2'>
+                        {errors?.min_price && <p className='text-start error'>{errors.min_price.message}</p>}
+                        {errors?.max_price && <p className='col-start-2 text-end error'>{errors.max_price.message}</p>}
+                    </div>
+                    <Button type='submit' children='Áp dụng' className='mt-4 px-4 py-2 rounded-sm w-full uppercase' />
+                </form>
             </div>
             {/* Rating */}
             <div className='mt-5 pb-5 border-gray-300 border-b-[1px]'>

@@ -52,7 +52,7 @@ const Register = () => {
             </div>
             <Input
                 name='email'
-                className='mt-5'
+                classNameDiv='mt-5'
                 register={register}
                 // rules={rules().email} // Form use yupResolver then no need use rule
                 type='text'
@@ -62,7 +62,7 @@ const Register = () => {
             />
             <Input
                 name='password'
-                className='mt-5'
+                classNameDiv='mt-5'
                 register={register}
                 type='password'
                 placeholder='Mật khẩu'
@@ -71,7 +71,7 @@ const Register = () => {
             />
             <Input
                 name='confirm_password'
-                className='mt-5'
+                classNameDiv='mt-5'
                 register={register}
                 type='password'
                 placeholder='Xác nhận mật khẩu'
