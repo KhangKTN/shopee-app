@@ -23,7 +23,8 @@ const ProductList = () => {
             price_min: queryParam.price_min,
             price_max: queryParam.price_max,
             exclude: queryParam.exclude,
-            category: queryParam.category
+            category: queryParam.category,
+            rating_filter: queryParam.rating_filter
         },
         _.isUndefined
     )

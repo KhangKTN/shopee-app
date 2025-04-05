@@ -3,13 +3,18 @@ import { useId } from 'react'
 interface Props {
     star: number
     isShowText?: boolean
+    onClick: (star: number) => void
 }
 
-const Star = ({ star, isShowText }: Props) => {
+const Star = ({ star, isShowText, onClick }: Props) => {
     const id = useId()
 
     return (
-        <div className='flex items-center gap-x-2 mt-1 cursor-pointer hover:bg-gray-300 w-fit px-1 py-[2px] rounded'>
+        <div
+            onClick={() => onClick(star)}
+            className='flex items-center gap-x-2 hover:bg-gray-300 mt-1 px-1 py-[2px] rounded w-fit cursor-pointer'
+            tabIndex={0}
+        >
             {Array(5)
                 .fill(0)
                 .map((_, idx) => (

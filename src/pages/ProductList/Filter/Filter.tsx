@@ -26,18 +26,43 @@ const Filter = ({ categories, queryConfig }: Prop) => {
     const {
         handleSubmit,
         control,
+        reset,
         formState: { errors },
         trigger
     } = useForm<PriceFilterSchema>({
         defaultValues: {
-            min_price: '',
-            max_price: ''
+            min_price: queryConfig.price_min ?? '',
+            max_price: queryConfig.price_max ?? ''
         },
         resolver: yupResolver(priceFilterSchema)
     })
 
     const onSubmit: SubmitHandler<PriceFilterSchema> = ({ min_price = '', max_price = '' }) => {
-        const searchQuery = _.omitBy({ ...queryConfig, price_min: min_price, price_max: max_price }, _.isEmpty)
+        const searchQuery = _.omitBy(
+            { ...queryConfig, price_min: min_price, price_max: max_price, page: '1' },
+            _.isEmpty
+        )
+        navigate({
+            pathname: path.HOME,
+            search: createSearchParams(searchQuery).toString()
+        })
+    }
+
+    const handleRating = (star: number) => {
+        navigate({
+            pathname: path.HOME,
+            search: createSearchParams({ ...queryConfig, rating_filter: star.toString(), page: '1' }).toString()
+        })
+    }
+
+    const handleResetFilter = () => {
+        reset({ min_price: '', max_price: '' })
+        const fieldReset = ['category', 'price_min', 'price_max', 'rating_filter']
+        const searchQuery = { ...queryConfig, page: '1' }
+        for (const field of fieldReset) {
+            delete searchQuery[field as keyof QueryConfig]
+        }
+
         navigate({
             pathname: path.HOME,
             search: createSearchParams(searchQuery).toString()
@@ -71,7 +96,7 @@ const Filter = ({ categories, queryConfig }: Prop) => {
                 </ul>
             </div>
             {/* Checkbox filter */}
-            <div className='flex items-center gap-x-3 mt-8 pt-4 text-base'>
+            {/* <div className='flex items-center gap-x-3 mt-8 pt-4 text-base'>
                 <i className='fa-solid fa-filter'></i>
                 <Link to={path.HOME} className={`capitalize font-bold`}>
                     bộ lọc tìm kiếm
@@ -145,9 +170,9 @@ const Filter = ({ categories, queryConfig }: Prop) => {
                         </label>
                     </li>
                 </ul>
-            </div>
+            </div> */}
             {/* Price */}
-            <div className='mt-5 pb-5 border-gray-300 border-b-[1px]'>
+            <div className='mt-5 pb-5 border-gray-300 border-y-[1px]'>
                 <div className='my-3 font-semibold capitalize'>Khoảng giá</div>
                 <form onSubmit={handleSubmit(onSubmit)} className='mt-4'>
                     <div className='flex items-center gap-x-3 w-full'>
@@ -194,12 +219,16 @@ const Filter = ({ categories, queryConfig }: Prop) => {
             {/* Rating */}
             <div className='mt-5 pb-5 border-gray-300 border-b-[1px]'>
                 <p className='my-3 font-semibold capitalize'>Đánh giá</p>
-                <Star star={5} />
-                <Star star={4} isShowText />
-                <Star star={3} isShowText />
-                <Star star={2} isShowText />
+                <Star star={5} onClick={(star) => handleRating(star)} />
+                <Star star={4} isShowText onClick={(star) => handleRating(star)} />
+                <Star star={3} isShowText onClick={(star) => handleRating(star)} />
+                <Star star={2} isShowText onClick={(star) => handleRating(star)} />
             </div>
-            <Button children='Xoá tất cả' className='mt-5 px-4 py-2 rounded-sm w-full uppercase' />
+            <Button
+                onClick={handleResetFilter}
+                children='Xoá tất cả'
+                className='mt-5 px-4 py-2 rounded-sm w-full uppercase'
+            />
         </>
     )
 }
