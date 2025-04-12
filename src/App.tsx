@@ -5,10 +5,10 @@ const App = () => {
     const routeComponent = useRouteCompenent()
 
     return (
-        <div>
+        <>
             {routeComponent}
-            <ToastContainer theme='dark' newestOnTop />
-        </div>
+            <ToastContainer newestOnTop />
+        </>
     )
 }
 

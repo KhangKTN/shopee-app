@@ -7,7 +7,7 @@ interface Props extends InputHTMLAttributes<HTMLInputElement> {
 }
 
 const InputNumber = ({
-    classNameDiv = 'w-full mt-3',
+    classNameDiv,
     className = 'w-full border-gray-400 border-[1px] px-4 py-2 outline-none rounded focus:border-gray-500 focus:shadow',
     errorMsg,
     onChange,

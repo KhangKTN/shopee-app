@@ -190,7 +190,7 @@ const Filter = ({ categories, queryConfig }: Prop) => {
                                 />
                             )}
                         />
-                        <span className='text-gray-200'>-</span>
+                        <span className='text-gray-400'>-</span>
                         <Controller
                             name='max_price'
                             control={control}

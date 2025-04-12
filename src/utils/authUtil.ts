@@ -19,7 +19,7 @@ const getProfile = (): User | null => {
 }
 
 const persistProfile = (profile: User): void => {
-    localStorage.setItem(PROFILE, JSON.stringify(profile));
+    localStorage.setItem(PROFILE, JSON.stringify(profile))
 }
 
 export default { persistAccessToken, clearPersistedData, getAccessToken, getProfile, persistProfile }

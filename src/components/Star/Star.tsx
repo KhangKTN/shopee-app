@@ -3,7 +3,7 @@ import { useId } from 'react'
 interface Props {
     star: number
     isShowText?: boolean
-    onClick: (star: number) => void
+    onClick?: (star: number) => void
 }
 
 const Star = ({ star, isShowText, onClick }: Props) => {
@@ -11,8 +11,8 @@ const Star = ({ star, isShowText, onClick }: Props) => {
 
     return (
         <div
-            onClick={() => onClick(star)}
-            className='flex items-center gap-x-2 hover:bg-gray-300 mt-1 px-1 py-[2px] rounded w-fit cursor-pointer'
+            onClick={() => onClick && onClick(star)}
+            className='flex items-center hover:bg-gray-300 px-1 py-[2px] rounded w-fit cursor-pointer'
             tabIndex={0}
         >
             {Array(5)
@@ -68,7 +68,7 @@ const Star = ({ star, isShowText, onClick }: Props) => {
                         )}
                     </div>
                 ))}
-            {isShowText && <span> trở lên</span>}
+            {isShowText && <span className='ml-1'> trở lên</span>}
         </div>
     )
 }

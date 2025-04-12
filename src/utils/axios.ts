@@ -35,9 +35,8 @@ class Axios {
         this.instance.interceptors.response.use(
             (response) => {
                 const { url } = response.config
-                if (url === path.LOGIN){
+                if (url === path.LOGIN) {
                     const resData = (response.data as AuthRes).data
-                    console.log(resData);
                     this.accessToken = resData.access_token
                     authUtil.persistAccessToken(this.accessToken)
                     authUtil.persistProfile(resData.user)
@@ -49,7 +48,7 @@ class Axios {
                 return response
             },
             function (error: AxiosError) {
-                if (error.response?.status !== HttpStatusCode.UnprocessableEntity){
+                if (error.response?.status !== HttpStatusCode.UnprocessableEntity) {
                     const data: any | undefined = error.response?.data
                     const message = data.message || error.message
                     toast.error(message)

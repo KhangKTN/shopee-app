@@ -1,18 +1,23 @@
 import { useContext } from 'react'
-import { Navigate, Outlet, useRoutes } from 'react-router-dom'
+import { Navigate, Outlet, useLocation, useRoutes } from 'react-router-dom'
 import path from '~/constant/path'
 import { AppContext } from '~/contexts/app.context'
 import HomeLayout from '~/layouts/HomeLayout'
 import RegisterLayout from '~/layouts/RegisterLayout'
 import Login from '~/pages/Login'
+import ProductDetail from '~/pages/ProductDetail'
 import { ProductList } from '~/pages/ProductList'
 import Profile from '~/pages/Profile/Profile'
 import Register from '~/pages/Register'
 
 const useRouteCompenent = () => {
     const { isAuthenticated } = useContext(AppContext)
+
     const ProtectedRoute = () => {
-        return isAuthenticated ? <Outlet /> : <Navigate to={path.LOGIN} />
+        const location = useLocation()
+        const returnUri = location.pathname.slice(1)
+
+        return isAuthenticated ? <Outlet /> : <Navigate to={`${path.LOGIN}?return_uri=${returnUri}`} />
     }
 
     const RejectedRoute = () => {
@@ -21,7 +26,7 @@ const useRouteCompenent = () => {
 
     const useRouteCompenent = useRoutes([
         {
-            path: '',
+            path: '/',
             element: <RejectedRoute />,
             children: [
                 {
@@ -65,6 +70,14 @@ const useRouteCompenent = () => {
                 </HomeLayout>
             )
         },
+        {
+            path: path.PRODUCT_DETAIL,
+            element: (
+                <HomeLayout>
+                    <ProductDetail />
+                </HomeLayout>
+            )
+        }
     ])
 
     return useRouteCompenent

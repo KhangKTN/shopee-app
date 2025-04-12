@@ -2,7 +2,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { useMutation } from '@tanstack/react-query'
 import { useContext } from 'react'
 import { useForm } from 'react-hook-form'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import authApi from '~/apis/auth.api'
 import Button from '~/components/Button'
 import Input from '~/components/Input'
@@ -14,6 +14,10 @@ import { loginSchema, LoginSchema } from '~/utils/validateField'
 const Login = () => {
     const { setAuthenticated, setProfile } = useContext(AppContext)
     const navigate = useNavigate()
+    const [params] = useSearchParams()
+    const returnUri = '/' + params.get('return_uri')
+    console.log(returnUri)
+
     const {
         handleSubmit,
         register,
@@ -30,7 +34,9 @@ const Login = () => {
             onSuccess: (resData) => {
                 setAuthenticated(true)
                 setProfile(resData.data.data.user)
-                navigate(path.HOME)
+                setTimeout(() => {
+                    navigate(returnUri ? returnUri : path.HOME)
+                }, 150)
             },
             onError: (error) => {
                 if (isAxiosUnprocessaleEntityError<ErrorResponse<LoginSchema>>(error)) {
