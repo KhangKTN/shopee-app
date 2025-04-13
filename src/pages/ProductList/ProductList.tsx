@@ -3,6 +3,7 @@ import _ from 'lodash'
 import { useEffect } from 'react'
 import categoryApi from '~/apis/category.api'
 import productApi from '~/apis/product.api'
+import ProductLoading from '~/components/Loading/ProductLoading'
 import Pagination from '~/components/Pagination'
 import useQueryParam from '~/hooks/useQueryParam'
 import { Filter, Product, Sort } from './index'
@@ -29,7 +30,7 @@ const ProductList = () => {
         _.isUndefined
     )
 
-    const { data: productData, isSuccess } = useQuery({
+    const { data: productData, isPending } = useQuery({
         queryKey: ['products', queryParam],
         queryFn: () => productApi.getProductList(queryConfig as ProductQuery),
         placeholderData: keepPreviousData
@@ -55,13 +56,15 @@ const ProductList = () => {
                     </div>
                     <div className='col-span-9'>
                         <Sort queryConfig={queryConfig} totalPage={totalPage} />
-                        {isSuccess && (
-                            <div className='gap-x-3 gap-y-2 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 mt-5'>
-                                {productData?.data.data.products.map((product) => (
+                        <div className='gap-x-3 gap-y-2 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 mt-5'>
+                            {isPending ? (
+                                <ProductLoading />
+                            ) : (
+                                productData?.data.data.products.map((product) => (
                                     <Product key={product._id} product={product} />
-                                ))}
-                            </div>
-                        )}
+                                ))
+                            )}
+                        </div>
                         <Pagination queryConfig={queryConfig} totalPage={totalPage} />
                     </div>
                 </div>
