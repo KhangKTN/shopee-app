@@ -1,9 +1,10 @@
 import { useQuery } from '@tanstack/react-query'
 import DOMPurify from 'dompurify'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import productApi from '~/apis/product.api'
 import { InputNumber } from '~/components/Input'
+import { ProductDetailLoading } from '~/components/Loading'
 import Star from '~/components/Star'
 import productUtil from '~/utils/productUtil'
 import ProductImages from './ProductImages'
@@ -14,6 +15,10 @@ const ProductDetail = () => {
     const { productLink } = useParams()
     const [buyQty, setBuyQty] = useState('1')
 
+    useEffect(() => {
+        window.scrollTo({ top: 0, behavior: 'auto' })
+    }, [])
+
     // Extract id from url
     const id = useMemo(() => {
         const pid = productLink?.slice(productLink.lastIndexOf('-'))
@@ -22,12 +27,15 @@ const ProductDetail = () => {
 
     const { data } = useQuery({
         queryKey: ['product', id],
-        queryFn: () => productApi.getProductDetail(id as string)
+        queryFn: async () => {
+            // await new Promise((resolve) => setTimeout(resolve, 3000))
+            return productApi.getProductDetail(id as string)
+        }
     })
 
     const productData = data?.data.data
     if (!productData) {
-        return null
+        return <ProductDetailLoading />
     }
 
     const { images, name, rating, sold, price, price_before_discount, quantity, description } = productData

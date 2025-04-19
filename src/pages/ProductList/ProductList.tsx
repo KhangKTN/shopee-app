@@ -3,7 +3,7 @@ import _ from 'lodash'
 import { useEffect } from 'react'
 import categoryApi from '~/apis/category.api'
 import productApi from '~/apis/product.api'
-import ProductLoading from '~/components/Loading/ProductLoading'
+import { ProductLoading } from '~/components/Loading'
 import Pagination from '~/components/Pagination'
 import useQueryParam from '~/hooks/useQueryParam'
 import { Filter, Product, Sort } from './index'
@@ -45,7 +45,7 @@ const ProductList = () => {
 
     useEffect(() => {
         window.scrollTo({ top: 0, behavior: 'smooth' })
-    }, [queryParam])
+    }, [queryParam.page])
 
     return (
         <section className='bg-gray-200 px-16 py-4'>

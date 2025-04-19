@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import { ImageLoad } from '~/components/Loading'
 import productUtil from '~/utils/productUtil'
 
 const Product = ({ product }: { product: Product }) => {
@@ -6,7 +7,7 @@ const Product = ({ product }: { product: Product }) => {
         <Link to={productUtil.slugifyUrl({ id: product._id, name: product.name })}>
             <div className='bg-white shadow hover:shadow-md rounded-sm transition-transform hover:-translate-y-[2px] duration-200'>
                 <div className='relative pt-[100%] w-full'>
-                    <img src={product.image} className='top-0 left-0 absolute w-full h-full object-cover' alt='' />
+                    <ImageLoad img={product.image} />
                 </div>
                 <div className='px-2 py-3 overflow-hidden'>
                     <div className='min-h-[42px] font-medium line-clamp-2'>{product.name}</div>

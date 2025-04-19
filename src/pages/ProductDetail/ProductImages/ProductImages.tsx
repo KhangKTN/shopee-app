@@ -1,43 +1,63 @@
 import cx from 'classix'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
+import { ImageLoad } from '~/components/Loading'
 
 const NUMBER_IMG_DISPLAY = 5
-
-const ImageLoad = ({ img }: { img: string }): React.ReactNode => {
-    const [loaded, setLoaded] = useState(false)
-
-    return (
-        <div className={cx('absolute inset-0 bg-gray-200', !loaded && 'animate-pulse')}>
-            <img
-                onLoad={() => setLoaded(true)}
-                className={cx(
-                    'size-full object-cover transition-opacity duration-200',
-                    loaded ? 'opacity-100' : 'opacity-0'
-                )}
-                src={img}
-                alt={img}
-            />
-        </div>
-    )
-}
 
 const ProductImages = ({ images, name }: { images: string[]; name: string }) => {
     const [currentImgIndex, setCurrentImgIndex] = useState(0)
     const [idxSlider, setIdxSlider] = useState(0)
+    const [loaded, setLoaded] = useState(false)
+
+    const imageRef = useRef<HTMLImageElement>(null)
 
     const canPressNext = images.length > NUMBER_IMG_DISPLAY + idxSlider
     const canPressPrev = idxSlider > 0
 
+    const handleZoom = (e: React.MouseEvent<HTMLImageElement, MouseEvent>) => {
+        const img = imageRef.current as HTMLImageElement
+        const { naturalHeight, naturalWidth } = img
+        img.style.width = naturalWidth + 'px'
+        img.style.height = naturalHeight + 'px'
+        img.style.maxWidth = 'unset'
+
+        const rect = e.currentTarget.getBoundingClientRect()
+        // Get mouse pointer coordinates
+        const { offsetX, offsetY } = e.nativeEvent
+        const top = offsetY * (1 - naturalHeight / rect.height)
+        const left = offsetX * (1 - naturalWidth / rect.width)
+        img.style.top = top + 'px'
+        img.style.left = left + 'px'
+    }
+
+    const handleResetZoom = () => {
+        imageRef.current?.removeAttribute('style')
+    }
+
     return (
         <>
-            <div className='relative shadow pt-[100%] rounded w-full overflow-hidden'>
+            {/* Image main */}
+            <div
+                onMouseMove={handleZoom}
+                onMouseLeave={handleResetZoom}
+                className={cx(
+                    !loaded && 'animate-pulse',
+                    'relative rounded shadow pt-[100%] w-full overflow-hidden hover:cursor-zoom-in'
+                )}
+            >
                 <img
-                    className='absolute inset-0 size-full object-cover animate-scale-up-center'
+                    ref={imageRef}
+                    className={cx(
+                        'absolute inset-0 rounded size-full object-cover transition-opacity animate-scale-up-center duration-200 pointer-events-none',
+                        loaded ? 'opacity-100' : 'opacity-0'
+                    )}
                     src={images[currentImgIndex]}
+                    onLoad={() => setLoaded(true)}
                     alt={name}
                     key={images[currentImgIndex]}
                 />
             </div>
+            {/* List image other */}
             <div className='relative gap-1 grid grid-cols-5 grid-rows-1 mt-4'>
                 {images.length > NUMBER_IMG_DISPLAY && (
                     <button
