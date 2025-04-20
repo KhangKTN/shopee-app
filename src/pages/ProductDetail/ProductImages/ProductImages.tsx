@@ -77,7 +77,7 @@ const ProductImages = ({ images, name }: { images: string[]; name: string }) => 
                         onClick={() => setCurrentImgIndex(idx + idxSlider)}
                         className='relative shadow pt-[100%] w-full cursor-pointer'
                     >
-                        <ImageLoad img={e} />
+                        <ImageLoad key={e} img={e} />
                         {idx + idxSlider === currentImgIndex && (
                             <div className='absolute inset-0 bg-transparent border-2 border-primary w-full h-full'></div>
                         )}

@@ -9,7 +9,7 @@ const ImageLoad = ({ img }: Prop) => {
     const [loaded, setLoaded] = useState(false)
 
     return (
-        <div className={cx('absolute inset-0 bg-gray-200', !loaded && 'animate-pulse')}>
+        <div className={cx('absolute inset-0 bg-gray-300', !loaded && 'animate-pulse')}>
             <img
                 onLoad={() => setLoaded(true)}
                 className={cx(

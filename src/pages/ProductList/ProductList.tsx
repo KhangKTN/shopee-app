@@ -1,11 +1,10 @@
-import { keepPreviousData, useQuery } from '@tanstack/react-query'
-import _ from 'lodash'
+import { useQuery } from '@tanstack/react-query'
 import { useEffect } from 'react'
 import categoryApi from '~/apis/category.api'
 import productApi from '~/apis/product.api'
 import { ProductLoading } from '~/components/Loading'
 import Pagination from '~/components/Pagination'
-import useQueryParam from '~/hooks/useQueryParam'
+import useQueryConfig from '~/hooks/useQueryConfig'
 import { Filter, Product, Sort } from './index'
 
 export type QueryConfig = {
@@ -13,39 +12,28 @@ export type QueryConfig = {
 }
 
 const ProductList = () => {
-    const queryParam: QueryConfig = useQueryParam()
-    const queryConfig: QueryConfig = _.omitBy(
-        {
-            page: queryParam.page ?? '1',
-            limit: queryParam.limit,
-            name: queryParam.name,
-            sort_by: queryParam.sort_by,
-            order: queryParam.order,
-            price_min: queryParam.price_min,
-            price_max: queryParam.price_max,
-            exclude: queryParam.exclude,
-            category: queryParam.category,
-            rating_filter: queryParam.rating_filter
-        },
-        _.isUndefined
-    )
+    const queryConfig: QueryConfig = useQueryConfig()
 
     const { data: productData, isPending } = useQuery({
-        queryKey: ['products', queryParam],
-        queryFn: () => productApi.getProductList(queryConfig as ProductQuery),
-        placeholderData: keepPreviousData
+        queryKey: ['products', queryConfig],
+        queryFn: () => {
+            return productApi.getProductList(queryConfig as ProductQuery)
+        }
     })
-
-    const totalPage = productData?.data.data.pagination.page_size
 
     const { data: categoriesData } = useQuery({
         queryKey: ['categories'],
-        queryFn: () => categoryApi.getCategories()
+        queryFn: () => {
+            return categoryApi.getCategories()
+        }
     })
+
+    const totalPage = productData?.data.data.pagination.page_size
+    const foundProduct = (productData?.data.data.products.length ?? 0) > 0
 
     useEffect(() => {
         window.scrollTo({ top: 0, behavior: 'smooth' })
-    }, [queryParam.page])
+    }, [queryConfig.page])
 
     return (
         <section className='bg-gray-200 px-16 py-4'>
@@ -59,13 +47,17 @@ const ProductList = () => {
                         <div className='gap-x-3 gap-y-2 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 mt-5'>
                             {isPending ? (
                                 <ProductLoading />
-                            ) : (
+                            ) : foundProduct ? (
                                 productData?.data.data.products.map((product) => (
                                     <Product key={product._id} product={product} />
                                 ))
+                            ) : (
+                                <div className='bg-gray-300/50 mt-5 py-4 rounded text-primary text-center italic'>
+                                    Không tìm thấy sản phẩm nào phù hợp
+                                </div>
                             )}
                         </div>
-                        <Pagination queryConfig={queryConfig} totalPage={totalPage} />
+                        {foundProduct && <Pagination queryConfig={queryConfig} totalPage={totalPage} />}
                     </div>
                 </div>
             </div>

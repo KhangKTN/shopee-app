@@ -50,7 +50,7 @@ const Sort = ({ queryConfig, totalPage = 0 }: Prop) => {
     }
 
     return (
-        <div className='flex justify-between items-center bg-gray-300/50 px-4 py-3 rounded-sm text-sm'>
+        <div className='flex justify-between items-center bg-gray-300/50 px-4 py-3 rounded text-sm'>
             {/* List button sort */}
             <div className='flex items-center gap-x-3'>
                 <span className='font-medium text-base'>Sắp xếp theo</span>

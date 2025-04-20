@@ -1,9 +1,11 @@
 import { useMutation } from '@tanstack/react-query'
-import { useContext } from 'react'
-import { Link } from 'react-router-dom'
+import { FormEvent, useContext, useState } from 'react'
+import { createSearchParams, Link, useNavigate } from 'react-router-dom'
 import authApi from '~/apis/auth.api'
 import path from '~/constant/path'
 import { AppContext } from '~/contexts/app.context'
+import useQueryConfig from '~/hooks/useQueryConfig'
+import { QueryConfig } from '~/pages/ProductList/ProductList'
 import Popover from '../Popover'
 
 const popoverItemClass = 'py-2 px-3 hover:text-primary hover:bg-slate-100 w-full text-left'
@@ -34,6 +36,10 @@ const sampleProductList: Product[] = [
 ]
 
 const Header = () => {
+    const queryConfig: QueryConfig = useQueryConfig()
+    const [search, setSearch] = useState(queryConfig.name ?? '')
+    const navigate = useNavigate()
+
     const { isAuthenticated, setAuthenticated, profile, setProfile } = useContext(AppContext)
 
     const logoutMutation = useMutation({
@@ -46,6 +52,19 @@ const Header = () => {
 
     const handleLogout = () => {
         logoutMutation.mutate()
+    }
+
+    const handleSearch = (e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault()
+        const searchValue = search.trim()
+        const queryObj = { ...queryConfig, page: '1', name: searchValue }
+        if (searchValue === '') {
+            delete queryObj['name' as keyof QueryConfig]
+        }
+        navigate({
+            pathname: path.HOME,
+            search: createSearchParams(queryObj).toString()
+        })
     }
 
     return (
@@ -131,8 +150,10 @@ const Header = () => {
                     </svg>
                 </Link>
                 {/* Search box */}
-                <form className='flex flex-1 gap-x-2 bg-white p-1 rounded w-full h-[44px]'>
+                <form onSubmit={handleSearch} className='flex flex-1 gap-x-2 bg-white p-1 rounded w-full h-[44px]'>
                     <input
+                        onChange={(e) => setSearch(e.target.value)}
+                        value={search}
                         className='ps-3 focus:outline-2 focus:outline-gray-600 w-full h-full text-black'
                         type='text'
                         placeholder='Siêu sale'
