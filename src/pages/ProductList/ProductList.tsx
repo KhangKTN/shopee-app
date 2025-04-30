@@ -5,7 +5,7 @@ import productApi from '~/apis/product.api'
 import { ProductLoading } from '~/components/Loading'
 import Pagination from '~/components/Pagination'
 import useQueryConfig from '~/hooks/useQueryConfig'
-import { Filter, Product, Sort } from './index'
+import { Filter, Product, Sort } from './'
 
 export type QueryConfig = {
     [key in keyof ProductQuery]?: string
@@ -18,7 +18,8 @@ const ProductList = () => {
         queryKey: ['products', queryConfig],
         queryFn: () => {
             return productApi.getProductList(queryConfig as ProductQuery)
-        }
+        },
+        staleTime: 1 * 60 * 1000
     })
 
     const { data: categoriesData } = useQuery({
