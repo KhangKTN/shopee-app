@@ -1,11 +1,15 @@
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import DOMPurify from 'dompurify'
 import { useEffect, useMemo, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import productApi from '~/apis/product.api'
+import purchaseApi from '~/apis/purchase.api'
+import AlertSuccess from '~/components/AlertSuccess'
 import { ProductDetailLoading, ProductLoading } from '~/components/Loading'
 import QuantityController from '~/components/QuantityController/QuantityController'
 import Star from '~/components/Star'
+import { PurchaseStatus } from '~/constant/purchase'
+import { queryClient } from '~/main'
 import productUtil from '~/utils/productUtil'
 import { Product } from '../ProductList'
 import ProductImages from './ProductImages'
@@ -24,6 +28,7 @@ const calcShippingDay = (): string => {
 const ProductDetail = () => {
     const { productLink } = useParams()
     const [buyQty, setBuyQty] = useState('1')
+    const [showAlertSuccess, setShowAlertSuccess] = useState(false)
 
     // Extract id from url
     const id = useMemo(() => {
@@ -52,6 +57,22 @@ const ProductDetail = () => {
         enabled: Boolean(product)
     })
 
+    const addCartMutation = useMutation({
+        mutationFn: (data: { product_id: string; buy_count: number }) => purchaseApi.addToCart(data),
+        onSuccess: () => {
+            // Trigger call api get items in cart
+            queryClient.invalidateQueries({ queryKey: ['purchases', PurchaseStatus.CART] })
+            setShowAlertSuccess(true)
+            setTimeout(() => {
+                setShowAlertSuccess(false)
+            }, 1500)
+        }
+    })
+
+    const handleAddToCart = () => {
+        addCartMutation.mutate({ product_id: id as string, buy_count: Number(buyQty) })
+    }
+
     const foundProducts = (productRelateds?.data.data.products.length ?? 0) > 0
 
     const productData = product?.data.data
@@ -72,34 +93,37 @@ const ProductDetail = () => {
                     </div>
                     {/* Product info */}
                     <div className='col-span-7'>
-                        <h1 className='text-2xl'>{name}</h1>
+                        <h1 className='font-medium text-2xl'>{name}</h1>
                         {/* Rating and sold */}
                         <div className='flex items-center gap-x-2 mt-3'>
                             <div className='flex items-center'>
-                                <span className='mr-1 text-base'>{rating}</span>
+                                <span className='mr-1 font-medium text-base'>{rating}</span>
                                 <Star star={rating} />
                             </div>
-                            <span className='pl-2 border-l-[1px]'>{sold} đã bán</span>
+                            <span className='pl-2 border-gray-300 border-l-[1px]'>
+                                <span className='font-semibold'>{sold}</span> đã bán
+                            </span>
                         </div>
                         {/* Price */}
                         <div className='flex bg-gray-50 mt-12 px-5 py-3 rounded'>
-                            <span className='mr-1 text-primary text-lg'>đ</span>
+                            <span className='mr-0.5 text-primary text-3xl underline'>đ</span>
                             <h2 className='font-medium text-primary text-3xl'>{productUtil.formatVnd(price)}</h2>
                             {price_before_discount > price && (
                                 <>
-                                    <span className='ml-5 text-gray-400 text-base'>đ</span>
-                                    <h2 className='ml-1 text-gray-400 text-lg line-through'>
+                                    <span className='ml-5 text-gray-400 text-lg underline'>đ</span>
+                                    <h2 className='ml-0.5 text-gray-400 text-lg line-through'>
                                         {productUtil.formatVnd(price_before_discount)}
                                     </h2>
                                 </>
                             )}
                             {price_before_discount && price < price_before_discount && (
-                                <div className='flex items-center bg-primary my-auto ml-10 px-2 py-1 rounded h-fit font-semibold text-white text-xs uppercase'>
+                                <div className='flex items-center bg-primary/10 my-auto ml-10 px-2 py-1 rounded h-fit font-bold text-primary text-xs uppercase'>
+                                    -
                                     {productUtil.calcDiscountPercent(
                                         productData.price,
                                         productData.price_before_discount
                                     )}
-                                    % giảm
+                                    %
                                 </div>
                             )}
                         </div>
@@ -133,9 +157,13 @@ const ProductDetail = () => {
                         </div>
                         {/* Quantity */}
                         <QuantityController productQty={quantity} buyQty={buyQty} setBuyQty={setBuyQty} />
-                        {/* Action */}
+                        {/* Action button */}
                         <div className='flex gap-x-4 mt-10'>
-                            <button className='flex items-center gap-x-2 bg-primary/10 hover:bg-primary/5 px-5 py-2.5 border-[1.5px] border-primary rounded text-primary transition-colors'>
+                            <button
+                                onClick={handleAddToCart}
+                                className='flex items-center gap-x-2 bg-primary/10 hover:bg-primary/5 px-5 py-2.5 border-[1.5px] border-primary rounded text-primary transition-colors'
+                                disabled={addCartMutation.isPending}
+                            >
                                 <img
                                     src='https://deo.shopeemobile.com/shopee/shopee-pcmall-live-sg/productdetailspage/f600cbfffbe02cc144a1.svg'
                                     alt='shopping_cart'
@@ -172,6 +200,8 @@ const ProductDetail = () => {
                     )}
                 </div>
             </div>
+            {/* Show alert when add to cart success */}
+            {showAlertSuccess && <AlertSuccess text='Sản phẩm đã được thêm vào giỏ hàng' />}
         </main>
     )
 }

@@ -6,22 +6,25 @@ const Product = ({ product }: { product: Product }) => {
     return (
         <Link to={productUtil.slugifyUrl({ id: product._id, name: product.name })}>
             <div className='bg-white shadow hover:shadow-md rounded-sm transition-transform hover:-translate-y-[2px] duration-200'>
+                {/* Image */}
                 <div className='relative pt-[100%] w-full'>
                     <ImageLoad img={product.image} />
                 </div>
                 <div className='px-2 py-3 overflow-hidden'>
                     <div className='min-h-[42px] font-medium line-clamp-2'>{product.name}</div>
-                    <div className='mt-2'>
-                        <span className='text-primary text-xs'>đ</span>
-                        <span className='font-semibold text-primary text-base'>
-                            {productUtil.formatVnd(product.price)}
-                        </span>
+                    {/* Price */}
+                    <div className='flex items-center mt-2'>
+                        <div className='flex max-w-[60%] font-semibold truncate'>
+                            <span className='mt-1.5 text-primary text-xs underline'>đ</span>
+                            <span className='text-primary text-base'>{productUtil.formatVnd(product.price)}</span>
+                        </div>
                         {product.price < product.price_before_discount && (
                             <span className='bg-primary/15 ml-3 px-1 py-[2px] rounded-sm font-medium text-primary text-sm'>
                                 -{productUtil.calcDiscountPercent(product.price, product.price_before_discount)}%
                             </span>
                         )}
                     </div>
+                    {/* Rating and Sold */}
                     <div className='mt-2.5 min-h-4 text-xs'>
                         {product.rating > 0 && (
                             <span>
@@ -35,6 +38,7 @@ const Product = ({ product }: { product: Product }) => {
                             </span>
                         )}
                     </div>
+                    {/* Shipping */}
                     <div className='mt-2 text-xs line-clamp-1'>
                         <span className='text-emerald-500'>
                             <i className='fa-solid fa-truck-fast'></i> 3 - 4 ngày

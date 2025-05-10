@@ -15,8 +15,8 @@ const Login = () => {
     const { setAuthenticated, setProfile } = useContext(AppContext)
     const navigate = useNavigate()
     const [params] = useSearchParams()
-    const returnUri = '/' + params.get('return_uri')
-    console.log(returnUri)
+
+    const returnUri = params.get('return_uri')
 
     const {
         handleSubmit,
@@ -35,7 +35,7 @@ const Login = () => {
                 setAuthenticated(true)
                 setProfile(resData.data.data.user)
                 setTimeout(() => {
-                    navigate(returnUri ? returnUri : path.HOME)
+                    navigate(returnUri ? `/${returnUri}` : path.HOME)
                 }, 150)
             },
             onError: (error) => {

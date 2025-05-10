@@ -6,34 +6,10 @@ import path from '~/constant/path'
 import { AppContext } from '~/contexts/app.context'
 import useQueryConfig from '~/hooks/useQueryConfig'
 import { QueryConfig } from '~/pages/ProductList/ProductList'
+import Cart from '../Cart'
 import Popover from '../Popover'
 
 const popoverItemClass = 'py-2 px-3 hover:text-primary hover:bg-slate-100 w-full text-left'
-
-interface Product {
-    img: string
-    name: string
-    quantity?: number
-    price: number
-}
-
-const sampleProductList: Product[] = [
-    {
-        img: 'https://down-vn.img.susercontent.com/file/vn-11134207-7r98o-lzyl06aja7v1d3@resize_w900_nl.webp',
-        name: 'Giá Huỷ Diệt - Mẫu M -Nhớt Xe số, xe côn GW GULF WESTERN OIL - 100% SYNTHETIC SAE 5W40 ESTER PAO BLEND Dung Tích 1000ML',
-        price: 189000
-    },
-    {
-        img: 'https://down-vn.img.susercontent.com/file/vn-11134207-7r98o-lsur44rvxnkp44.webp',
-        name: 'Nhớt Repsol Moto Racing 10w-40 1L dùng cho xe số và xe côn tay',
-        price: 235000
-    },
-    {
-        img: 'https://down-vn.img.susercontent.com/file/23c748f0df4f43674a847bf77d6a759c.webp',
-        name: 'Xịt Dưỡng Sên Voltronic IX50 400ml',
-        price: 220000
-    }
-]
 
 const Header = () => {
     const queryConfig: QueryConfig = useQueryConfig()
@@ -163,38 +139,7 @@ const Header = () => {
                     </button>
                 </form>
                 {/* Cart */}
-                <Popover
-                    popover={
-                        <div className='bg-white p-3 rounded-sm w-[400px] min-h-[240px]'>
-                            <div className='mb-3 text-gray-400'>Sản phẩm mới thêm</div>
-                            {sampleProductList?.length > 0 ? (
-                                <div className=''>
-                                    {sampleProductList.map((item, idx) => (
-                                        <div key={idx} className='flex gap-x-3'>
-                                            <img className='size-[60px]' src={item.img} alt={`product_${idx}`} />
-                                            <span className='flex-1 overflow-hidden truncate'>{item.name}</span>
-                                            <span className='w-1/5 text-primary text-right'>đ{item.price}</span>
-                                        </div>
-                                    ))}
-                                    <div className='flex justify-between items-center mt-3'>
-                                        <span>1 thêm vào giỏ</span>
-                                        <button className='block bg-primary ml-auto px-4 py-2 rounded text-white'>
-                                            Xem giỏ hàng
-                                        </button>
-                                    </div>
-                                </div>
-                            ) : (
-                                <div className='flex justify-center items-center w-full h-[240px] min-h-full'>
-                                    <span>Chưa có sản phẩm nào</span>
-                                </div>
-                            )}
-                        </div>
-                    }
-                >
-                    <Link to='' className='min-w-[60px]'>
-                        <i className='text-2xl fa-solid fa-cart-shopping'></i>
-                    </Link>
-                </Popover>
+                <Cart />
             </div>
         </div>
     )
