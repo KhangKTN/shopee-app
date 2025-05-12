@@ -1,17 +1,22 @@
 import { useQuery } from '@tanstack/react-query'
+import { useContext } from 'react'
 import { Link } from 'react-router-dom'
 import purchaseApi from '~/apis/purchase.api'
 import path from '~/constant/path'
 import { PurchaseStatus } from '~/constant/purchase'
+import { AppContext } from '~/contexts/app.context'
 import productUtil from '~/utils/productUtil'
 import Popover from '../Popover'
 
 const CART_ITEM_SHOW = 5
 
 const Cart = () => {
+    const { isAuthenticated } = useContext(AppContext)
+
     const { data: cartData } = useQuery({
         queryKey: ['purchases', PurchaseStatus.CART],
-        queryFn: () => purchaseApi.getListPurchase(PurchaseStatus.CART)
+        queryFn: () => purchaseApi.getListPurchase(PurchaseStatus.CART),
+        enabled: isAuthenticated
     })
 
     const cartProductList = cartData?.data.data
@@ -51,10 +56,10 @@ const Cart = () => {
                 </div>
             }
         >
-            <Link to={path.HOME} className='relative'>
+            <Link to={path.CART} className='relative'>
                 <i className='text-2xl fa-solid fa-cart-shopping'></i>
                 <span className='top-0 right-0 absolute flex justify-center items-center bg-white rounded-full size-4 text-primary text-xs -translate-y-1/2 translate-x-1/2'>
-                    {cartProductList?.length}
+                    {cartProductList?.length ?? 0}
                 </span>
             </Link>
         </Popover>

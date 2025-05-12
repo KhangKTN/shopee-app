@@ -35,7 +35,7 @@ const Login = () => {
                 setAuthenticated(true)
                 setProfile(resData.data.data.user)
                 setTimeout(() => {
-                    navigate(returnUri ? `/${returnUri}` : path.HOME)
+                    navigate(returnUri ? returnUri : path.HOME)
                 }, 150)
             },
             onError: (error) => {

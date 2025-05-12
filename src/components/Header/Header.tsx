@@ -1,10 +1,12 @@
 import { useMutation } from '@tanstack/react-query'
 import { FormEvent, useContext, useState } from 'react'
-import { createSearchParams, Link, useNavigate } from 'react-router-dom'
+import { createSearchParams, Link, useLocation, useNavigate } from 'react-router-dom'
 import authApi from '~/apis/auth.api'
 import path from '~/constant/path'
+import { PurchaseStatus } from '~/constant/purchase'
 import { AppContext } from '~/contexts/app.context'
 import useQueryConfig from '~/hooks/useQueryConfig'
+import { queryClient } from '~/main'
 import { QueryConfig } from '~/pages/ProductList/ProductList'
 import Cart from '../Cart'
 import Popover from '../Popover'
@@ -15,7 +17,7 @@ const Header = () => {
     const queryConfig: QueryConfig = useQueryConfig()
     const [search, setSearch] = useState(queryConfig.name ?? '')
     const navigate = useNavigate()
-
+    const location = useLocation()
     const { isAuthenticated, setAuthenticated, profile, setProfile } = useContext(AppContext)
 
     const logoutMutation = useMutation({
@@ -23,6 +25,7 @@ const Header = () => {
         onSuccess: () => {
             setAuthenticated(false)
             setProfile(null)
+            queryClient.removeQueries({ queryKey: ['purchases', PurchaseStatus.CART] })
         }
     })
 
@@ -109,7 +112,10 @@ const Header = () => {
                                 Đăng ký
                             </Link>
                             <div className='border-white/40 border-r-[1px] h-3'></div>
-                            <Link className='hover:text-white/80 capitalize' to='/login'>
+                            <Link
+                                className='hover:text-white/80 capitalize'
+                                to={`${path.LOGIN}?return_uri=${location.pathname}`}
+                            >
                                 Đăng nhập
                             </Link>
                         </div>

@@ -6,7 +6,7 @@ import productApi from '~/apis/product.api'
 import purchaseApi from '~/apis/purchase.api'
 import AlertSuccess from '~/components/AlertSuccess'
 import { ProductDetailLoading, ProductLoading } from '~/components/Loading'
-import QuantityController from '~/components/QuantityController/QuantityController'
+import QuantityController from '~/components/QuantityController'
 import Star from '~/components/Star'
 import { PurchaseStatus } from '~/constant/purchase'
 import { queryClient } from '~/main'
@@ -156,7 +156,11 @@ const ProductDetail = () => {
                             <p>Trả hàng miễn phí 15 ngày · Chính hãng 100% · Miễn phí vận chuyển</p>
                         </div>
                         {/* Quantity */}
-                        <QuantityController productQty={quantity} buyQty={buyQty} setBuyQty={setBuyQty} />
+                        <div className='flex items-center mt-12'>
+                            <span className='min-w-[100px] text-gray-500 capitalize'>Số lượng</span>
+                            <QuantityController productQty={quantity} buyQty={buyQty} setBuyQty={setBuyQty} />
+                            <span className='ml-5 text-gray-400'>{quantity} sản phẩm có sẵn</span>
+                        </div>
                         {/* Action button */}
                         <div className='flex gap-x-4 mt-10'>
                             <button

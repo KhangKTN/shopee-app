@@ -4,6 +4,7 @@ import path from '~/constant/path'
 import { AppContext } from '~/contexts/app.context'
 import HomeLayout from '~/layouts/HomeLayout'
 import RegisterLayout from '~/layouts/RegisterLayout'
+import Cart from '~/pages/Cart'
 import Login from '~/pages/Login'
 import ProductDetail from '~/pages/ProductDetail'
 import { ProductList } from '~/pages/ProductList'
@@ -15,7 +16,7 @@ const useRouteCompenent = () => {
 
     const ProtectedRoute = () => {
         const location = useLocation()
-        const returnUri = location.pathname.slice(1)
+        const returnUri = location.pathname
 
         return isAuthenticated ? <Outlet /> : <Navigate to={`${path.LOGIN}?return_uri=${returnUri}`} />
     }
@@ -56,6 +57,14 @@ const useRouteCompenent = () => {
                     element: (
                         <HomeLayout>
                             <Profile />
+                        </HomeLayout>
+                    )
+                },
+                {
+                    path: path.CART,
+                    element: (
+                        <HomeLayout>
+                            <Cart />
                         </HomeLayout>
                     )
                 }
