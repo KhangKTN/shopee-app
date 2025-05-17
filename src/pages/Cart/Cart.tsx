@@ -1,24 +1,65 @@
 import { useQuery } from '@tanstack/react-query'
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import purchaseApi from '~/apis/purchase.api'
+import SpinnerLoading from '~/components/Loading/SpinnerLoading'
 import QuantityController from '~/components/QuantityController'
 import { PurchaseStatus } from '~/constant/purchase'
 import productUtil from '~/utils/productUtil'
 
+interface ProductExtra extends Purchase {
+    disabled: boolean
+    checked: boolean
+}
+
 const Cart = () => {
-    const { data: cartData } = useQuery({
+    const [productExtraList, setProductExtra] = useState<ProductExtra[]>([])
+    const { data: cartData, isFetching } = useQuery({
         queryKey: ['purchases', PurchaseStatus.CART],
         queryFn: () => purchaseApi.getListPurchase(PurchaseStatus.CART)
     })
 
     const cartProductList = cartData?.data.data
 
-    const calcTotalPrice = (): string | null => {
+    useEffect(() => {
+        if (cartProductList && cartProductList.length > 0) {
+            const cartProductExtraList: ProductExtra[] = cartProductList.map((i) => ({
+                ...i,
+                disabled: false,
+                checked: false
+            }))
+            setProductExtra([...cartProductExtraList])
+        }
+    }, [cartProductList])
+
+    const calcTotalPrice = () => {
         if (!cartProductList) {
             return null
         }
-        const totalPrice = cartProductList.reduce((prevValue, cur) => (prevValue += cur.price * cur.buy_count), 0)
+        const totalPrice = productExtraList
+            .filter((i) => i.checked)
+            .reduce((prevValue, cur) => (prevValue += cur.price * cur.buy_count), 0)
         return productUtil.formatVnd(totalPrice)
+    }
+
+    const isCheckedAll = productExtraList.every((i) => i.checked)
+
+    const countChecked = () => productExtraList.filter((i) => i.checked).length
+
+    const handleCheck = (checkAll: boolean, id?: string) => {
+        if (!productExtraList || productExtraList.length <= 0) {
+            return
+        }
+
+        if (checkAll) {
+            setProductExtra(productExtraList.map((i) => ({ ...i, checked: !isCheckedAll })))
+        } else {
+            const productCheckedIndex = productExtraList.findIndex((i) => i._id === id)
+            if (productCheckedIndex === -1) {
+                return
+            }
+            setProductExtra(productExtraList.map((i) => (i._id === id ? { ...i, checked: !i.checked } : i)))
+        }
     }
 
     return (
@@ -26,11 +67,18 @@ const Cart = () => {
             <div className='mx-auto overflow-auto container'>
                 <div className='min-w-[1000px]'>
                     {/* Render items cart */}
-                    {cartProductList && cartProductList.length > 0 ? (
+                    {isFetching ? (
+                        <SpinnerLoading />
+                    ) : productExtraList.length > 0 ? (
                         <>
                             <div className='grid grid-cols-12 bg-white mb-3 px-8 py-4 font-medium capitalize'>
                                 <div className='flex items-center col-span-6'>
-                                    <input className='mr-3 size-4 accent-primary shrink-0' type='checkbox' />
+                                    <input
+                                        onChange={() => handleCheck(true)}
+                                        className='mr-3 size-4 accent-primary shrink-0'
+                                        type='checkbox'
+                                        checked={isCheckedAll}
+                                    />
                                     <div>Sản phẩm</div>
                                 </div>
                                 <div className='col-span-1 text-gray-500 text-center'>Đơn giá</div>
@@ -39,7 +87,7 @@ const Cart = () => {
                                 <div className='col-span-1 text-gray-500 text-center'>Thao tác</div>
                             </div>
                             <div className='bg-white px-4 py-6 rounded-sm'>
-                                {cartProductList.map((i) => (
+                                {productExtraList.map((i) => (
                                     <div
                                         key={i._id}
                                         className='items-center grid grid-cols-12 mt-3 first:mt-0 px-4 py-8 border-[1px] border-gray-200 rounded-sm font-medium'
@@ -49,6 +97,8 @@ const Cart = () => {
                                                 id={i._id}
                                                 className='mr-3 size-4 accent-primary shrink-0'
                                                 type='checkbox'
+                                                onChange={() => handleCheck(false, i._id)}
+                                                checked={i.checked}
                                             />
                                             <div className='flex gap-x-3'>
                                                 <Link
@@ -97,25 +147,35 @@ const Cart = () => {
                 </div>
             </div>
             {/* Summary cart */}
-            <div className='bottom-0 z-10 sticky flex lg:flex-row flex-col justify-between bg-white mx-auto mt-5 px-4 py-5 border-primary border-t-2 rounded-sm container'>
-                <div className='flex items-center text-base capitalize'>
-                    <input id='select_all' type='checkbox' className='mr-2 size-4 accent-primary' />
-                    <label htmlFor='select_all'>Chọn tất cả ({cartProductList?.length})</label>
-                    <button className='ml-3 pl-3 border-neutral-200 border-l-[1px] hover:text-primary'>Xoá</button>
+            {productExtraList.length > 0 && (
+                <div className='bottom-0 z-10 sticky flex lg:flex-row flex-col justify-between bg-white mx-auto mt-5 px-4 py-5 border-primary border-t-2 rounded-sm container'>
+                    <div className='flex items-center text-base capitalize'>
+                        <input
+                            id='select_all'
+                            onChange={() => handleCheck(true)}
+                            checked={isCheckedAll}
+                            type='checkbox'
+                            className='mr-2 size-4 accent-primary'
+                        />
+                        <label htmlFor='select_all' className='cursor-pointer'>
+                            Chọn tất cả ({productExtraList?.length})
+                        </label>
+                        <button className='ml-3 pl-3 border-neutral-200 border-l-[1px] hover:text-primary'>Xoá</button>
+                    </div>
+                    <div>
+                        <span className='mr-5 font-medium text-base'>
+                            Tổng cộng ({countChecked()} Sản phẩm){': '}
+                            <span className='font-semibold text-primary text-xl'>đ{calcTotalPrice()}</span>
+                        </span>
+                        <Link
+                            to=''
+                            className='bg-primary px-10 py-3 rounded-sm font-medium text-white text-base capitalize'
+                        >
+                            Mua hàng
+                        </Link>
+                    </div>
                 </div>
-                <div>
-                    <span className='mr-5 font-medium text-base'>
-                        Tổng cộng (Sản phẩm){': '}
-                        <span className='font-semibold text-primary text-xl'>đ{calcTotalPrice()}</span>
-                    </span>
-                    <Link
-                        to=''
-                        className='bg-primary px-10 py-3 rounded-sm font-medium text-white text-base capitalize'
-                    >
-                        Mua hàng
-                    </Link>
-                </div>
-            </div>
+            )}
         </div>
     )
 }
