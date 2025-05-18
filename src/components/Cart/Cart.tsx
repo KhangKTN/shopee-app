@@ -43,7 +43,7 @@ const Cart = () => {
                                         {cartProductList.length - CART_ITEM_SHOW} thêm hàng vào giỏ
                                     </span>
                                 )}
-                                <Link to={path.HOME} className='block bg-primary ml-auto px-4 py-2 rounded text-white'>
+                                <Link to={path.CART} className='block bg-primary ml-auto px-4 py-2 rounded text-white'>
                                     Xem giỏ hàng
                                 </Link>
                             </div>

@@ -158,7 +158,13 @@ const ProductDetail = () => {
                         {/* Quantity */}
                         <div className='flex items-center mt-12'>
                             <span className='min-w-[100px] text-gray-500 capitalize'>Số lượng</span>
-                            <QuantityController productQty={quantity} buyQty={buyQty} setBuyQty={setBuyQty} />
+                            <QuantityController
+                                mode='state'
+                                id={id || ''}
+                                productQty={quantity}
+                                buyQty={buyQty}
+                                handleUpdate={setBuyQty}
+                            />
                             <span className='ml-5 text-gray-400'>{quantity} sản phẩm có sẵn</span>
                         </div>
                         {/* Action button */}

@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import purchaseApi from '~/apis/purchase.api'
@@ -13,8 +13,13 @@ interface ProductExtra extends Purchase {
 }
 
 const Cart = () => {
+    const [isFirstLoad, setFirstLoad] = useState(true)
     const [productExtraList, setProductExtra] = useState<ProductExtra[]>([])
-    const { data: cartData, isFetching } = useQuery({
+    const {
+        data: cartData,
+        isFetching,
+        refetch
+    } = useQuery({
         queryKey: ['purchases', PurchaseStatus.CART],
         queryFn: () => purchaseApi.getListPurchase(PurchaseStatus.CART)
     })
@@ -28,7 +33,7 @@ const Cart = () => {
                 disabled: false,
                 checked: false
             }))
-            setProductExtra([...cartProductExtraList])
+            setProductExtra(cartProductExtraList)
         }
     }, [cartProductList])
 
@@ -62,12 +67,29 @@ const Cart = () => {
         }
     }
 
+    const updateCartMutation = useMutation({
+        mutationFn: purchaseApi.updatePurchase,
+        onSuccess: () => {
+            refetch()
+        }
+    })
+
+    const handleChangeQuantity = (id: string, value: number) => {
+        const purchase = productExtraList.find((i) => i._id === id)
+        if (!purchase) {
+            return
+        }
+        setProductExtra(productExtraList.map((item) => (item._id === id ? { ...item, disabled: true } : item)))
+        setFirstLoad(false)
+        updateCartMutation.mutate({ product_id: purchase.product._id, buy_count: value })
+    }
+
     return (
         <div className='bg-neutral-100 py-10'>
             <div className='mx-auto overflow-auto container'>
                 <div className='min-w-[1000px]'>
                     {/* Render items cart */}
-                    {isFetching ? (
+                    {isFetching && isFirstLoad ? (
                         <SpinnerLoading />
                     ) : productExtraList.length > 0 ? (
                         <>
@@ -127,8 +149,13 @@ const Cart = () => {
                                         <div className='col-span-1 text-center'>đ{productUtil.formatVnd(i.price)}</div>
                                         <div className='col-span-2 mx-auto text-gray-500'>
                                             <QuantityController
+                                                mode='custom'
+                                                id={i._id}
+                                                disabled={i.disabled}
                                                 buyQty={i.buy_count.toString()}
                                                 productQty={i.product.quantity}
+                                                // handleChangeQuantity={handleChangeQuantity}
+                                                handleUpdate={handleChangeQuantity}
                                             />
                                         </div>
                                         <div className='col-span-2 font-semibold text-primary text-center'>
