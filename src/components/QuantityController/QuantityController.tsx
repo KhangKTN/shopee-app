@@ -3,8 +3,8 @@ import { useEffect, useState } from 'react'
 import { InputNumber } from '../Input'
 
 type HandleUpdateType =
-    | { mode: 'state'; handleUpdate: React.Dispatch<React.SetStateAction<string>> }
-    | { mode: 'custom'; handleUpdate: (id: string, value: number) => void }
+    | { mode: 'state'; handleUpdate: React.Dispatch<React.SetStateAction<string>> } // Set state for parent component
+    | { mode: 'custom'; handleUpdate: (id: string, value: number) => void } // Call api update data
 
 type Prop = {
     id: string
@@ -14,58 +14,41 @@ type Prop = {
 } & HandleUpdateType
 
 const QuantityController = ({ id, productQty, buyQty, disabled, mode, handleUpdate }: Prop) => {
+    // Use to show change input value, when Update API has not been called yet
     const [displayValue, setDisplayValue] = useState(buyQty)
 
     useEffect(() => {
         setDisplayValue(buyQty)
     }, [buyQty])
 
-    const handleChangeBuyQty = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const qty = e.target.value
-        if (qty === '') {
-            if (mode === 'state') {
-                handleUpdate(qty)
-            } else {
-                setDisplayValue(qty)
-            }
+    const handleQtyInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const input = e.target.value.trim()
+
+        // Input empty
+        if (input === '') {
+            const emptyHandler = mode === 'state' ? handleUpdate : setDisplayValue
+            emptyHandler(input)
             return
         }
 
-        let qtyNum = +qty
-        if (qtyNum === 0) {
-            qtyNum = 1
-        } else if (qtyNum > productQty) {
-            qtyNum = productQty
-        }
-        if (mode === 'state') {
-            handleUpdate(qtyNum.toString())
-        } else {
-            setDisplayValue(qtyNum.toString())
-        }
+        // Handle limit input
+        const qtyNum = Math.min(Math.max(1, +input), productQty)
+
+        const handler = mode === 'state' ? handleUpdate : setDisplayValue
+        handler(qtyNum.toString())
     }
 
-    const handleIncrease = () => {
+    const handleQtyButton = (step: -1 | 1) => {
         const qtyNum = Number(buyQty)
-        if (qtyNum === productQty) {
+        const newQty = qtyNum + step
+        if (newQty < 1 || newQty > productQty) {
             return
         }
-        const newQty = qtyNum + 1
+
         if (mode === 'state') {
             handleUpdate(newQty.toString())
         } else {
-            handleUpdate(id, newQty)
-        }
-    }
-
-    const handleDecrease = () => {
-        const qtyNum = Number(buyQty)
-        if (qtyNum === 1) {
-            return
-        }
-        const newQty = qtyNum - 1
-        if (mode === 'state') {
-            handleUpdate(newQty.toString())
-        } else {
+            setDisplayValue(newQty.toString())
             handleUpdate(id, newQty)
         }
     }
@@ -76,7 +59,7 @@ const QuantityController = ({ id, productQty, buyQty, disabled, mode, handleUpda
                 <div className='flex'>
                     <button
                         disabled={disabled}
-                        onClick={() => handleDecrease()}
+                        onClick={() => handleQtyButton(-1)}
                         className={cx('px-3 py-1.5 border rounded-s', disabled && 'bg-zinc-50 cursor-not-allowed')}
                     >
                         <i className='fa-solid fa-minus'></i>
@@ -87,22 +70,22 @@ const QuantityController = ({ id, productQty, buyQty, disabled, mode, handleUpda
                                 ? handleUpdate(id, +displayValue)
                                 : setDisplayValue(buyQty)
                         }
-                        onChange={handleChangeBuyQty}
+                        onChange={handleQtyInput}
                         value={displayValue}
                         disabled={disabled}
                         className='py-1.5 border-y focus:border-primary outline-none w-12 text-center'
                     />
                     <button
                         disabled={disabled}
-                        onClick={() => handleIncrease()}
+                        onClick={() => handleQtyButton(1)}
                         className={cx('px-3 py-1.5 border rounded-e', disabled && 'bg-zinc-50 cursor-not-allowed')}
                     >
                         <i className='fa-solid fa-plus'></i>
                     </button>
                 </div>
             </div>
-            {+buyQty === productQty && (
-                <p className='mt-2.5 text-primary text-sm'>Bạn đã chọn tối đa số lượng sản phẩm</p>
+            {+displayValue === productQty && (
+                <span className='mt-2.5 text-primary text-sm'>Bạn đã chọn tối đa số lượng sản phẩm</span>
             )}
         </div>
     )

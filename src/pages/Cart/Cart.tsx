@@ -28,10 +28,10 @@ const Cart = () => {
 
     useEffect(() => {
         if (cartProductList && cartProductList.length > 0) {
-            const cartProductExtraList: ProductExtra[] = cartProductList.map((i) => ({
-                ...i,
+            const cartProductExtraList: ProductExtra[] = cartProductList.map((product) => ({
+                ...product,
                 disabled: false,
-                checked: false
+                checked: Boolean(productExtraList[productExtraList.findIndex((e) => e._id === product._id)]?.checked)
             }))
             setProductExtra(cartProductExtraList)
         }
@@ -74,6 +74,13 @@ const Cart = () => {
         }
     })
 
+    const deleteCartMutation = useMutation({
+        mutationFn: purchaseApi.deletePurchase,
+        onSuccess: () => {
+            refetch()
+        }
+    })
+
     const handleChangeQuantity = (id: string, value: number) => {
         const purchase = productExtraList.find((i) => i._id === id)
         if (!purchase) {
@@ -82,6 +89,16 @@ const Cart = () => {
         setProductExtra(productExtraList.map((item) => (item._id === id ? { ...item, disabled: true } : item)))
         setFirstLoad(false)
         updateCartMutation.mutate({ product_id: purchase.product._id, buy_count: value })
+    }
+
+    const handleDelete = (id: string) => {
+        // Delete single item
+        if (id.trim()) {
+            deleteCartMutation.mutate([id])
+            return
+        }
+        const deleteIds = productExtraList.filter((i) => i.checked).map((i) => i._id)
+        deleteCartMutation.mutate(deleteIds)
     }
 
     return (
@@ -161,7 +178,10 @@ const Cart = () => {
                                         <div className='col-span-2 font-semibold text-primary text-center'>
                                             đ{productUtil.formatVnd(i.price * i.buy_count)}
                                         </div>
-                                        <button className='col-span-1 bg-primary/10 hover:bg-primary/20 px-4 py-1.5 border-[1px] border-primary rounded text-primary transition-colors'>
+                                        <button
+                                            onClick={() => handleDelete(i._id)}
+                                            className='col-span-1 bg-primary/10 hover:bg-primary/20 px-4 py-1.5 border-[1px] border-primary rounded text-primary transition-colors'
+                                        >
                                             Xoá
                                         </button>
                                     </div>
@@ -187,7 +207,12 @@ const Cart = () => {
                         <label htmlFor='select_all' className='cursor-pointer'>
                             Chọn tất cả ({productExtraList?.length})
                         </label>
-                        <button className='ml-3 pl-3 border-neutral-200 border-l-[1px] hover:text-primary'>Xoá</button>
+                        <button
+                            onClick={() => handleDelete('')}
+                            className='ml-3 pl-3 border-neutral-200 border-l-[1px] hover:text-primary'
+                        >
+                            Xoá
+                        </button>
                     </div>
                     <div>
                         <span className='mr-5 font-medium text-base'>
