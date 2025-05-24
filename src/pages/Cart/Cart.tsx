@@ -1,9 +1,14 @@
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import Swal from 'sweetalert2'
+import 'sweetalert2/src/sweetalert2.scss'
 import purchaseApi from '~/apis/purchase.api'
+import Button from '~/components/Button'
 import SpinnerLoading from '~/components/Loading/SpinnerLoading'
 import QuantityController from '~/components/QuantityController'
+import { appHeight } from '~/constant/app'
+import path from '~/constant/path'
 import { PurchaseStatus } from '~/constant/purchase'
 import productUtil from '~/utils/productUtil'
 
@@ -27,7 +32,7 @@ const Cart = () => {
     const cartProductList = cartData?.data.data
 
     useEffect(() => {
-        if (cartProductList && cartProductList.length > 0) {
+        if (cartProductList && cartProductList.length >= 0) {
             const cartProductExtraList: ProductExtra[] = cartProductList.map((product) => ({
                 ...product,
                 disabled: false,
@@ -48,8 +53,7 @@ const Cart = () => {
     }
 
     const isCheckedAll = productExtraList.every((i) => i.checked)
-
-    const countChecked = () => productExtraList.filter((i) => i.checked).length
+    const countChecked = productExtraList.filter((i) => i.checked).length
 
     const handleCheck = (checkAll: boolean, id?: string) => {
         if (!productExtraList || productExtraList.length <= 0) {
@@ -81,6 +85,14 @@ const Cart = () => {
         }
     })
 
+    const buyProductsMutation = useMutation({
+        mutationFn: purchaseApi.buyProducts,
+        onSuccess: () => {
+            refetch()
+            Swal.fire({ text: 'Bạn đã đặt hàng thành công', icon: 'success' })
+        }
+    })
+
     const handleChangeQuantity = (id: string, value: number) => {
         const purchase = productExtraList.find((i) => i._id === id)
         if (!purchase) {
@@ -101,8 +113,20 @@ const Cart = () => {
         deleteCartMutation.mutate(deleteIds)
     }
 
+    const buyProducts = () => {
+        const productBuy: { product_id: string; buy_count: number }[] = productExtraList
+            .filter((i) => i.checked)
+            .map((i) => ({ product_id: i.product._id, buy_count: i.buy_count }))
+        buyProductsMutation.mutate(productBuy)
+    }
+
     return (
-        <div className='bg-neutral-100 py-10'>
+        <div
+            style={{
+                minHeight: `calc(100vh - ${appHeight.navHeader + appHeight.header + appHeight.footer}px)`
+            }}
+            className='bg-neutral-100 py-10'
+        >
             <div className='mx-auto overflow-auto container'>
                 <div className='min-w-[1000px]'>
                     {/* Render items cart */}
@@ -189,7 +213,22 @@ const Cart = () => {
                             </div>
                         </>
                     ) : (
-                        <div className='font-semibold text-primary text-lg text-center'>Giỏ hàng trống</div>
+                        <div className='text-center'>
+                            <img
+                                src='https://deo.shopeemobile.com/shopee/shopee-pcmall-live-sg/cart/ef577a25315c384ed114.png'
+                                alt='empty_cart'
+                                className='mx-auto size-32'
+                            />
+                            <div className='font-medium text-gray-400 text-lg text-center tracking-wide'>
+                                Giỏ hàng trống
+                            </div>
+                            <Link
+                                className='inline-block bg-primary hover:opacity-80 mt-5 px-8 py-2 rounded-sm text-white text-lg uppercase transition-opacity'
+                                to={path.HOME}
+                            >
+                                Mua Ngay
+                            </Link>
+                        </div>
                     )}
                 </div>
             </div>
@@ -214,17 +253,19 @@ const Cart = () => {
                             Xoá
                         </button>
                     </div>
-                    <div>
+                    <div className='flex items-center'>
                         <span className='mr-5 font-medium text-base'>
-                            Tổng cộng ({countChecked()} Sản phẩm){': '}
+                            Tổng cộng ({countChecked} Sản phẩm){': '}
                             <span className='font-semibold text-primary text-xl'>đ{calcTotalPrice()}</span>
                         </span>
-                        <Link
-                            to=''
+                        <Button
+                            isLoading={buyProductsMutation.isPending}
+                            disabled={buyProductsMutation.isPending || countChecked === 0}
+                            onClick={() => buyProducts()}
                             className='bg-primary px-10 py-3 rounded-sm font-medium text-white text-base capitalize'
                         >
                             Mua hàng
-                        </Link>
+                        </Button>
                     </div>
                 </div>
             )}

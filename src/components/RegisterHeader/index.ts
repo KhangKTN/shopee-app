@@ -1,3 +1,3 @@
-import RegisterHeader from './RegisterHeader'
+import CommonHeader from './CommonHeader'
 
-export default RegisterHeader
+export default CommonHeader

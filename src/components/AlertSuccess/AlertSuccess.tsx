@@ -1,6 +1,6 @@
 const AlertSuccess = ({ text }: { text: string }) => {
     return (
-        <div className='top-1/2 left-1/2 fixed flex flex-col justify-center items-center gap-y-4 bg-black/70 backdrop-blur px-4 py-8 rounded-sm text-white -translate-x-1/2'>
+        <div className='top-1/2 left-1/2 z-50 fixed flex flex-col justify-center items-center gap-y-4 bg-black/70 backdrop-blur px-4 py-8 rounded-sm text-white -translate-x-1/2'>
             <svg xmlns='http://www.w3.org/2000/svg' x='0px' y='0px' width='60' height='60' viewBox='0 0 48 48'>
                 <path
                     fill='#4caf50'

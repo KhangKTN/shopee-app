@@ -37,7 +37,7 @@ const ProductList = () => {
     }, [queryConfig.page])
 
     return (
-        <section className='bg-gray-200 px-16 py-4'>
+        <section className='bg-gray-100 px-16 py-4'>
             <div className='container'>
                 <div className='gap-5 grid grid-cols-12'>
                     <div className='col-span-3'>

@@ -10,7 +10,7 @@ const getListPurchase = (status: PurchaseListStatus) => {
     return axiosConfig.get<SuccessReponse<Purchase[]>>(`${URL}`, { params: { status } })
 }
 
-const buyProducts = (data: [{ product_id: string; buy_count: number }]) => {
+const buyProducts = (data: { product_id: string; buy_count: number }[]) => {
     return axiosConfig.post<SuccessReponse<Purchase[]>>(`${URL}/buy-products`, data)
 }
 

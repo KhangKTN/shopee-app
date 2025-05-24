@@ -4,10 +4,11 @@ import useQueryParam from './useQueryParam'
 
 const useQueryConfig = () => {
     const queryParam: QueryConfig = useQueryParam()
+
     return _.omitBy(
         {
             page: queryParam.page ?? '1',
-            limit: queryParam.limit ?? '16',
+            limit: queryParam.limit,
             name: queryParam.name,
             sort_by: queryParam.sort_by,
             order: queryParam.order,
