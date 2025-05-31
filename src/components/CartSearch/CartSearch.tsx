@@ -23,7 +23,7 @@ const CartSearch = () => {
     }
 
     return (
-        <form onSubmit={handleSearch} className='flex rounded-sm w-1/2 overflow-hidden'>
+        <form onSubmit={handleSearch} className='flex rounded w-1/2 overflow-hidden'>
             <input
                 onChange={(e) => setSearch(e.target.value)}
                 value={search}

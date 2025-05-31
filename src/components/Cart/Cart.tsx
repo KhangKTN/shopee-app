@@ -24,7 +24,7 @@ const Cart = () => {
     return (
         <Popover
             popover={
-                <div className='bg-white py-3 rounded-sm w-[400px]'>
+                <div className='bg-white py-3 rounded w-[400px]'>
                     <div className='mb-3 px-3 text-gray-400'>Sản phẩm mới thêm</div>
                     {cartProductList && cartProductList?.length > 0 ? (
                         <div>

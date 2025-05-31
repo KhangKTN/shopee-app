@@ -14,3 +14,8 @@ interface Purchase {
     createdAt: string
     updatedAt: string
 }
+
+interface ProductExtra extends Purchase {
+    disabled: boolean
+    checked: boolean
+}

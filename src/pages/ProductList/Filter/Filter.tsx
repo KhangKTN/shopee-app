@@ -213,7 +213,7 @@ const Filter = ({ categories, queryConfig }: Prop) => {
                         {errors?.min_price && <p className='text-start error'>{errors.min_price.message}</p>}
                         {errors?.max_price && <p className='col-start-2 text-end error'>{errors.max_price.message}</p>}
                     </div>
-                    <Button type='submit' children='Áp dụng' className='mt-4 px-4 py-2 rounded-sm w-full uppercase' />
+                    <Button type='submit' children='Áp dụng' className='mt-4 px-4 py-2 rounded w-full uppercase' />
                 </form>
             </div>
             {/* Rating */}
@@ -227,7 +227,7 @@ const Filter = ({ categories, queryConfig }: Prop) => {
             <Button
                 onClick={handleResetFilter}
                 children='Xoá tất cả'
-                className='mt-5 px-4 py-2 rounded-sm w-full uppercase'
+                className='mt-5 px-4 py-2 rounded w-full uppercase'
             />
         </>
     )

@@ -1,13 +1,14 @@
 import { useMutation, useQuery } from '@tanstack/react-query'
 import DOMPurify from 'dompurify'
 import { useEffect, useMemo, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import productApi from '~/apis/product.api'
 import purchaseApi from '~/apis/purchase.api'
 import AlertSuccess from '~/components/AlertSuccess'
 import { ProductDetailLoading, ProductLoading } from '~/components/Loading'
 import QuantityController from '~/components/QuantityController'
 import Star from '~/components/Star'
+import path from '~/constant/path'
 import { PurchaseStatus } from '~/constant/purchase'
 import { queryClient } from '~/main'
 import productUtil from '~/utils/productUtil'
@@ -27,6 +28,7 @@ const calcShippingDay = (): string => {
 
 const ProductDetail = () => {
     const { productLink } = useParams()
+    const navigate = useNavigate()
     const [buyQty, setBuyQty] = useState('1')
     const [showAlertSuccess, setShowAlertSuccess] = useState(false)
 
@@ -47,7 +49,7 @@ const ProductDetail = () => {
         }
     })
 
-    const queryConfig: ProductQuery = { page: '1', limit: '16', category: product?.data.data.category._id }
+    const queryConfig: ProductQuery = { page: '1', limit: 12, category: product?.data.data.category._id, exclude: id }
     const { data: productRelateds, isPending } = useQuery({
         queryKey: ['products', queryConfig],
         queryFn: () => {
@@ -71,6 +73,14 @@ const ProductDetail = () => {
 
     const handleAddToCart = () => {
         addCartMutation.mutate({ product_id: id as string, buy_count: Number(buyQty) })
+    }
+
+    const buyNow = async () => {
+        if (!id) {
+            return
+        }
+        const res = await addCartMutation.mutateAsync({ product_id: id, buy_count: 1 })
+        navigate(path.CART, { state: { productId: res.data.data._id } })
     }
 
     const foundProducts = (productRelateds?.data.data.products.length ?? 0) > 0
@@ -181,7 +191,10 @@ const ProductDetail = () => {
                                 />
                                 Thêm vào giỏ hàng
                             </button>
-                            <button className='bg-primary hover:opacity-80 px-5 py-2.5 rounded text-white capitalize transition-opacity'>
+                            <button
+                                onClick={() => buyNow()}
+                                className='bg-primary hover:opacity-80 px-5 py-2.5 rounded text-white capitalize transition-opacity'
+                            >
                                 mua ngay
                             </button>
                         </div>

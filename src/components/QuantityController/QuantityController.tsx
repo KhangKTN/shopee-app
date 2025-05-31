@@ -1,5 +1,5 @@
 import cx from 'classix'
-import { useEffect, useState } from 'react'
+import { memo, useEffect, useState } from 'react'
 import { InputNumber } from '../Input'
 
 type HandleUpdateType =
@@ -60,7 +60,7 @@ const QuantityController = ({ id, productQty, buyQty, disabled, mode, handleUpda
                     <button
                         disabled={disabled}
                         onClick={() => handleQtyButton(-1)}
-                        className={cx('px-3 py-1.5 border rounded-s', disabled && 'bg-zinc-50 cursor-not-allowed')}
+                        className={cx('border rounded-s size-10', disabled && 'bg-zinc-50 cursor-not-allowed')}
                     >
                         <i className='fa-solid fa-minus'></i>
                     </button>
@@ -73,22 +73,24 @@ const QuantityController = ({ id, productQty, buyQty, disabled, mode, handleUpda
                         onChange={handleQtyInput}
                         value={displayValue}
                         disabled={disabled}
-                        className='py-1.5 border-y focus:border-primary outline-none w-12 text-center'
+                        className='py-1.5 border-y focus:border-primary outline-none w-12 h-10 text-center'
                     />
                     <button
                         disabled={disabled}
                         onClick={() => handleQtyButton(1)}
-                        className={cx('px-3 py-1.5 border rounded-e', disabled && 'bg-zinc-50 cursor-not-allowed')}
+                        className={cx('border rounded-e size-10', disabled && 'bg-zinc-50 cursor-not-allowed')}
                     >
                         <i className='fa-solid fa-plus'></i>
                     </button>
                 </div>
             </div>
             {+displayValue === productQty && (
-                <span className='mt-2.5 text-primary text-sm'>Bạn đã chọn tối đa số lượng sản phẩm</span>
+                <span className='mt-2.5 max-w-[128px] text-primary text-sm text-center'>
+                    Bạn đã chọn tối đa số lượng sản phẩm
+                </span>
             )}
         </div>
     )
 }
 
-export default QuantityController
+export default memo(QuantityController)

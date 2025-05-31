@@ -59,7 +59,7 @@ const Sort = ({ queryConfig, totalPage = 0 }: Prop) => {
                         key={item.name}
                         onClick={() => handleClickSort(item.sortByValue)}
                         className={cx(
-                            'px-4 py-2 rounded-sm capitalize',
+                            'px-4 py-2 rounded capitalize',
                             isActiveSort(item.sortByValue) ? 'bg-primary text-white' : 'bg-white'
                         )}
                     >
@@ -70,7 +70,7 @@ const Sort = ({ queryConfig, totalPage = 0 }: Prop) => {
                     onMouseEnter={() => setShowPrice(true)}
                     onMouseLeave={() => setShowPrice(false)}
                     className={cx(
-                        'inline-flex relative items-center bg-white hover:bg-gray-50 px-4 py-2 rounded-sm focus:outline-none w-44 text-center',
+                        'inline-flex relative items-center bg-white hover:bg-gray-50 px-4 py-2 rounded focus:outline-none w-44 text-center',
                         queryConfig.sort_by === SortByEnum.PRICE && 'text-primary'
                     )}
                     type='button'
