@@ -32,7 +32,10 @@ const Pagination = ({ queryConfig, totalPage = 0 }: Prop) => {
                 isShowBeforeDot = true
             }
             return (
-                <span key={idx} className='bg-white shadow-sm px-3 py-2 rounded cursor-default'>
+                <span
+                    key={idx}
+                    className='flex justify-center items-center bg-white shadow-sm rounded size-10 cursor-default'
+                >
                     ...
                 </span>
             )
@@ -72,8 +75,10 @@ const Pagination = ({ queryConfig, totalPage = 0 }: Prop) => {
                         }}
                         key={idx}
                         className={cx(
-                            'shadow-sm px-3.5 py-2 rounded',
-                            pageNumber === page ? 'bg-primary text-white' : 'bg-white'
+                            'flex justify-center items-center shadow-sm rounded size-10 font-medium',
+                            pageNumber === page
+                                ? 'bg-primary text-white'
+                                : 'bg-white hover:bg-gray-50 hover:text-primary transition-colors'
                         )}
                     >
                         {pageNumber}
@@ -84,19 +89,9 @@ const Pagination = ({ queryConfig, totalPage = 0 }: Prop) => {
 
     return (
         <div className='flex flex-wrap justify-center gap-x-2 mt-6'>
-            <PrevNextLink
-                type='prev'
-                queryConfig={queryConfig}
-                totalPage={totalPage}
-                className='bg-white shadow-sm px-3 py-2 rounded'
-            />
+            <PrevNextLink type='prev' queryConfig={queryConfig} totalPage={totalPage} />
             {renderPage()}
-            <PrevNextLink
-                type='next'
-                queryConfig={queryConfig}
-                totalPage={totalPage}
-                className='bg-white shadow-sm px-3 py-2 rounded'
-            />
+            <PrevNextLink type='next' queryConfig={queryConfig} totalPage={totalPage} />
         </div>
     )
 }

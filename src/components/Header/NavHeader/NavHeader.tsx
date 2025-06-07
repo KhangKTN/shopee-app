@@ -1,4 +1,4 @@
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import cx from 'classix'
 import { useContext } from 'react'
 import { Link, useLocation } from 'react-router-dom'
@@ -8,12 +8,12 @@ import { appHeight } from '~/constant/app'
 import path from '~/constant/path'
 import { PurchaseStatus } from '~/constant/purchase'
 import { AppContext } from '~/contexts/app.context'
-import { queryClient } from '~/main'
 
 const popoverItemClass = 'py-2 px-3 hover:text-primary hover:bg-slate-100 w-full text-left'
 
 const NavHeader = ({ isChildren }: { isChildren?: boolean }) => {
     const location = useLocation()
+    const queryClient = useQueryClient()
     const { isAuthenticated, setAuthenticated, profile, setProfile } = useContext(AppContext)
 
     const logoutMutation = useMutation({
@@ -76,7 +76,7 @@ const NavHeader = ({ isChildren }: { isChildren?: boolean }) => {
                     <Popover
                         popover={
                             <div className='flex flex-col w-[150px]'>
-                                <Link to='/profile' className={popoverItemClass}>
+                                <Link to='/user/profile' className={popoverItemClass}>
                                     Tài khoản của tôi
                                 </Link>
                                 <Link to='' type='button' className={popoverItemClass}>

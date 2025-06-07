@@ -58,9 +58,11 @@ const Cart = () => {
         >
             <Link to={path.CART} className='relative'>
                 <i className='text-2xl fa-solid fa-cart-shopping'></i>
-                <span className='top-0 right-0 absolute flex justify-center items-center bg-white rounded-full size-4 text-primary text-xs -translate-y-1/2 translate-x-1/2'>
-                    {cartProductList?.length ?? 0}
-                </span>
+                {cartProductList?.length ? (
+                    <span className='top-0 right-0 absolute flex justify-center items-center bg-white rounded-full size-4 text-primary text-xs -translate-y-1/2 translate-x-1/2'>
+                        {cartProductList.length}
+                    </span>
+                ) : null}
             </Link>
         </Popover>
     )

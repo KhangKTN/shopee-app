@@ -6,7 +6,6 @@ import 'sweetalert2/src/sweetalert2.scss'
 import purchaseApi from '~/apis/purchase.api'
 import Button from '~/components/Button'
 import SpinnerLoading from '~/components/Loading/SpinnerLoading'
-import { appHeight } from '~/constant/app'
 import { PurchaseStatus } from '~/constant/purchase'
 import { useCounterStore } from '~/store/useCartStore'
 import productUtil from '~/utils/productUtil'
@@ -123,13 +122,8 @@ const Cart = () => {
     }
 
     return (
-        <div
-            style={{
-                minHeight: `calc(100vh - ${appHeight.navHeader + appHeight.header + appHeight.footer}px)`
-            }}
-            className='bg-neutral-100 py-10'
-        >
-            <div className='mx-auto overflow-auto container'>
+        <div className='bg-neutral-100 py-10 h-full'>
+            <div className='mx-auto overflow-x-auto container'>
                 <div className='min-w-[1000px]'>
                     {/* Render items cart */}
                     {isFetching && isFirstLoad ? (

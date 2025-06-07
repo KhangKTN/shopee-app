@@ -9,8 +9,11 @@ import Cart from '~/pages/Cart'
 import Login from '~/pages/Login'
 import ProductDetail from '~/pages/ProductDetail'
 import { ProductList } from '~/pages/ProductList'
-import Profile from '~/pages/Profile/Profile'
 import Register from '~/pages/Register'
+import UserLayout from '~/pages/User'
+import ChangePassword from '~/pages/User/ChangePassword'
+import HistoryPurchase from '~/pages/User/HistoryPurchase'
+import Profile from '~/pages/User/Profile'
 
 const useRouteCompenent = () => {
     const { isAuthenticated } = useContext(AppContext)
@@ -28,7 +31,7 @@ const useRouteCompenent = () => {
 
     const useRouteCompenent = useRoutes([
         {
-            path: '/',
+            path: path.HOME,
             element: <RejectedRoute />,
             children: [
                 {
@@ -54,20 +57,26 @@ const useRouteCompenent = () => {
             element: <ProtectedRoute />,
             children: [
                 {
-                    path: path.PROFILE,
-                    element: (
-                        <HomeLayout>
-                            <Profile />
-                        </HomeLayout>
-                    )
-                },
-                {
                     path: path.CART,
                     element: (
                         <CartLayout>
                             <Cart />
                         </CartLayout>
                     )
+                },
+                {
+                    path: path.USER,
+                    element: (
+                        <HomeLayout>
+                            <UserLayout />
+                        </HomeLayout>
+                    ),
+                    children: [
+                        { element: <Profile />, index: true },
+                        { path: path.PROFILE, element: <Profile /> },
+                        { path: path.HISTORY_PURCHASES, element: <HistoryPurchase /> },
+                        { path: path.CHANGE_PASSWORD, element: <ChangePassword /> }
+                    ]
                 }
             ]
         },

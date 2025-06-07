@@ -30,8 +30,10 @@ const PrevNextLink = ({ type, queryConfig, totalPage, className }: Prop) => {
         <Link
             to={url}
             className={cx(
-                className ? className : 'flex justify-center items-center hover:bg-gray-50 size-8',
-                disablePage ? 'text-gray-400 bg-gray-50/80 cursor-not-allowed' : 'text-gray-600 bg-white',
+                className ? className : 'flex justify-center items-center size-10 shadow-sm',
+                disablePage
+                    ? 'text-gray-400 bg-gray-50/80 cursor-not-allowed'
+                    : 'text-gray-600 bg-white hover:bg-gray-50 hover:text-primary',
                 type === 'prev' ? 'rounded-s' : 'rounded-e'
             )}
         >

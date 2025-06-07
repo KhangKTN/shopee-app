@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import DOMPurify from 'dompurify'
 import { useEffect, useMemo, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -10,7 +10,6 @@ import QuantityController from '~/components/QuantityController'
 import Star from '~/components/Star'
 import path from '~/constant/path'
 import { PurchaseStatus } from '~/constant/purchase'
-import { queryClient } from '~/main'
 import productUtil from '~/utils/productUtil'
 import { Product } from '../ProductList'
 import ProductImages from './ProductImages'
@@ -31,6 +30,7 @@ const ProductDetail = () => {
     const navigate = useNavigate()
     const [buyQty, setBuyQty] = useState('1')
     const [showAlertSuccess, setShowAlertSuccess] = useState(false)
+    const queryClient = useQueryClient()
 
     // Extract id from url
     const id = useMemo(() => {

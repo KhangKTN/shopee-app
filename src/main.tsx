@@ -6,7 +6,7 @@ import App from './App'
 import { AppProvider } from './contexts/app.context'
 import './index.css'
 
-export const queryClient = new QueryClient({ defaultOptions: { queries: { refetchOnWindowFocus: false } } })
+const queryClient = new QueryClient({ defaultOptions: { queries: { refetchOnWindowFocus: false, retry: 0 } } })
 
 createRoot(document.getElementById('root')!).render(
     <BrowserRouter>

@@ -5,7 +5,7 @@ import productUtil from '~/utils/productUtil'
 const Product = ({ product }: { product: Product }) => {
     return (
         <Link to={productUtil.slugifyUrl({ id: product._id, name: product.name })}>
-            <div className='bg-white shadow hover:shadow-md rounded transition-transform hover:-translate-y-[2px] duration-200'>
+            <div className='bg-white shadow-sm hover:shadow rounded overflow-hidden transition-transform hover:-translate-y-[4px] duration-200'>
                 {/* Image */}
                 <div className='relative pt-[100%] w-full'>
                     <ImageLoad img={product.image} />
