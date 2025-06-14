@@ -11,6 +11,7 @@ import Star from '~/components/Star'
 import path from '~/constant/path'
 import { PurchaseStatus } from '~/constant/purchase'
 import productUtil from '~/utils/productUtil'
+import NotFound from '../NotFound'
 import { Product } from '../ProductList'
 import ProductImages from './ProductImages'
 
@@ -46,7 +47,8 @@ const ProductDetail = () => {
         queryKey: ['product', id],
         queryFn: async () => {
             return productApi.getProductDetail(id as string)
-        }
+        },
+        enabled: Boolean(id)
     })
 
     const queryConfig: ProductQuery = { page: '1', limit: 12, category: product?.data.data.category._id, exclude: id }
@@ -70,6 +72,10 @@ const ProductDetail = () => {
             }, 1500)
         }
     })
+
+    if (!id) {
+        return <NotFound />
+    }
 
     const handleAddToCart = () => {
         addCartMutation.mutate({ product_id: id as string, buy_count: Number(buyQty) })

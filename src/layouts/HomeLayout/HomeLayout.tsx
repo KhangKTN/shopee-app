@@ -7,14 +7,14 @@ const HomeLayout = ({ children }: { children: React.ReactNode }) => {
     return (
         <>
             <Header />
-            <div
+            <main
                 style={{
                     minHeight: `calc(100vh - ${appHeight.navHeader + appHeight.header + appHeight.footer}px)`
                 }}
                 className='grid'
             >
                 {children}
-            </div>
+            </main>
             <Footer />
         </>
     )

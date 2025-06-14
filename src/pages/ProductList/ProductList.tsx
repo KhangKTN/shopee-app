@@ -48,17 +48,16 @@ const ProductList = () => {
                         <div className='gap-x-3 gap-y-3.5 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 mt-5'>
                             {isPending ? (
                                 <ProductLoading />
-                            ) : (
+                            ) : foundProduct ? (
                                 productData?.data.data.products.map((product) => (
                                     <Product key={product._id} product={product} />
                                 ))
+                            ) : (
+                                <div className='bg-gray-300/50 mx-auto mt-10 px-8 py-4 rounded w-fit font-semibold text-primary text-center italic'>
+                                    Không tìm thấy sản phẩm nào phù hợp
+                                </div>
                             )}
                         </div>
-                        {!foundProduct && (
-                            <div className='bg-gray-300/50 mx-auto mt-10 px-8 py-4 rounded w-fit font-semibold text-primary text-center italic'>
-                                Không tìm thấy sản phẩm nào phù hợp
-                            </div>
-                        )}
                         {foundProduct && <Pagination queryConfig={queryConfig} totalPage={totalPage} />}
                     </div>
                 </div>

@@ -76,10 +76,10 @@ const NavHeader = ({ isChildren }: { isChildren?: boolean }) => {
                     <Popover
                         popover={
                             <div className='flex flex-col w-[150px]'>
-                                <Link to='/user/profile' className={popoverItemClass}>
+                                <Link to={path.PROFILE} className={popoverItemClass}>
                                     Tài khoản của tôi
                                 </Link>
-                                <Link to='' type='button' className={popoverItemClass}>
+                                <Link to={path.HISTORY_PURCHASES} type='button' className={popoverItemClass}>
                                     Đơn hàng
                                 </Link>
                                 {isAuthenticated && (

@@ -81,7 +81,7 @@ const itemPurchaseList: ItemPurchase[] = [
     {
         shop: shopList[1],
         product: {
-            _id: '48069299.7461589701',
+            _id: '48243285.10496249259',
             name: 'Kim phun FASSTek đủ size dành cho xe Ex150 đời 2015 đến 2018. BH 1 năm đổi mới.',
             image: 'https://down-vn.img.susercontent.com/file/vn-11134207-7ra0g-m8gfy5rnspkea6.webp',
             price: 400000,
@@ -176,8 +176,12 @@ const HistoryPurchase = () => {
     const [searchParams] = useSearchParams()
     const purchaseTypeQuery = searchParams.get(TYPE) ?? PurchaseStatus.ALL
 
+    const purchaseRenderList: ItemPurchase[] = itemPurchaseList.filter(
+        (i) => +purchaseTypeQuery === PurchaseStatus.ALL || i.status === Number(purchaseTypeQuery)
+    )
+
     return (
-        <div>
+        <>
             {/* Navbav */}
             <section className='grid grid-cols-6 bg-white rounded text-base'>
                 {purchaseNavLinks.map((link) => (
@@ -199,13 +203,15 @@ const HistoryPurchase = () => {
             {/* Show purchase items */}
             <section className='flex flex-col gap-y-3 mt-4'>
                 {/* Purchase */}
-                {itemPurchaseList
-                    .filter((i) => i.status === Number(purchaseTypeQuery))
-                    .map((purchase) => (
+                {purchaseRenderList.length > 0 ? (
+                    purchaseRenderList.map((purchase) => (
                         <PurchaseItem key={purchase.product._id} purchase={purchase} />
-                    ))}
+                    ))
+                ) : (
+                    <div className='pt-10 text-base text-center'>Chưa có đơn hàng nào</div>
+                )}
             </section>
-        </div>
+        </>
     )
 }
 
