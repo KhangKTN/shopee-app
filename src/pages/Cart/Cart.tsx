@@ -5,7 +5,7 @@ import Swal from 'sweetalert2'
 import 'sweetalert2/src/sweetalert2.scss'
 import purchaseApi from '~/apis/purchase.api'
 import Button from '~/components/Button'
-import SpinnerLoading from '~/components/Loading/SpinnerLoading'
+import SpinnerLoader from '~/components/Loading/SpinnerLoader'
 import { PurchaseStatus } from '~/constant/purchase'
 import { useCounterStore } from '~/store/useCartStore'
 import productUtil from '~/utils/productUtil'
@@ -127,7 +127,7 @@ const Cart = () => {
                 <div className='min-w-[1000px]'>
                     {/* Render items cart */}
                     {isFetching && isFirstLoad ? (
-                        <SpinnerLoading />
+                        <SpinnerLoader />
                     ) : (
                         <CartProducts
                             productExtraList={productExtraList}

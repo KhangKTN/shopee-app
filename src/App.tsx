@@ -13,7 +13,6 @@ const App = () => {
             setAuthenticated(false)
             setProfile(null)
         }
-
         localStorageEvent.addEventListener(CLEAR_TOKEN, handleResetContext)
 
         return () => {
@@ -24,7 +23,7 @@ const App = () => {
     return (
         <>
             {routeComponent}
-            <ToastContainer newestOnTop />
+            <ToastContainer newestOnTop limit={1} />
         </>
     )
 }

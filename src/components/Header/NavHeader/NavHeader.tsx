@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import cx from 'classix'
-import { useContext } from 'react'
+import { useContext, useMemo } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import authApi from '~/apis/auth.api'
 import Popover from '~/components/Popover'
@@ -8,19 +8,22 @@ import { appHeight } from '~/constant/app'
 import path from '~/constant/path'
 import { PurchaseStatus } from '~/constant/purchase'
 import { AppContext } from '~/contexts/app.context'
+import profileUtil from '~/utils/profileUtil'
 
 const popoverItemClass = 'py-2 px-3 hover:text-primary hover:bg-slate-100 w-full text-left'
 
 const NavHeader = ({ isChildren }: { isChildren?: boolean }) => {
     const location = useLocation()
     const queryClient = useQueryClient()
-    const { isAuthenticated, setAuthenticated, profile, setProfile } = useContext(AppContext)
+    const { isAuthenticated, profile } = useContext(AppContext)
+
+    const avatar = useMemo(() => {
+        return profileUtil.getAvatarUrl(profile?.avatar)
+    }, [profile])
 
     const logoutMutation = useMutation({
         mutationFn: authApi.logout,
         onSuccess: () => {
-            setAuthenticated(false)
-            setProfile(null)
             queryClient.removeQueries({ queryKey: ['purchases', PurchaseStatus.CART] })
         }
     })
@@ -90,12 +93,17 @@ const NavHeader = ({ isChildren }: { isChildren?: boolean }) => {
                             </div>
                         }
                     >
-                        <i className='text-lg fa-solid fa-circle-user'></i>
+                        <div
+                            style={{ ...(avatar ? { backgroundImage: `url(${avatar})` } : {}) }}
+                            className='flex items-center bg-cover bg-no-repeat bg-center rounded-full size-5'
+                        >
+                            {!avatar && <i className='w-full text-lg fa-solid fa-circle-user'></i>}
+                        </div>
                         <span>{profile?.email}</span>
                     </Popover>
                 ) : (
                     <div className='flex items-center gap-x-3 font-semibold'>
-                        <Link className='hover:text-white/80 capitalize' to='/register'>
+                        <Link className='hover:text-white/80 capitalize' to={path.REGISTER}>
                             Đăng ký
                         </Link>
                         <div className='border-white/40 border-r-[1px] h-3'></div>

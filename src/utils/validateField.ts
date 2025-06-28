@@ -28,7 +28,7 @@ export const registerSchema = Yup.object({
  */
 export type RegisterSchema = Yup.InferType<typeof registerSchema>
 
-export const loginSchema = registerSchema.omit(['confirm_password'])
+export const loginSchema = registerSchema.pick(['email', 'password'])
 /**
  * Export type schemas
  */
@@ -59,6 +59,28 @@ export type PriceFilterSchema = Yup.InferType<typeof priceFilterSchema>
  * Use what is available in the react-hook-form library
  */
 type Rules = { [key in 'email' | 'password' | 'confirm_password']?: RegisterOptions }
+
+export const userSchema = Yup.object({
+    name: Yup.string().min(3, 'Độ dài tối thiểu 3 kí tự').max(160, 'Độ dài tối đa 160 kí tự'),
+    phone: Yup.string()
+        .max(20, 'Độ dài tối đa 20 kí tự')
+        .matches(
+            /^(032|033|034|035|036|037|038|039|096|097|098|086|083|084|085|081|082|088|091|094|070|079|077|076|078|090|093|089|056|058|092|059|099)[0-9]{7}$/,
+            'Định dạng không hợp lệ'
+        ),
+    address: Yup.string()
+        .min(3, 'Địa chỉ phải có ít nhất 3 ký tự')
+        .max(160, 'Độ dài tối đa 160 kí tự')
+        .nullable()
+        .transform((value) => (value === '' ? null : value)),
+    avatar: Yup.string().max(1000, 'Độ dài tối đa 1000 kí tự'),
+    date_of_birth: Yup.date().max(new Date(), 'Ngày sinh phải là ngày trong quá khứ'),
+    password: loginSchema.fields['password'],
+    new_password: loginSchema.fields['password'],
+    confirm_password: registerSchema.fields['confirm_password']
+})
+
+export type UserSchema = Yup.InferType<typeof userSchema>
 
 export const rules = (getValues?: UseFormGetValues<any>): Rules => ({
     email: {

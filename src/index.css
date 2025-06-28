@@ -10,6 +10,6 @@ body {
 
 @layer components {
     p.error {
-        @apply text-red-500 mt-0.5 min-h-6;
+        @apply -bottom-7 absolute h-6 text-red-500;
     }
 }

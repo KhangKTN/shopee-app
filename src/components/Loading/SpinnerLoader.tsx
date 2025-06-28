@@ -1,4 +1,4 @@
-const SpinnerLoading = () => {
+const SpinnerLoader = () => {
     return (
         <div className='flex items-center gap-x-3 mx-auto w-fit' role='status'>
             <svg
@@ -22,4 +22,4 @@ const SpinnerLoading = () => {
     )
 }
 
-export default SpinnerLoading
+export default SpinnerLoader

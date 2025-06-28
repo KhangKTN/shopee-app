@@ -20,7 +20,7 @@ const Register = () => {
     } = useForm<RegisterSchema>({ resolver: yupResolver(registerSchema) })
 
     const registerMutation = useMutation({
-        mutationFn: (body: Omit<RegisterSchema, 'confirm_password'>) => authApi.registerAccount(body)
+        mutationFn: (body: Pick<RegisterSchema, 'email' | 'password'>) => authApi.registerAccount(body)
     })
 
     const onSubmit = handleSubmit((data) => {

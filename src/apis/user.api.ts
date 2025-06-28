@@ -1,6 +1,6 @@
 import axiosConfig from '~/utils/axios'
 
-interface ProfileUpdate extends Omit<User, '_id' | 'roles' | 'createdAt' | 'updatedAt'> {
+interface ProfileUpdate extends Pick<User, 'name' | 'avatar' | 'address' | 'date_of_birth' | 'phone'> {
     password?: string
     new_password?: string
 }
@@ -16,4 +16,4 @@ const uploadAvatar = (data: FormData) =>
         }
     })
 
-export { getProfile, updateProfile, uploadAvatar }
+export default { getProfile, updateProfile, uploadAvatar }
