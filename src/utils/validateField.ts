@@ -1,3 +1,4 @@
+import dayjs from 'dayjs'
 import { RegisterOptions, UseFormGetValues } from 'react-hook-form'
 import * as Yup from 'yup'
 
@@ -74,10 +75,33 @@ export const userSchema = Yup.object({
         .nullable()
         .transform((value) => (value === '' ? null : value)),
     avatar: Yup.string().max(1000, 'Độ dài tối đa 1000 kí tự'),
-    date_of_birth: Yup.date().max(new Date(), 'Ngày sinh phải là ngày trong quá khứ'),
-    password: loginSchema.fields['password'],
-    new_password: loginSchema.fields['password'],
-    confirm_password: registerSchema.fields['confirm_password']
+    date_of_birth: Yup.string().test('is-valid-dob', 'Ngày sinh không hợp lệ', (value) => {
+        const dateParsed = dayjs(value)
+        return dateParsed.isValid() && dateParsed.format('YYYY-MM-DD') === value
+    }),
+    password: Yup.string()
+        .required('Mật khẩu không được để trống')
+        .trim()
+        .min(6, 'Độ dài tối thiểu 6 kí tự')
+        .max(160, 'Độ dài tối đa 160 kí tự'),
+    new_password: Yup.string()
+        .required('Mật khẩu mới không được để trống')
+        .trim()
+        .min(6, 'Độ dài tối thiểu 6 kí tự')
+        .max(160, 'Độ dài tối đa 160 kí tự')
+        .test('', 'Mật khẩu mới và cũ không trùng nhau', function (value) {
+            const { password } = this.parent
+            if (!password || !value) {
+                return
+            }
+            return password !== value
+        }),
+    confirm_password: Yup.string()
+        .required('Xác nhận Mật khẩu không được để trống')
+        .trim()
+        .min(6, 'Độ dài tối thiểu 6 kí tự')
+        .max(160, 'Độ dài tối đa 160 kí tự')
+        .oneOf([Yup.ref('new_password')], 'Mật khẩu xác nhận không trùng khớp')
 })
 
 export type UserSchema = Yup.InferType<typeof userSchema>

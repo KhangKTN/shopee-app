@@ -7,10 +7,10 @@ const selectClassName =
 
 interface Props {
     name: 'date_of_birth'
-    value: Date
-    onChange?: (value: Date) => void
-    setError: UseFormSetError<{ date_of_birth?: Date | undefined }>
-    clearError: UseFormClearErrors<{ date_of_birth?: Date | undefined }>
+    value: string
+    onChange?: (value: string) => void
+    setError: UseFormSetError<{ date_of_birth?: string | undefined }>
+    clearError: UseFormClearErrors<{ date_of_birth?: string | undefined }>
     errorMessage?: string
 }
 
@@ -26,30 +26,23 @@ type DateType = {
     [key in DateName]: number
 }
 
-const isValidDate = ({ date, month, year }: DateType) => {
-    const newDate = new Date(year, month - 1, date)
-    return newDate.getDate() === date
-}
-
-const DateSelect = ({ name: nameField, value, onChange, setError, clearError, errorMessage }: Props) => {
-    const [date, setDate] = useState<DateType>({
-        date: value.getDate(),
-        month: value.getMonth(),
-        year: value.getFullYear()
-    })
+const DateSelect = ({ value, onChange, errorMessage }: Props) => {
+    const [date, setDate] = useState<DateType>()
 
     const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         const { name, value } = event.target
         const newDate = { ...date, [name]: Number(value) }
 
-        clearError('date_of_birth')
-        if (!isValidDate(newDate)) {
-            setError(nameField, { message: 'Ngày tháng không hợp lệ' })
-            setDate(newDate)
-            return
-        }
+        // clearError('date_of_birth')
+        // if (!isValidDate(newDate)) {
+        //     setError(nameField, { message: 'Ngày tháng không hợp lệ' })
+        //     setDate(newDate)
+        //     return
+        // }
         if (onChange) {
-            onChange(new Date(newDate.year, newDate.month - 1, newDate.date))
+            console.log(`${newDate.year}-${newDate.month}-${newDate.date}`)
+
+            onChange(`${newDate.year}-${newDate.month}-${newDate.date}`)
         }
     }
 
@@ -57,10 +50,12 @@ const DateSelect = ({ name: nameField, value, onChange, setError, clearError, er
         if (!value) {
             return
         }
+
+        const [year, month, date] = value.split('-')
         setDate({
-            date: value.getDate(),
-            month: value.getMonth() + 1,
-            year: value.getFullYear()
+            date: Number(date),
+            month: Number(month),
+            year: Number(year)
         })
     }, [value])
 
@@ -70,7 +65,12 @@ const DateSelect = ({ name: nameField, value, onChange, setError, clearError, er
             <div className='relative col-span-8'>
                 <div className='gap-x-4 grid grid-cols-12'>
                     {/* Date */}
-                    <select onChange={handleChange} value={date.date} className={selectClassName} name={DATE_NAME.DATE}>
+                    <select
+                        onChange={handleChange}
+                        value={date?.date}
+                        className={selectClassName}
+                        name={DATE_NAME.DATE}
+                    >
                         {_.range(1, 32).map((i) => (
                             <option key={`date_${i}`} value={i}>
                                 {i}
@@ -80,7 +80,7 @@ const DateSelect = ({ name: nameField, value, onChange, setError, clearError, er
                     {/* Month */}
                     <select
                         onChange={handleChange}
-                        value={date.month}
+                        value={date?.month}
                         className={selectClassName}
                         name={DATE_NAME.MONTH}
                     >
@@ -91,7 +91,12 @@ const DateSelect = ({ name: nameField, value, onChange, setError, clearError, er
                         ))}
                     </select>
                     {/* Year */}
-                    <select onChange={handleChange} value={date.year} className={selectClassName} name={DATE_NAME.YEAR}>
+                    <select
+                        onChange={handleChange}
+                        value={date?.year}
+                        className={selectClassName}
+                        name={DATE_NAME.YEAR}
+                    >
                         {_.range(1910, new Date().getFullYear() - 2)
                             .sort((a, b) => b - a)
                             .map((i) => (

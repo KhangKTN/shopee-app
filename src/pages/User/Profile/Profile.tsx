@@ -1,5 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useMutation, useQuery } from '@tanstack/react-query'
+import dayjs from 'dayjs'
 import { useContext, useEffect, useMemo, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
@@ -14,8 +15,8 @@ import { isAxiosUnprocessaleEntityError } from '~/utils/helper'
 import profileUtil from '~/utils/profileUtil'
 import { userSchema } from '~/utils/validateField'
 
-const MAX_SIZE_AVATAR = 1 * 1024 * 1024
-const DEFAULT_DOB = new Date(1990, 0, 1)
+const MAX_AVATAR_SIZE_BYTES = 1 * 1024 * 1024
+const INIT_DATE_OF_BIRTH = '1990-01-01'
 
 const profileSchema = userSchema.pick(['name', 'address', 'phone', 'date_of_birth', 'avatar'])
 type FormData = yup.InferType<typeof profileSchema>
@@ -29,7 +30,7 @@ const Profile = () => {
             name: '',
             address: '',
             avatar: '',
-            date_of_birth: DEFAULT_DOB
+            date_of_birth: INIT_DATE_OF_BIRTH
         },
         resolver: yupResolver(profileSchema)
     })
@@ -72,10 +73,8 @@ const Profile = () => {
         setValue('phone', profileData.phone)
         setValue('address', profileData.address)
         setValue('avatar', profileData.avatar)
-        setValue('date_of_birth', profileData.date_of_birth ? new Date(profileData.date_of_birth) : DEFAULT_DOB)
+        setValue('date_of_birth', dayjs(profileData.date_of_birth).format('YYYY-MM-DD'))
     }, [profileData, setValue])
-
-    console.log(formState.errors.date_of_birth)
 
     const onSubmit = handleSubmit(async (data) => {
         try {
@@ -92,7 +91,7 @@ const Profile = () => {
             }
             await updateProfileMutation.mutateAsync({
                 ...data,
-                date_of_birth: data.date_of_birth?.toISOString(),
+                date_of_birth: dayjs(data.date_of_birth).toISOString(),
                 address: data.address ? data.address : undefined
             })
         } catch (error) {
@@ -115,9 +114,13 @@ const Profile = () => {
             return
         }
         const avatarImg = e.target.files[0]
-        const avatarSize = avatarImg.size
 
-        if (avatarSize > MAX_SIZE_AVATAR) {
+        const isImage = avatarImg.type.includes('image') && ['jpg', 'jpeg', 'png'].includes(avatarImg.type)
+        if (!isImage) {
+            toast.error('Vui lòng tải lên tệp hình ảnh có định dạng hợp lệ!')
+            return
+        }
+        if (avatarImg.size > MAX_AVATAR_SIZE_BYTES) {
             toast.error('Kích thước ảnh quá 1MB. Vui lòng chọn ảnh khác')
             return
         }
@@ -166,7 +169,7 @@ const Profile = () => {
                                 onChange={field.onChange}
                                 setError={setError}
                                 clearError={clearErrors}
-                                value={field.value ?? DEFAULT_DOB}
+                                value={field.value ?? INIT_DATE_OF_BIRTH}
                             />
                         )}
                     />
