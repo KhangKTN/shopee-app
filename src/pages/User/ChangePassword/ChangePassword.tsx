@@ -6,6 +6,7 @@ import { toast } from 'react-toastify'
 import * as yup from 'yup'
 import userApi from '~/apis/user.api'
 import Button from '~/components/Button'
+import Checkbox from '~/components/Checkbox'
 import Input from '~/components/Input'
 import { isAxiosUnprocessaleEntityError } from '~/utils/helper'
 import { userSchema } from '~/utils/validateField'
@@ -67,6 +68,7 @@ const ChangePassword = () => {
                         <label>Mật khẩu hiện tại</label>
                         <Input
                             name='password'
+                            type='password'
                             register={register}
                             errorMsg={formState.errors.password?.message}
                             classNameDiv='mt-1'
@@ -76,6 +78,7 @@ const ChangePassword = () => {
                         <label>Mật khẩu mới</label>
                         <Input
                             name='new_password'
+                            type='password'
                             register={register}
                             errorMsg={formState.errors.new_password?.message}
                             classNameDiv='mt-1'
@@ -85,6 +88,7 @@ const ChangePassword = () => {
                         <label>Nhập lại mật khẩu mới</label>
                         <Input
                             name='confirm_password'
+                            type='password'
                             register={register}
                             errorMsg={formState.errors.confirm_password?.message}
                             classNameDiv='mt-1'
@@ -95,13 +99,14 @@ const ChangePassword = () => {
                 <div className='col-start-5 mt-8 col-auto'>
                     <Button
                         children='Lưu'
-                        // isLoading={updateProfileMutation.isPending}
-                        // disabled={updateProfileMutation.isPending}
+                        isLoading={updatePasswordMutation.isPending}
+                        disabled={updatePasswordMutation.isPending}
                         type='submit'
                         className='px-6 py-2.5 rounded'
                     />
                 </div>
             </form>
+            <Checkbox />
         </div>
     )
 }

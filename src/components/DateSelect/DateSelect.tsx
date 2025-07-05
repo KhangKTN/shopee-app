@@ -40,8 +40,6 @@ const DateSelect = ({ value, onChange, errorMessage }: Props) => {
         //     return
         // }
         if (onChange) {
-            console.log(`${newDate.year}-${newDate.month}-${newDate.date}`)
-
             onChange(`${newDate.year}-${newDate.month}-${newDate.date}`)
         }
     }

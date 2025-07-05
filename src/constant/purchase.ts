@@ -23,8 +23,7 @@ export const purchaseNavLinks: PurchaseNavLink[] = [
     },
     {
         name: 'Vận chuyển',
-        type: PurchaseStatus.SHIPPING,
-        showCount: true
+        type: PurchaseStatus.SHIPPING
     },
     {
         name: 'Hoàn thành',

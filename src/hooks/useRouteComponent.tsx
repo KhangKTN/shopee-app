@@ -98,7 +98,7 @@ const useRouteCompenent = () => {
                 </HomeLayout>
             )
         },
-        { errorElement: <NotFound /> }
+        { path: '*', element: <NotFound /> }
     ])
 
     return useRouteCompenent

@@ -1,14 +1,14 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import cx from 'classix'
-import { useContext, useMemo } from 'react'
+import { useContext } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import authApi from '~/apis/auth.api'
+import Avatar from '~/components/Avatar'
 import Popover from '~/components/Popover'
 import { appHeight } from '~/constant/app'
 import path from '~/constant/path'
 import { PurchaseStatus } from '~/constant/purchase'
 import { AppContext } from '~/contexts/app.context'
-import profileUtil from '~/utils/profileUtil'
 
 const popoverItemClass = 'py-2 px-3 hover:text-primary hover:bg-slate-100 w-full text-left'
 
@@ -16,10 +16,6 @@ const NavHeader = ({ isChildren }: { isChildren?: boolean }) => {
     const location = useLocation()
     const queryClient = useQueryClient()
     const { isAuthenticated, profile } = useContext(AppContext)
-
-    const avatar = useMemo(() => {
-        return profileUtil.getAvatarUrl(profile?.avatar)
-    }, [profile])
 
     const logoutMutation = useMutation({
         mutationFn: authApi.logout,
@@ -93,12 +89,7 @@ const NavHeader = ({ isChildren }: { isChildren?: boolean }) => {
                             </div>
                         }
                     >
-                        <div
-                            style={{ ...(avatar ? { backgroundImage: `url(${avatar})` } : {}) }}
-                            className='flex items-center bg-cover bg-no-repeat bg-center rounded-full size-5'
-                        >
-                            {!avatar && <i className='w-full text-lg fa-solid fa-circle-user'></i>}
-                        </div>
+                        <Avatar />
                         <span>{profile?.email}</span>
                     </Popover>
                 ) : (

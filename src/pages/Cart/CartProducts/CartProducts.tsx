@@ -1,6 +1,7 @@
 import { useMutation } from '@tanstack/react-query'
 import { Link } from 'react-router-dom'
 import purchaseApi from '~/apis/purchase.api'
+import Checkbox from '~/components/Checkbox'
 import QuantityController from '~/components/QuantityController'
 import path from '~/constant/path'
 import { useCounterStore } from '~/store/useCartStore'
@@ -62,15 +63,10 @@ const CartProducts = ({ productExtraList, handleCheck, handleDelete, isCheckedAl
 
     return (
         <>
-            <div className='grid grid-cols-12 bg-white mb-3 px-8 py-4 font-medium capitalize'>
+            <div className='items-center grid grid-cols-12 bg-white mb-3 px-8 py-4 font-medium capitalize'>
                 <div className='flex items-center col-span-6'>
-                    <input
-                        onChange={() => handleCheck(true)}
-                        className='mr-3 size-4 accent-primary shrink-0'
-                        type='checkbox'
-                        checked={isCheckedAll}
-                    />
-                    <div>Sản phẩm</div>
+                    <Checkbox id={undefined} checked={isCheckedAll} onChange={handleCheck} />
+                    <div className='ml-2'>Sản phẩm</div>
                 </div>
                 <div className='col-span-1 text-gray-500 text-center'>Đơn giá</div>
                 <div className='col-span-2 text-gray-500 text-center'>Số lượng</div>
@@ -83,14 +79,8 @@ const CartProducts = ({ productExtraList, handleCheck, handleDelete, isCheckedAl
                         key={productExtra._id}
                         className='items-center grid grid-cols-12 mt-3 first:mt-0 px-4 py-8 border-[1px] border-gray-200 rounded-sm font-medium'
                     >
-                        <div className='flex items-center col-span-6'>
-                            <input
-                                id={productExtra._id}
-                                className='mr-3 size-4 accent-primary shrink-0'
-                                type='checkbox'
-                                onChange={() => handleCheck(false, productExtra._id)}
-                                checked={productExtra.checked}
-                            />
+                        <div className='flex items-center gap-x-2 col-span-6'>
+                            <Checkbox id={productExtra._id} checked={productExtra.checked} onChange={handleCheck} />
                             <div className='flex gap-x-3'>
                                 <Link
                                     to={productUtil.slugifyUrl({

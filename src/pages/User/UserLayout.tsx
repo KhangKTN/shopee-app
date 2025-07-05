@@ -1,5 +1,6 @@
 import cx from 'classix'
 import { Link, NavLink, Outlet } from 'react-router-dom'
+import Avatar from '~/components/Avatar'
 import path from '~/constant/path'
 
 const navLinks: { link: string; name: string }[] = [
@@ -15,12 +16,7 @@ const UserLayout = () => {
                 <div className='gap-x-8 grid grid-cols-12 h-full'>
                     <div className='flex flex-col gap-y-4 col-span-2'>
                         <div className='flex items-center gap-x-4 py-4 border-gray-200 border-b-[1px]'>
-                            <div className='border rounded-full size-12 overflow-hidden'>
-                                <img
-                                    src='https://render.fineartamerica.com/images/rendered/medium/print/8/8/break/images/artworkimages/medium/3/classic-liverpool-fc-logo-grant-rosalia.jpg'
-                                    alt='avatar'
-                                />
-                            </div>
+                            <Avatar sizeClass='size-12' />
                             <div>
                                 <p className='font-bold'>khangktn</p>
                                 <Link to={path.PROFILE} className='font-medium text-gray-500'>

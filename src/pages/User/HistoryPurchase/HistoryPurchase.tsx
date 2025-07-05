@@ -1,5 +1,8 @@
+import { useQuery } from '@tanstack/react-query'
 import cx from 'classix'
 import { Link, useSearchParams } from 'react-router-dom'
+import purchaseApi from '~/apis/purchase.api'
+import { SpinnerLoader } from '~/components/Loading'
 import { purchaseNavLinks, PurchaseStatus } from '~/constant/purchase'
 import PurchaseItem from './PurchaseItem'
 
@@ -22,7 +25,7 @@ export interface ItemPurchase {
     status: PurchaseStatus
 }
 
-const itemPurchaseList: ItemPurchase[] = [
+const mockPurchases: ItemPurchase[] = [
     {
         shop: shopList[0],
         product: {
@@ -170,15 +173,25 @@ const itemPurchaseList: ItemPurchase[] = [
 
 const TYPE = 'type'
 
-const countStatus = (status: number) => itemPurchaseList.filter((i) => i.status === status).length ?? 0
+const countStatus = (status: number) => mockPurchases.filter((i) => i.status === status).length ?? 0
+
+const getStatusFromParam = (value: string | 0) => {
+    if (Object.values(PurchaseStatus).includes(Number(value) as PurchaseListStatus)) {
+        return value
+    }
+    return PurchaseStatus.ALL
+}
 
 const HistoryPurchase = () => {
     const [searchParams] = useSearchParams()
-    const purchaseTypeQuery = searchParams.get(TYPE) ?? PurchaseStatus.ALL
+    const purchaseTypeQuery = getStatusFromParam(searchParams.get(TYPE) ?? PurchaseStatus.ALL)
 
-    const purchaseRenderList: ItemPurchase[] = itemPurchaseList.filter(
-        (i) => +purchaseTypeQuery === PurchaseStatus.ALL || i.status === Number(purchaseTypeQuery)
-    )
+    const { data, isFetching } = useQuery({
+        queryKey: ['purchases', { status: purchaseTypeQuery }],
+        queryFn: () => purchaseApi.getListPurchase(purchaseTypeQuery as PurchaseListStatus)
+    })
+
+    const cartList = data?.data.data
 
     return (
         <>
@@ -202,11 +215,10 @@ const HistoryPurchase = () => {
             </section>
             {/* Show purchase items */}
             <section className='flex flex-col gap-y-3 mt-4'>
-                {/* Purchase */}
-                {purchaseRenderList.length > 0 ? (
-                    purchaseRenderList.map((purchase) => (
-                        <PurchaseItem key={purchase.product._id} purchase={purchase} />
-                    ))
+                {isFetching ? (
+                    <SpinnerLoader />
+                ) : cartList && cartList.length > 0 ? (
+                    mockPurchases.map((purchase) => <PurchaseItem key={purchase.product._id} purchase={purchase} />)
                 ) : (
                     <div className='pt-10 text-base text-center'>Chưa có đơn hàng nào</div>
                 )}

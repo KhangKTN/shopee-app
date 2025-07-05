@@ -5,6 +5,7 @@ import Swal from 'sweetalert2'
 import 'sweetalert2/src/sweetalert2.scss'
 import purchaseApi from '~/apis/purchase.api'
 import Button from '~/components/Button'
+import Checkbox from '~/components/Checkbox'
 import SpinnerLoader from '~/components/Loading/SpinnerLoader'
 import { PurchaseStatus } from '~/constant/purchase'
 import { useCounterStore } from '~/store/useCartStore'
@@ -56,7 +57,7 @@ const Cart = () => {
                 }
             })
         )
-    }, [cartProductList])
+    }, [cartProductList, location.state?.productId])
 
     const calcTotalPrice = useMemo(() => {
         if (!productExtraList) {
@@ -123,12 +124,12 @@ const Cart = () => {
 
     return (
         <div className='bg-neutral-100 py-10 h-full'>
-            <div className='mx-auto overflow-x-auto container'>
-                <div className='min-w-[1000px]'>
-                    {/* Render items cart */}
-                    {isFetching && isFirstLoad ? (
-                        <SpinnerLoader />
-                    ) : (
+            {isFetching && isFirstLoad ? (
+                <SpinnerLoader />
+            ) : (
+                /* Render items cart */
+                <div className='mx-auto overflow-x-auto container'>
+                    <div className='min-w-[1000px]'>
                         <CartProducts
                             productExtraList={productExtraList}
                             handleCheck={handleCheck}
@@ -136,21 +137,16 @@ const Cart = () => {
                             isCheckedAll={isCheckedAll}
                             setFirstLoad={setFirstLoad}
                         />
-                    )}
+                    </div>
                 </div>
-            </div>
+            )}
+
             {/* Summary cart */}
             {productExtraList.length > 0 && (
                 <div className='bottom-0 z-10 sticky flex lg:flex-row flex-col justify-between bg-white mx-auto mt-5 px-4 py-5 border-primary border-t-2 rounded-sm container'>
                     <div className='flex items-center text-base capitalize'>
-                        <input
-                            id='select_all'
-                            onChange={() => handleCheck(true)}
-                            checked={isCheckedAll}
-                            type='checkbox'
-                            className='mr-2 size-4 accent-primary'
-                        />
-                        <label htmlFor='select_all' className='cursor-pointer'>
+                        <Checkbox id='' checked={isCheckedAll} onChange={handleCheck} />
+                        <label htmlFor='select_all' className='ml-2 cursor-pointer'>
                             Chọn tất cả ({productExtraList?.length})
                         </label>
                         <button

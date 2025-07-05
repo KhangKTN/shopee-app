@@ -2,6 +2,8 @@ import dayjs from 'dayjs'
 import { RegisterOptions, UseFormGetValues } from 'react-hook-form'
 import * as Yup from 'yup'
 
+const DATE_FORMAT = 'YYYY-MM-DD'
+
 /**
  * Define schema object use Yup
  */
@@ -77,7 +79,7 @@ export const userSchema = Yup.object({
     avatar: Yup.string().max(1000, 'Độ dài tối đa 1000 kí tự'),
     date_of_birth: Yup.string().test('is-valid-dob', 'Ngày sinh không hợp lệ', (value) => {
         const dateParsed = dayjs(value)
-        return dateParsed.isValid() && dateParsed.format('YYYY-MM-DD') === value
+        return dateParsed.isValid() && dateParsed.format(DATE_FORMAT) === dayjs(value).format(DATE_FORMAT)
     }),
     password: Yup.string()
         .required('Mật khẩu không được để trống')
