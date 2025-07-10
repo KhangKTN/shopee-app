@@ -11,9 +11,9 @@ import Star from '~/components/Star'
 import path from '~/constant/path'
 import { PurchaseStatus } from '~/constant/purchase'
 import productUtil from '~/utils/productUtil'
-import NotFound from '../NotFound'
 import { Product } from '../ProductList'
 import ProductImages from './ProductImages'
+import ProductNotFound from './ProductNotFound'
 
 const DAY_IN_MILISECOND = 24 * 60 * 60 * 1000
 
@@ -43,16 +43,14 @@ const ProductDetail = () => {
         window.scrollTo({ top: 0, behavior: 'auto' })
     }, [id])
 
-    const { data: product } = useQuery({
+    const { data: product, isFetching: isFetchingProduct } = useQuery({
         queryKey: ['product', id],
-        queryFn: async () => {
-            return productApi.getProductDetail(id as string)
-        },
+        queryFn: () => productApi.getProductDetail(id as string),
         enabled: Boolean(id)
     })
 
     const queryConfig: ProductQuery = { page: '1', limit: 12, category: product?.data.data.category._id, exclude: id }
-    const { data: productRelateds, isPending } = useQuery({
+    const { data: productRelateds, isFetching: isFetchingRelatedProduct } = useQuery({
         queryKey: ['products', queryConfig],
         queryFn: () => {
             return productApi.getProductList(queryConfig)
@@ -74,7 +72,7 @@ const ProductDetail = () => {
     })
 
     if (!id) {
-        return <NotFound />
+        return <ProductNotFound />
     }
 
     const handleAddToCart = () => {
@@ -89,11 +87,14 @@ const ProductDetail = () => {
         navigate(path.CART, { state: { productId: res.data.data._id } })
     }
 
-    const foundProducts = (productRelateds?.data.data.products.length ?? 0) > 0
-
+    // const foundRelatedProducts = (productRelateds?.data.data.products.length ?? 0) > 0
     const productData = product?.data.data
-    if (!productData) {
+
+    if (isFetchingProduct) {
         return <ProductDetailLoading />
+    }
+    if (!productData) {
+        return <ProductNotFound />
     }
 
     const { images, name, rating, sold, price, price_before_discount, quantity, description } = productData
@@ -216,16 +217,12 @@ const ProductDetail = () => {
             <div className='mx-auto container'>
                 <h2 className='mt-8 font-medium text-gray-500 text-lg uppercase'>Có thể bạn cũng thích</h2>
                 <div className='gap-x-3 gap-y-2 grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 mt-5'>
-                    {isPending ? (
+                    {isFetchingRelatedProduct ? (
                         <ProductLoading />
-                    ) : foundProducts ? (
+                    ) : (
                         productRelateds?.data.data.products.map((product) => (
                             <Product key={product._id} product={product} />
                         ))
-                    ) : (
-                        <div className='bg-gray-300/50 mt-5 py-4 rounded text-primary text-center italic'>
-                            Không tìm thấy sản phẩm nào phù hợp
-                        </div>
                     )}
                 </div>
             </div>

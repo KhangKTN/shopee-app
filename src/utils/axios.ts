@@ -1,11 +1,16 @@
-import axios, { AxiosError, HttpStatusCode, type AxiosInstance } from 'axios'
+import axios, { AxiosError, type AxiosInstance } from 'axios'
 import { toast } from 'react-toastify'
 import path from '~/constant/path'
 import authUtil from './authUtil'
+import { isAxiosExpiredTokenError, isAxiosUnauthorizedError, isNormalError } from './helper'
+
+const URL_REFRESH_TOKEN = 'refresh-access-token'
 
 class Axios {
     instance: AxiosInstance
     private accessToken: string
+    private refreshToken: string
+    private refreshTokenRequest: Promise<string> | null
 
     constructor() {
         // Init value
@@ -13,10 +18,14 @@ class Axios {
             baseURL: 'https://api-ecom.duthanhduoc.com',
             timeout: 10000,
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'expire-access-token': 10,
+                'expire-refresh-token': 60 * 60
             }
         })
         this.accessToken = authUtil.getAccessToken()
+        this.refreshToken = authUtil.getRefreshToken()
+        this.refreshTokenRequest = null
 
         // Handle interceptors for request
         this.instance.interceptors.request.use(
@@ -38,7 +47,9 @@ class Axios {
                 if (url === path.LOGIN) {
                     const resData = (response.data as AuthRes).data
                     this.accessToken = resData.access_token
+                    this.refreshToken = resData.refresh_token
                     authUtil.persistAccessToken(this.accessToken)
+                    authUtil.persistRefreshToken(this.refreshToken)
                     authUtil.persistProfile(resData.user)
                 }
                 if (url === path.LOGOUT) {
@@ -47,21 +58,66 @@ class Axios {
                 }
                 return response
             },
-            function (error: AxiosError) {
-                if (error.response?.status !== HttpStatusCode.UnprocessableEntity) {
-                    const data: any | undefined = error.response?.data
-                    const message = data?.message || error.message
+            (error: AxiosError) => {
+                if (isNormalError(error)) {
+                    const message = (error.response?.data as any)?.message || error.message
                     toast.error(message)
                 }
-                if (error.response?.status === HttpStatusCode.Unauthorized) {
+
+                if (isAxiosUnauthorizedError<ErrorResponse<{ name: string; message: string }>>(error)) {
+                    const currentRequest = error.response?.config || { headers: {}, url: '' }
+                    const { url } = currentRequest
+
+                    // Call api with expired token (Not refresh token)
+                    if (isAxiosExpiredTokenError(error) && url !== URL_REFRESH_TOKEN) {
+                        // Cache refreshTokenRequest avoid multi request
+                        this.refreshTokenRequest = this.refreshTokenRequest
+                            ? this.refreshTokenRequest
+                            : this.handleRefreshToken().finally(() => {
+                                  // Keep refreshTokenRequest in 10s for request 401
+                                  setTimeout(() => {
+                                      this.refreshTokenRequest = null
+                                  }, 10000)
+                              })
+
+                        return this.refreshTokenRequest.then((access_token) => {
+                            return this.instance({
+                                ...currentRequest,
+                                headers: { ...currentRequest.headers, authorization: access_token }
+                            })
+                        })
+                    }
+
                     authUtil.clearPersistedData()
+                    this.accessToken = ''
+                    this.refreshToken = ''
+                    toast.error(error.response?.data.data?.message || error.response?.data.message)
                 }
+
                 return Promise.reject(error)
             }
         )
     }
+
+    private async handleRefreshToken(): Promise<string> {
+        try {
+            const response = await this.instance.post<RefreshTokenRes>(URL_REFRESH_TOKEN, {
+                refreshToken: this.refreshToken
+            })
+
+            const accessToken = response.data.data.access_token
+            authUtil.persistAccessToken(accessToken)
+            this.accessToken = accessToken
+
+            return accessToken
+        } catch (error) {
+            authUtil.clearPersistedData()
+            this.accessToken = ''
+            this.refreshToken = ''
+            throw error
+        }
+    }
 }
 
 const axiosConfig = new Axios().instance
-
 export default axiosConfig

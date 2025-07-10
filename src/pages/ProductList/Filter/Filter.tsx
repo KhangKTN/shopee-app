@@ -1,6 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import cx from 'classix'
-import _ from 'lodash'
+import isEmpty from 'lodash/isEmpty'
+import omitBy from 'lodash/omitBy'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { createSearchParams, Link, useNavigate } from 'react-router-dom'
 import Button from '~/components/Button'
@@ -38,10 +39,7 @@ const Filter = ({ categories, queryConfig }: Prop) => {
     })
 
     const onSubmit: SubmitHandler<PriceFilterSchema> = ({ min_price = '', max_price = '' }) => {
-        const searchQuery = _.omitBy(
-            { ...queryConfig, price_min: min_price, price_max: max_price, page: '1' },
-            _.isEmpty
-        )
+        const searchQuery = omitBy({ ...queryConfig, price_min: min_price, price_max: max_price, page: '1' }, isEmpty)
         navigate({
             pathname: path.HOME,
             search: createSearchParams(searchQuery).toString()

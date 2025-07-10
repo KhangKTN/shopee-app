@@ -1,5 +1,6 @@
 const path = {
     HOME: '/',
+    ALL: '*',
     LOGIN: '/login',
     REGISTER: '/register',
     LOGOUT: '/logout',

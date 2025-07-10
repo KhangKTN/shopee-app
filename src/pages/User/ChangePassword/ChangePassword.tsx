@@ -6,7 +6,6 @@ import { toast } from 'react-toastify'
 import * as yup from 'yup'
 import userApi from '~/apis/user.api'
 import Button from '~/components/Button'
-import Checkbox from '~/components/Checkbox'
 import Input from '~/components/Input'
 import { isAxiosUnprocessaleEntityError } from '~/utils/helper'
 import { userSchema } from '~/utils/validateField'
@@ -106,7 +105,6 @@ const ChangePassword = () => {
                     />
                 </div>
             </form>
-            <Checkbox />
         </div>
     )
 }

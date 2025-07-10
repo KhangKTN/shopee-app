@@ -1,6 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useMutation } from '@tanstack/react-query'
-import _ from 'lodash'
+import omit from 'lodash/omit'
 import { useForm } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router-dom'
 import authApi from '~/apis/auth.api'
@@ -24,7 +24,7 @@ const Register = () => {
     })
 
     const onSubmit = handleSubmit((data) => {
-        const registerData = _.omit(data, ['confirm_password'])
+        const registerData = omit(data, ['confirm_password'])
         registerMutation.mutate(registerData, {
             onSuccess: () => {
                 navigate(path.LOGIN)

@@ -1,4 +1,4 @@
-import _ from 'lodash'
+import range from 'lodash/range'
 import { useEffect, useState } from 'react'
 import { UseFormClearErrors, UseFormSetError } from 'react-hook-form'
 
@@ -69,7 +69,7 @@ const DateSelect = ({ value, onChange, errorMessage }: Props) => {
                         className={selectClassName}
                         name={DATE_NAME.DATE}
                     >
-                        {_.range(1, 32).map((i) => (
+                        {range(1, 32).map((i) => (
                             <option key={`date_${i}`} value={i}>
                                 {i}
                             </option>
@@ -82,7 +82,7 @@ const DateSelect = ({ value, onChange, errorMessage }: Props) => {
                         className={selectClassName}
                         name={DATE_NAME.MONTH}
                     >
-                        {_.range(1, 13).map((i) => (
+                        {range(1, 13).map((i) => (
                             <option key={`month_${i}`} value={i}>
                                 {i}
                             </option>
@@ -95,7 +95,7 @@ const DateSelect = ({ value, onChange, errorMessage }: Props) => {
                         className={selectClassName}
                         name={DATE_NAME.YEAR}
                     >
-                        {_.range(1910, new Date().getFullYear() - 2)
+                        {range(1910, new Date().getFullYear() - 2)
                             .sort((a, b) => b - a)
                             .map((i) => (
                                 <option key={`year_${i}`} value={i}>

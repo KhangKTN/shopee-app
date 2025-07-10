@@ -75,7 +75,7 @@ const useRouteCompenent = () => {
                     children: [
                         { element: <Profile />, index: true },
                         { path: path.PROFILE, element: <Profile /> },
-                        { path: path.HISTORY_PURCHASES, element: <HistoryPurchase /> },
+                        { path: path.HISTORY_PURCHASES, element: <HistoryPurchase />, index: true },
                         { path: path.CHANGE_PASSWORD, element: <ChangePassword /> }
                     ]
                 }
@@ -98,7 +98,7 @@ const useRouteCompenent = () => {
                 </HomeLayout>
             )
         },
-        { path: '*', element: <NotFound /> }
+        { path: path.ALL, element: <NotFound /> }
     ])
 
     return useRouteCompenent
