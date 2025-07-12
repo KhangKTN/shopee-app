@@ -38,14 +38,14 @@ const ProductList = () => {
 
     return (
         <section className='bg-gray-100 px-16 py-4'>
-            <div className='container'>
+            <div className='mx-auto container'>
                 <div className='gap-5 grid grid-cols-12'>
                     <div className='col-span-3'>
                         <Filter categories={categoriesData?.data.data ?? []} queryConfig={queryConfig} />
                     </div>
                     <div className='col-span-9'>
                         <Sort queryConfig={queryConfig} totalPage={totalPage} />
-                        <div className='gap-x-3 gap-y-3.5 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 mt-5'>
+                        <div className='gap-x-3 gap-y-3.5 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 mt-5'>
                             {isPending ? (
                                 <ProductLoading />
                             ) : foundProduct ? (
@@ -53,7 +53,7 @@ const ProductList = () => {
                                     <Product key={product._id} product={product} />
                                 ))
                             ) : (
-                                <div className='bg-gray-300/50 mx-auto mt-10 px-8 py-4 rounded w-fit font-semibold text-primary text-center italic'>
+                                <div className='col-span-full mt-10 px-8 py-4 rounded font-semibold text-primary text-base text-center italic'>
                                     Không tìm thấy sản phẩm nào phù hợp
                                 </div>
                             )}

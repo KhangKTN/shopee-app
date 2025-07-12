@@ -8,7 +8,7 @@ const useQueryConfig = () => {
 
     return omitBy(
         {
-            page: queryParam.page ?? '1',
+            page: queryParam.page,
             limit: queryParam.limit,
             name: queryParam.name,
             sort_by: queryParam.sort_by,

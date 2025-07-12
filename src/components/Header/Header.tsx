@@ -44,7 +44,7 @@ const Header = () => {
                         <input
                             onChange={(e) => setSearch(e.target.value)}
                             value={search}
-                            className='ps-3 focus:outline-2 focus:outline-gray-600 w-full h-full text-black'
+                            className='ps-3 focus:outline-2 focus:outline-primary/80 w-full h-full text-black'
                             type='text'
                             placeholder='Siêu sale'
                         />

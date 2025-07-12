@@ -19,7 +19,7 @@ const Product = ({ product }: { product: Product }) => {
                             <span className='text-primary text-base'>{productUtil.formatVnd(product.price)}</span>
                         </div>
                         {product.price < product.price_before_discount && (
-                            <span className='bg-primary/15 ml-3 px-1 py-[2px] rounded-sm font-medium text-primary text-sm'>
+                            <span className='bg-primary/15 ml-4 p-0.5 rounded-sm font-medium text-primary text-xs'>
                                 -{productUtil.calcDiscountPercent(product.price, product.price_before_discount)}%
                             </span>
                         )}
@@ -28,7 +28,7 @@ const Product = ({ product }: { product: Product }) => {
                     <div className='mt-2.5 min-h-4 text-xs'>
                         {product.rating > 0 && (
                             <span>
-                                <i className='mr-2 text-yellow-300 fa-solid fa-star'></i>
+                                <i className='mr-1 text-yellow-300 fa-solid fa-star'></i>
                                 {product.rating}
                             </span>
                         )}

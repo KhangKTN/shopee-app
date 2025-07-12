@@ -1,6 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import cx from 'classix'
 import isEmpty from 'lodash/isEmpty'
+import omit from 'lodash/omit'
 import omitBy from 'lodash/omitBy'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { createSearchParams, Link, useNavigate } from 'react-router-dom'
@@ -21,7 +22,10 @@ const Filter = ({ categories, queryConfig }: Prop) => {
     const { category } = queryConfig
 
     const getCategoryLink = (id: string) => {
-        return { pathname: path.HOME, search: createSearchParams({ ...queryConfig, category: id }).toString() }
+        return {
+            pathname: path.HOME,
+            search: createSearchParams({ ...omit(queryConfig, ['page']), category: id }).toString()
+        }
     }
 
     const {
@@ -39,31 +43,29 @@ const Filter = ({ categories, queryConfig }: Prop) => {
     })
 
     const onSubmit: SubmitHandler<PriceFilterSchema> = ({ min_price = '', max_price = '' }) => {
-        const searchQuery = omitBy({ ...queryConfig, price_min: min_price, price_max: max_price, page: '1' }, isEmpty)
-        navigate({
-            pathname: path.HOME,
-            search: createSearchParams(searchQuery).toString()
-        })
-    }
-
-    const handleRating = (star: number) => {
-        navigate({
-            pathname: path.HOME,
-            search: createSearchParams({ ...queryConfig, rating_filter: star.toString(), page: '1' }).toString()
-        })
-    }
-
-    const handleResetFilter = () => {
-        reset({ min_price: '', max_price: '' })
-        const fieldReset = ['category', 'price_min', 'price_max', 'rating_filter']
-        const searchQuery = { ...queryConfig, page: '1' }
-        for (const field of fieldReset) {
-            delete searchQuery[field as keyof QueryConfig]
+        if (!min_price && !max_price) {
+            return
         }
-
+        const searchQuery = omitBy(
+            { ...omit(queryConfig, ['page']), price_min: min_price, price_max: max_price },
+            isEmpty
+        )
         navigate({
             pathname: path.HOME,
             search: createSearchParams(searchQuery).toString()
+        })
+    }
+
+    const handleFilter = (queryReset: (keyof QueryConfig)[], updateQuery?: keyof QueryConfig, valueUpdate?: string) => {
+        // Delete queries unnecessery
+        const newQuery: QueryConfig = { ...omit(queryConfig, queryReset) }
+        // Update new query
+        if (updateQuery && valueUpdate) {
+            newQuery[updateQuery] = valueUpdate
+        }
+        navigate({
+            pathname: path.HOME,
+            search: createSearchParams(newQuery).toString()
         })
     }
 
@@ -72,9 +74,9 @@ const Filter = ({ categories, queryConfig }: Prop) => {
             {/* Category list */}
             <div className='flex items-center gap-x-3 py-4 border-gray-300 border-b-[1px] text-base'>
                 <i className='fa-solid fa-list'></i>
-                <Link to={path.HOME} className={`capitalize font-bold`}>
+                <button onClick={() => handleFilter(['page', 'category'])} className={`capitalize font-bold`}>
                     tất cả danh mục
-                </Link>
+                </button>
             </div>
             <div>
                 <ul>
@@ -208,8 +210,10 @@ const Filter = ({ categories, queryConfig }: Prop) => {
                         />
                     </div>
                     <div className='grid grid-cols-2'>
-                        {errors?.min_price && <p className='text-start error'>{errors.min_price.message}</p>}
-                        {errors?.max_price && <p className='col-start-2 text-end error'>{errors.max_price.message}</p>}
+                        {errors?.min_price && <p className='text-red-500 text-start'>{errors.min_price.message}</p>}
+                        {errors?.max_price && (
+                            <p className='col-start-2 text-red-500 text-end'>{errors.max_price.message}</p>
+                        )}
                     </div>
                     <Button type='submit' children='Áp dụng' className='mt-4 px-4 py-2 rounded w-full uppercase' />
                 </form>
@@ -217,13 +221,16 @@ const Filter = ({ categories, queryConfig }: Prop) => {
             {/* Rating */}
             <div className='mt-5 pb-5 border-gray-300 border-b-[1px]'>
                 <p className='my-3 font-semibold capitalize'>Đánh giá</p>
-                <Star star={5} onClick={(star) => handleRating(star)} />
-                <Star star={4} isShowText onClick={(star) => handleRating(star)} />
-                <Star star={3} isShowText onClick={(star) => handleRating(star)} />
-                <Star star={2} isShowText onClick={(star) => handleRating(star)} />
+                <Star star={5} onClick={(star) => handleFilter(['page'], 'rating_filter', String(star))} />
+                <Star star={4} isShowText onClick={(star) => handleFilter(['page'], 'rating_filter', String(star))} />
+                <Star star={3} isShowText onClick={(star) => handleFilter(['page'], 'rating_filter', String(star))} />
+                <Star star={2} isShowText onClick={(star) => handleFilter(['page'], 'rating_filter', String(star))} />
             </div>
             <Button
-                onClick={handleResetFilter}
+                onClick={() => {
+                    reset({ min_price: '', max_price: '' })
+                    handleFilter(['category', 'price_min', 'price_max', 'rating_filter'])
+                }}
                 children='Xoá tất cả'
                 className='mt-5 px-4 py-2 rounded w-full uppercase'
             />

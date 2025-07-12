@@ -1,5 +1,6 @@
 import axios, { AxiosError, type AxiosInstance } from 'axios'
 import { toast } from 'react-toastify'
+import Swal from 'sweetalert2'
 import path from '~/constant/path'
 import authUtil from './authUtil'
 import { isAxiosExpiredTokenError, isAxiosUnauthorizedError, isNormalError } from './helper'
@@ -65,6 +66,12 @@ class Axios {
                 }
 
                 if (isAxiosUnauthorizedError<ErrorResponse<{ name: string; message: string }>>(error)) {
+                    // If user not login
+                    if (!this.accessToken) {
+                        Swal.fire('Chưa đăng nhập', 'Vui lòng đăng nhập để tiếp tục!', 'error')
+                        return
+                    }
+
                     const currentRequest = error.response?.config || { headers: {}, url: '' }
                     const { url } = currentRequest
 
@@ -102,7 +109,7 @@ class Axios {
     private async handleRefreshToken(): Promise<string> {
         try {
             const response = await this.instance.post<RefreshTokenRes>(URL_REFRESH_TOKEN, {
-                refreshToken: this.refreshToken
+                refresh_token: this.refreshToken
             })
 
             const accessToken = response.data.data.access_token
