@@ -9,6 +9,7 @@ import userApi from '~/apis/user.api'
 import Button from '~/components/Button'
 import DateSelect from '~/components/DateSelect'
 import Input from '~/components/Input'
+import { SpinnerLoader } from '~/components/Loading'
 import { AppContext } from '~/contexts/app.context'
 import authUtil from '~/utils/authUtil'
 import { isAxiosUnprocessaleEntityError } from '~/utils/helper'
@@ -46,7 +47,7 @@ const Profile = () => {
         return profileUtil.getAvatarUrl(watchAvatar)
     }, [avatarFile, watchAvatar])
 
-    const { data } = useQuery({
+    const { data, isFetching } = useQuery({
         queryKey: ['profile'],
         queryFn: userApi.getProfile
     })
@@ -75,6 +76,10 @@ const Profile = () => {
         setValue('avatar', profileData.avatar)
         setValue('date_of_birth', dayjs(profileData.date_of_birth).format('YYYY-MM-DD'))
     }, [profileData, setValue])
+
+    if (isFetching) {
+        return <SpinnerLoader />
+    }
 
     const onSubmit = handleSubmit(async (data) => {
         try {

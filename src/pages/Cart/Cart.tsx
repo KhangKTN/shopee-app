@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo } from 'react'
 import { useLocation } from 'react-router-dom'
 import Swal from 'sweetalert2'
 import 'sweetalert2/src/sweetalert2.scss'
@@ -14,12 +14,12 @@ import CartProducts from './CartProducts/CartProducts'
 
 const Cart = () => {
     const location = useLocation()
-    const [isFirstLoad, setFirstLoad] = useState(true)
     const { cart: productExtraList, setCart: setProductExtra } = useCounterStore()
 
     const {
         data: cartData,
         isFetching,
+        isPending,
         refetch
     } = useQuery({
         queryKey: ['purchases', { status: PurchaseStatus.CART }],
@@ -105,7 +105,6 @@ const Cart = () => {
     })
 
     const handleDelete = (id: string) => {
-        setFirstLoad(false)
         // Delete single item
         if (id.trim()) {
             deleteCartMutation.mutate([id])
@@ -124,7 +123,7 @@ const Cart = () => {
 
     return (
         <div className='bg-neutral-100 py-10 h-full'>
-            {isFetching && isFirstLoad ? (
+            {isFetching && isPending ? (
                 <SpinnerLoader />
             ) : (
                 /* Render items cart */
@@ -135,7 +134,6 @@ const Cart = () => {
                             handleCheck={handleCheck}
                             handleDelete={handleDelete}
                             isCheckedAll={isCheckedAll}
-                            setFirstLoad={setFirstLoad}
                         />
                     </div>
                 </div>

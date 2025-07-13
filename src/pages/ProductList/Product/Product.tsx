@@ -1,8 +1,11 @@
+import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 import { ImageLoad } from '~/components/Loading'
 import productUtil from '~/utils/productUtil'
 
 const Product = ({ product }: { product: Product }) => {
+    const { t } = useTranslation('product')
+
     return (
         <Link to={productUtil.slugifyUrl({ id: product._id, name: product.name })}>
             <div className='bg-white shadow-sm hover:shadow rounded overflow-hidden transition-transform hover:-translate-y-[4px] duration-200'>
@@ -34,14 +37,14 @@ const Product = ({ product }: { product: Product }) => {
                         )}
                         {product.sold > 0 && (
                             <span className='ml-2 pl-2 border-gray-300 border-l-[1px]'>
-                                {productUtil.formatQuantity(product.sold)} đã bán
+                                {productUtil.formatQuantity(product.sold)} {t('sold')}
                             </span>
                         )}
                     </div>
                     {/* Shipping */}
                     <div className='mt-2 text-xs line-clamp-1'>
                         <span className='text-emerald-500'>
-                            <i className='fa-solid fa-truck-fast'></i> 3 - 4 ngày
+                            <i className='fa-solid fa-truck-fast'></i> 3 - 4 {t('day')}
                         </span>
                         <span className='ml-2 pl-2 border-gray-300 border-l-[1px] font-light text-gray-500'>
                             <i className='fa-solid fa-location-dot'></i> TP. Hồ Chí Minh

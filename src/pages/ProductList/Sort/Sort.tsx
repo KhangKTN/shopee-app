@@ -1,5 +1,6 @@
 import cx from 'classix'
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { createSearchParams, useNavigate } from 'react-router-dom'
 import { PrevNextLink } from '~/components/Pagination'
 import path from '~/constant/path'
@@ -11,22 +12,14 @@ interface Prop {
     queryConfig: QueryConfig
 }
 
-interface ButtonSort {
-    name: string
-    sortByValue: SortByEnum
-}
-
-const buttonSortList: ButtonSort[] = [
-    { name: 'phổ biến', sortByValue: SortByEnum.VIEW },
-    { name: 'mới nhất', sortByValue: SortByEnum.CREATED_AT },
-    { name: 'bán chạy', sortByValue: SortByEnum.SOLD }
-]
+const buttonSortList: SortByEnum[] = [SortByEnum.VIEW, SortByEnum.CREATED_AT, SortByEnum.SOLD]
 
 type SortByQuery = Exclude<ProductQuery['sort_by'], undefined>
 
 const Sort = ({ queryConfig, totalPage = 0 }: Prop) => {
     const [isShowPrice, setShowPrice] = useState<boolean>(false)
     const navigate = useNavigate()
+    const { t } = useTranslation()
 
     const { sort_by = SortByEnum.CREATED_AT } = queryConfig
     const page = Number(queryConfig.page) || 1
@@ -53,17 +46,17 @@ const Sort = ({ queryConfig, totalPage = 0 }: Prop) => {
         <div className='flex justify-between items-center bg-gray-300/50 px-4 py-3 rounded text-sm'>
             {/* List button sort */}
             <div className='flex items-center gap-x-3'>
-                <span className='font-medium text-base'>Sắp xếp theo</span>
+                <span className='text-gray-600 text-base'>{t('sort.sortby')}</span>
                 {buttonSortList.map((item) => (
                     <button
-                        key={item.name}
-                        onClick={() => handleClickSort(item.sortByValue)}
+                        key={item}
+                        onClick={() => handleClickSort(item)}
                         className={cx(
                             'px-4 py-2 rounded capitalize',
-                            isActiveSort(item.sortByValue) ? 'bg-primary text-white' : 'bg-white'
+                            isActiveSort(item) ? 'bg-primary text-white' : 'bg-white'
                         )}
                     >
-                        {item.name}
+                        {t(`sort.${item}` as any)}
                     </button>
                 ))}
                 <button
@@ -77,9 +70,9 @@ const Sort = ({ queryConfig, totalPage = 0 }: Prop) => {
                 >
                     {queryConfig?.sort_by === SortByEnum.PRICE
                         ? queryConfig.order === OrderEnum.ASC
-                            ? 'Giá: Thấp đến Cao'
-                            : 'Giá: Cao đến Thấp'
-                        : 'Giá'}
+                            ? t('sort.low_to_high')
+                            : t('sort.high_to_low')
+                        : t('sort.price')}
                     <svg
                         className='ms-auto w-2.5 h-2.5'
                         aria-hidden='true'
@@ -106,7 +99,7 @@ const Sort = ({ queryConfig, totalPage = 0 }: Prop) => {
                                         queryConfig.order === OrderEnum.ASC ? 'text-primary' : 'text-black'
                                     )}
                                 >
-                                    Giá: Thấp đến Cao
+                                    {t('sort.low_to_high')}
                                 </li>
                                 <li
                                     onClick={() => handleClickSort('price', OrderEnum.DESC)}
@@ -115,7 +108,7 @@ const Sort = ({ queryConfig, totalPage = 0 }: Prop) => {
                                         queryConfig.order === OrderEnum.DESC ? 'text-primary' : 'text-black'
                                     )}
                                 >
-                                    Giá: Cao đến Thấp
+                                    {t('sort.high_to_low')}
                                 </li>
                             </ul>
                         </div>

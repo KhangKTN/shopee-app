@@ -1,0 +1,39 @@
+{
+    "header": {
+        "seller_channel": "Kênh người bán",
+        "download_app": "Tải ứng dụng",
+        "connect": "Kết nối",
+        "alert": "Thông báo",
+        "support": "Hỗ trợ",
+        "login": "Đăng nhập",
+        "register": "Đăng kí",
+        "my_acount": "Tài khoản của tôi",
+        "order": "Đơn hàng",
+        "logout": "Đăng xuất"
+    },
+    "cart": {
+        "new_product_add": "Sản phẩm mới thêm",
+        "view_cart": "xem giỏ hàng",
+        "add_product_cart": "thêm hàng vào giỏ",
+        "not_product": "Chưa có sản phẩm nào"
+    },
+    "filter": {
+        "all_category": "Tất cả danh mục",
+        "price_range": "Khoảng giá",
+        "from": "TỪ",
+        "to": "ĐẾN",
+        "apply": "Áp dụng",
+        "rating": "Đánh giá",
+        "and_up": "trở lên",
+        "clear_all": "Xoá tất cả"
+    },
+    "sort": {
+        "sortby": "Sắp xếp theo",
+        "view": "Phổ biến",
+        "createdAt": "Mới nhất",
+        "sold": "Bán chạy",
+        "price": "Giá",
+        "low_to_high": "Giá: Thấp đến Cao",
+        "high_to_low": "Giá: Cao đến Thấp"
+    }
+}

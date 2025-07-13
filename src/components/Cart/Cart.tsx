@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { useContext } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 import purchaseApi from '~/apis/purchase.api'
 import path from '~/constant/path'
@@ -12,6 +13,7 @@ const CART_ITEM_SHOW = 5
 
 const Cart = () => {
     const { isAuthenticated } = useContext(AppContext)
+    const { t } = useTranslation('home')
 
     const { data: cartData } = useQuery({
         queryKey: ['purchases', PurchaseStatus.CART],
@@ -25,7 +27,7 @@ const Cart = () => {
         <Popover
             popover={
                 <div className='bg-white py-3 rounded w-[400px]'>
-                    <div className='mb-3 px-3 text-gray-400'>Sản phẩm mới thêm</div>
+                    <div className='mb-3 px-3 text-gray-400'>{t('cart.new_product_add')}</div>
                     {cartProductList && cartProductList?.length > 0 ? (
                         <div>
                             {cartProductList.slice(0, CART_ITEM_SHOW).map((item) => (
@@ -40,17 +42,17 @@ const Cart = () => {
                             <div className='flex justify-between items-center mt-3 px-3'>
                                 {cartProductList.length > CART_ITEM_SHOW && (
                                     <span className='text-primary'>
-                                        {cartProductList.length - CART_ITEM_SHOW} thêm hàng vào giỏ
+                                        {cartProductList.length - CART_ITEM_SHOW} {t('cart.add_product_cart')}
                                     </span>
                                 )}
                                 <Link to={path.CART} className='block bg-primary ml-auto px-4 py-2 rounded text-white'>
-                                    Xem giỏ hàng
+                                    {t('cart.view_cart')}
                                 </Link>
                             </div>
                         </div>
                     ) : (
                         <div className='flex justify-center items-center w-full h-[80px]'>
-                            <span>Chưa có sản phẩm nào</span>
+                            <span>{t('cart.not_product')}</span>
                         </div>
                     )}
                 </div>

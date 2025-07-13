@@ -1,0 +1,39 @@
+{
+    "header": {
+        "seller_channel": "Seller channel",
+        "download_app": "Download app",
+        "connect": "Connect",
+        "alert": "Alert",
+        "support": "Support",
+        "login": "Login",
+        "register": "Register",
+        "my_acount": "My account",
+        "order": "Order",
+        "logout": "Logout"
+    },
+    "cart": {
+        "new_product_add": "New products added",
+        "view_cart": "view cart",
+        "add_product_cart": "add product to cart",
+        "not_product": "No products yet"
+    },
+    "filter": {
+        "all_category": "All category",
+        "price_range": "Price range",
+        "from": "FROM",
+        "to": "TO",
+        "apply": "Apply",
+        "rating": "Rating",
+        "and_up": "and up",
+        "clear_all": "Clear all"
+    },
+    "sort": {
+        "sortby": "Sort by",
+        "view": "Populate",
+        "createdAt": "Latest",
+        "sold": "Best seller",
+        "price": "Price",
+        "low_to_high": "Price: Low to High",
+        "high_to_low": "Price: High to Low"
+    }
+}

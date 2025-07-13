@@ -11,11 +11,10 @@ interface Prop {
     productExtraList: ProductExtra[]
     handleCheck: (checkAll: boolean, id?: string) => void
     handleDelete: (id: string) => void
-    setFirstLoad: React.Dispatch<React.SetStateAction<boolean>>
     isCheckedAll: boolean
 }
 
-const CartProducts = ({ productExtraList, handleCheck, handleDelete, isCheckedAll, setFirstLoad }: Prop) => {
+const CartProducts = ({ productExtraList, handleCheck, handleDelete, isCheckedAll }: Prop) => {
     const { setCart: setProductExtra } = useCounterStore()
 
     const updateCartMutation = useMutation({
@@ -28,7 +27,6 @@ const CartProducts = ({ productExtraList, handleCheck, handleDelete, isCheckedAl
             return
         }
         setProductExtra(productExtraList.map((item) => (item._id === id ? { ...item, disabled: true } : item)))
-        setFirstLoad(false)
         await updateCartMutation.mutateAsync({ product_id: purchase.product._id, buy_count: value })
 
         // Set disable false

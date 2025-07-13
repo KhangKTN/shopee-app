@@ -4,6 +4,7 @@ import isEmpty from 'lodash/isEmpty'
 import omit from 'lodash/omit'
 import omitBy from 'lodash/omitBy'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import { createSearchParams, Link, useNavigate } from 'react-router-dom'
 import Button from '~/components/Button'
 import { InputNumber } from '~/components/Input'
@@ -20,6 +21,7 @@ interface Prop {
 const Filter = ({ categories, queryConfig }: Prop) => {
     const navigate = useNavigate()
     const { category } = queryConfig
+    const { t } = useTranslation()
 
     const getCategoryLink = (id: string) => {
         return {
@@ -74,8 +76,11 @@ const Filter = ({ categories, queryConfig }: Prop) => {
             {/* Category list */}
             <div className='flex items-center gap-x-3 py-4 border-gray-300 border-b-[1px] text-base'>
                 <i className='fa-solid fa-list'></i>
-                <button onClick={() => handleFilter(['page', 'category'])} className={`capitalize font-bold`}>
-                    tất cả danh mục
+                <button
+                    onClick={() => handleFilter(['page', 'category'])}
+                    className='font-bold hover:text-primary capitalize'
+                >
+                    {t('filter.all_category')}
                 </button>
             </div>
             <div>
@@ -173,7 +178,7 @@ const Filter = ({ categories, queryConfig }: Prop) => {
             </div> */}
             {/* Price */}
             <div className='mt-5 pb-5 border-gray-300 border-y-[1px]'>
-                <div className='my-3 font-semibold capitalize'>Khoảng giá</div>
+                <div className='my-3 font-semibold capitalize'>{t('filter.price_range')}</div>
                 <form onSubmit={handleSubmit(onSubmit)} className='mt-4'>
                     <div className='flex items-center gap-x-3 w-full'>
                         <Controller
@@ -184,7 +189,7 @@ const Filter = ({ categories, queryConfig }: Prop) => {
                                     onChange={field.onChange}
                                     classNameDiv='grow'
                                     className='py-1 pl-1 border border-gray-300 focus:border-gray-400 rounded-sm outline-none w-full'
-                                    placeholder='đ TỪ'
+                                    placeholder={`đ ${t('filter.from')}`}
                                     type='text'
                                     value={field.value}
                                 />
@@ -202,7 +207,7 @@ const Filter = ({ categories, queryConfig }: Prop) => {
                                     }}
                                     classNameDiv='grow'
                                     className='py-1 pl-1 border border-gray-300 focus:border-gray-400 rounded-sm outline-none w-full'
-                                    placeholder='đ ĐẾN'
+                                    placeholder={`đ ${t('filter.to')}`}
                                     type='text'
                                     value={field.value}
                                 />
@@ -215,12 +220,16 @@ const Filter = ({ categories, queryConfig }: Prop) => {
                             <p className='col-start-2 text-red-500 text-end'>{errors.max_price.message}</p>
                         )}
                     </div>
-                    <Button type='submit' children='Áp dụng' className='mt-4 px-4 py-2 rounded w-full uppercase' />
+                    <Button
+                        type='submit'
+                        children={t('filter.apply')}
+                        className='mt-4 px-4 py-2 rounded w-full uppercase'
+                    />
                 </form>
             </div>
             {/* Rating */}
             <div className='mt-5 pb-5 border-gray-300 border-b-[1px]'>
-                <p className='my-3 font-semibold capitalize'>Đánh giá</p>
+                <p className='my-3 font-semibold capitalize'>{t('filter.rating')}</p>
                 <Star star={5} onClick={(star) => handleFilter(['page'], 'rating_filter', String(star))} />
                 <Star star={4} isShowText onClick={(star) => handleFilter(['page'], 'rating_filter', String(star))} />
                 <Star star={3} isShowText onClick={(star) => handleFilter(['page'], 'rating_filter', String(star))} />
@@ -231,7 +240,7 @@ const Filter = ({ categories, queryConfig }: Prop) => {
                     reset({ min_price: '', max_price: '' })
                     handleFilter(['category', 'price_min', 'price_max', 'rating_filter'])
                 }}
-                children='Xoá tất cả'
+                children={t('filter.clear_all')}
                 className='mt-5 px-4 py-2 rounded w-full uppercase'
             />
         </>

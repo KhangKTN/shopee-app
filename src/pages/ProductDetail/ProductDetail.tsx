@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import DOMPurify from 'dompurify'
 import { useEffect, useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
 import productApi from '~/apis/product.api'
 import purchaseApi from '~/apis/purchase.api'
@@ -32,6 +33,7 @@ const ProductDetail = () => {
     const [buyQty, setBuyQty] = useState('1')
     const [showAlertSuccess, setShowAlertSuccess] = useState(false)
     const queryClient = useQueryClient()
+    const { t } = useTranslation('product')
 
     // Extract id from url
     const id = useMemo(() => {
@@ -118,7 +120,7 @@ const ProductDetail = () => {
                                 <Star star={rating} />
                             </div>
                             <span className='pl-2 border-gray-300 border-l-[1px]'>
-                                <span className='font-semibold'>{sold}</span> đã bán
+                                <span className='font-semibold'>{sold}</span> {t('sold')}
                             </span>
                         </div>
                         {/* Price */}
@@ -146,7 +148,7 @@ const ProductDetail = () => {
                         </div>
                         {/* Shipping */}
                         <div className='flex items-start mt-5'>
-                            <h2 className='min-w-[100px] text-gray-500 capitalize'>Vận chuyển</h2>
+                            <h2 className='min-w-[100px] text-gray-500 capitalize'>{t('shipping')}</h2>
                             <div className='flex'>
                                 <img
                                     src='https://deo.shopeemobile.com/shopee/shopee-pcmall-live-sg/productdetailspage/f1f65ec969d238ed62ff.svg'
@@ -163,18 +165,18 @@ const ProductDetail = () => {
                         </div>
                         <div className='flex items-center mt-5'>
                             <span className='min-w-[100px] max-w-[100px] text-gray-500 capitalize'>
-                                An tâm mua sắm cùng Shopee
+                                {t('confidence')}
                             </span>
                             <img
                                 src='https://deo.shopeemobile.com/shopee/shopee-pcmall-live-sg/productdetailspage/fd303700dd252abf3771.svg'
                                 alt='img_verify'
                                 className='mr-2 h-fit'
                             />
-                            <p>Trả hàng miễn phí 15 ngày · Chính hãng 100% · Miễn phí vận chuyển</p>
+                            <p>{t('confidence_detail')}</p>
                         </div>
                         {/* Quantity */}
                         <div className='flex items-center mt-12'>
-                            <span className='min-w-[100px] text-gray-500 capitalize'>Số lượng</span>
+                            <span className='min-w-[100px] text-gray-500 capitalize'>{t('quantity')}</span>
                             <QuantityController
                                 mode='state'
                                 id={id || ''}
@@ -182,7 +184,9 @@ const ProductDetail = () => {
                                 buyQty={buyQty}
                                 handleUpdate={setBuyQty}
                             />
-                            <span className='ml-5 text-gray-400'>{quantity} sản phẩm có sẵn</span>
+                            <span className='ml-5 text-gray-400'>
+                                {quantity} {t('product_available')}
+                            </span>
                         </div>
                         {/* Action button */}
                         <div className='flex gap-x-4 mt-10'>
@@ -196,13 +200,13 @@ const ProductDetail = () => {
                                     alt='shopping_cart'
                                     className='size-5'
                                 />
-                                Thêm vào giỏ hàng
+                                {t('add_to_cart')}
                             </button>
                             <button
                                 onClick={() => buyNow()}
                                 className='bg-primary hover:opacity-80 px-5 py-2.5 rounded text-white capitalize transition-opacity'
                             >
-                                mua ngay
+                                {t('buy_now')}
                             </button>
                         </div>
                     </div>
@@ -210,12 +214,14 @@ const ProductDetail = () => {
             </section>
             {/* Description */}
             <section className='bg-white shadow mx-auto mt-5 p-4 rounded container'>
-                <div className='bg-gray-100 py-2 pl-3 rounded font-medium text-base uppercase'>Mô tả sản phẩm</div>
+                <div className='bg-gray-100 py-2 pl-3 rounded font-medium text-base uppercase'>
+                    {t('product_description')}
+                </div>
                 <p dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(description) }} className='mt-4 px-3'></p>
             </section>
             {/* Related products */}
             <div className='mx-auto container'>
-                <h2 className='mt-8 font-medium text-gray-500 text-lg uppercase'>Có thể bạn cũng thích</h2>
+                <h2 className='mt-8 font-medium text-gray-500 text-lg uppercase'>{t('may_also_like')}</h2>
                 <div className='gap-x-3 gap-y-2 grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 mt-5'>
                     {isFetchingRelatedProduct ? (
                         <ProductLoading />

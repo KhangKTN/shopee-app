@@ -1,4 +1,5 @@
 import { useId } from 'react'
+import { useTranslation } from 'react-i18next'
 
 interface Props {
     star: number
@@ -8,6 +9,7 @@ interface Props {
 
 const Star = ({ star, isShowText, onClick }: Props) => {
     const id = useId()
+    const { t } = useTranslation()
 
     return (
         <div
@@ -68,7 +70,7 @@ const Star = ({ star, isShowText, onClick }: Props) => {
                         )}
                     </div>
                 ))}
-            {isShowText && <span className='ml-1'> trở lên</span>}
+            {isShowText && <span className='ml-1'> {t('filter.and_up')}</span>}
         </div>
     )
 }
