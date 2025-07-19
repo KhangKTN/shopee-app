@@ -1,6 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useMutation } from '@tanstack/react-query'
 import omit from 'lodash/omit'
+import { Helmet } from 'react-helmet-async'
 import { useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
 import * as yup from 'yup'
@@ -55,57 +56,63 @@ const ChangePassword = () => {
     })
 
     return (
-        <div className='bg-white shadow-sm px-8 rounded min-h-full'>
-            <div className='py-[15px] border-gray-200 border-b-[1px] h-[81px]'>
-                <h6 className='font-semibold text-lg capitalize'>Đổi mật khẩu</h6>
-                <p>Thay đổi mật khẩu của bạn</p>
+        <>
+            <Helmet>
+                <title>Shopee Việt Nam | Đổi mật khẩu</title>
+                <meta name='description' content='Thay đổi mật khẩu' />
+            </Helmet>
+            <div className='bg-white shadow-sm px-8 rounded min-h-full'>
+                <div className='py-[15px] border-gray-200 border-b-[1px] h-[81px]'>
+                    <h6 className='font-semibold text-lg capitalize'>Đổi mật khẩu</h6>
+                    <p>Thay đổi mật khẩu của bạn</p>
+                </div>
+                {/* Form change password */}
+                <form className='grid grid-cols-12 py-8' onSubmit={onSubmit}>
+                    <div className='col-span-6'>
+                        <div>
+                            <label>Mật khẩu hiện tại</label>
+                            <Input
+                                name='password'
+                                type='password'
+                                register={register}
+                                errorMsg={formState.errors.password?.message}
+                                classNameDiv='mt-1'
+                            />
+                        </div>
+                        <div className='mt-6'>
+                            <label>Mật khẩu mới</label>
+                            <Input
+                                name='new_password'
+                                type='password'
+                                register={register}
+                                errorMsg={formState.errors.new_password?.message}
+                                classNameDiv='mt-1'
+                            />
+                        </div>
+                        <div className='mt-6'>
+                            <label>Nhập lại mật khẩu mới</label>
+                            <Input
+                                name='confirm_password'
+                                type='password'
+                                register={register}
+                                errorMsg={formState.errors.confirm_password?.message}
+                                classNameDiv='mt-1'
+                            />
+                        </div>
+                    </div>
+                    {/* Button submit */}
+                    <div className='col-start-5 mt-8 col-auto'>
+                        <Button
+                            children='Lưu'
+                            isLoading={updatePasswordMutation.isPending}
+                            disabled={updatePasswordMutation.isPending}
+                            type='submit'
+                            className='px-6 py-2.5 rounded'
+                        />
+                    </div>
+                </form>
             </div>
-            {/* Form change password */}
-            <form className='grid grid-cols-12 py-8' onSubmit={onSubmit}>
-                <div className='col-span-6'>
-                    <div>
-                        <label>Mật khẩu hiện tại</label>
-                        <Input
-                            name='password'
-                            type='password'
-                            register={register}
-                            errorMsg={formState.errors.password?.message}
-                            classNameDiv='mt-1'
-                        />
-                    </div>
-                    <div className='mt-6'>
-                        <label>Mật khẩu mới</label>
-                        <Input
-                            name='new_password'
-                            type='password'
-                            register={register}
-                            errorMsg={formState.errors.new_password?.message}
-                            classNameDiv='mt-1'
-                        />
-                    </div>
-                    <div className='mt-6'>
-                        <label>Nhập lại mật khẩu mới</label>
-                        <Input
-                            name='confirm_password'
-                            type='password'
-                            register={register}
-                            errorMsg={formState.errors.confirm_password?.message}
-                            classNameDiv='mt-1'
-                        />
-                    </div>
-                </div>
-                {/* Button submit */}
-                <div className='col-start-5 mt-8 col-auto'>
-                    <Button
-                        children='Lưu'
-                        isLoading={updatePasswordMutation.isPending}
-                        disabled={updatePasswordMutation.isPending}
-                        type='submit'
-                        className='px-6 py-2.5 rounded'
-                    />
-                </div>
-            </form>
-        </div>
+        </>
     )
 }
 

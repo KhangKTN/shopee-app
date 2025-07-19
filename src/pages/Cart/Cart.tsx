@@ -1,5 +1,6 @@
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { useEffect, useMemo } from 'react'
+import { Helmet } from 'react-helmet-async'
 import { useLocation } from 'react-router-dom'
 import Swal from 'sweetalert2'
 import 'sweetalert2/src/sweetalert2.scss'
@@ -122,55 +123,61 @@ const Cart = () => {
     }
 
     return (
-        <div className='bg-neutral-100 py-10 h-full'>
-            {isFetching && isPending ? (
-                <SpinnerLoader />
-            ) : (
-                /* Render items cart */
-                <div className='mx-auto overflow-x-auto container'>
-                    <div className='min-w-[1000px]'>
-                        <CartProducts
-                            productExtraList={productExtraList}
-                            handleCheck={handleCheck}
-                            handleDelete={handleDelete}
-                            isCheckedAll={isCheckedAll}
-                        />
+        <>
+            <Helmet>
+                <title>Shopee Việt Nam | Giỏ hàng</title>
+                <meta name='description' content='Xem giỏ hàng' />
+            </Helmet>
+            <div className='bg-neutral-100 py-10 h-full'>
+                {isFetching && isPending ? (
+                    <SpinnerLoader />
+                ) : (
+                    /* Render items cart */
+                    <div className='mx-auto overflow-x-auto container'>
+                        <div className='min-w-[1000px]'>
+                            <CartProducts
+                                productExtraList={productExtraList}
+                                handleCheck={handleCheck}
+                                handleDelete={handleDelete}
+                                isCheckedAll={isCheckedAll}
+                            />
+                        </div>
                     </div>
-                </div>
-            )}
+                )}
 
-            {/* Summary cart */}
-            {productExtraList.length > 0 && (
-                <div className='bottom-0 z-10 sticky flex lg:flex-row flex-col justify-between bg-white mx-auto mt-5 px-4 py-5 border-primary border-t-2 rounded-sm container'>
-                    <div className='flex items-center text-base capitalize'>
-                        <Checkbox id='' checked={isCheckedAll} onChange={handleCheck} />
-                        <label htmlFor='select_all' className='ml-2 cursor-pointer'>
-                            Chọn tất cả ({productExtraList?.length})
-                        </label>
-                        <button
-                            onClick={() => handleDelete('')}
-                            className='ml-3 pl-3 border-neutral-200 border-l-[1px] hover:text-primary'
-                        >
-                            Xoá
-                        </button>
+                {/* Summary cart */}
+                {productExtraList.length > 0 && (
+                    <div className='bottom-0 z-10 sticky flex lg:flex-row flex-col justify-between bg-white mx-auto mt-5 px-4 py-5 border-primary border-t-2 rounded-sm container'>
+                        <div className='flex items-center text-base capitalize'>
+                            <Checkbox id='' checked={isCheckedAll} onChange={handleCheck} />
+                            <label htmlFor='select_all' className='ml-2 cursor-pointer'>
+                                Chọn tất cả ({productExtraList?.length})
+                            </label>
+                            <button
+                                onClick={() => handleDelete('')}
+                                className='ml-3 pl-3 border-neutral-200 border-l-[1px] hover:text-primary'
+                            >
+                                Xoá
+                            </button>
+                        </div>
+                        <div className='flex items-center'>
+                            <span className='mr-5 font-medium text-base'>
+                                Tổng cộng ({countChecked} Sản phẩm){': '}
+                                <span className='font-semibold text-primary text-xl'>đ{calcTotalPrice}</span>
+                            </span>
+                            <Button
+                                isLoading={buyProductsMutation.isPending}
+                                disabled={buyProductsMutation.isPending || countChecked === 0}
+                                onClick={() => buyProducts()}
+                                className='bg-primary px-10 py-3 rounded font-medium text-white text-base capitalize'
+                            >
+                                Mua hàng
+                            </Button>
+                        </div>
                     </div>
-                    <div className='flex items-center'>
-                        <span className='mr-5 font-medium text-base'>
-                            Tổng cộng ({countChecked} Sản phẩm){': '}
-                            <span className='font-semibold text-primary text-xl'>đ{calcTotalPrice}</span>
-                        </span>
-                        <Button
-                            isLoading={buyProductsMutation.isPending}
-                            disabled={buyProductsMutation.isPending || countChecked === 0}
-                            onClick={() => buyProducts()}
-                            className='bg-primary px-10 py-3 rounded font-medium text-white text-base capitalize'
-                        >
-                            Mua hàng
-                        </Button>
-                    </div>
-                </div>
-            )}
-        </div>
+                )}
+            </div>
+        </>
     )
 }
 

@@ -6,6 +6,7 @@ import authUtil from './authUtil'
 import { isAxiosExpiredTokenError, isAxiosUnauthorizedError, isNormalError } from './helper'
 
 const URL_REFRESH_TOKEN = 'refresh-access-token'
+const DAY_IN_MILISECOND = 24 * 60 * 60
 
 class Axios {
     instance: AxiosInstance
@@ -20,8 +21,8 @@ class Axios {
             timeout: 10000,
             headers: {
                 'Content-Type': 'application/json',
-                'expire-access-token': 10,
-                'expire-refresh-token': 60 * 60
+                'expire-access-token': 3 * DAY_IN_MILISECOND,
+                'expire-refresh-token': 30 * DAY_IN_MILISECOND
             }
         })
         this.accessToken = authUtil.getAccessToken()

@@ -13,7 +13,7 @@
     },
     "cart": {
         "new_product_add": "New products added",
-        "view_cart": "view cart",
+        "view_cart": "View cart",
         "add_product_cart": "add product to cart",
         "not_product": "No products yet"
     },

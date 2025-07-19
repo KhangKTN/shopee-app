@@ -1,6 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import DOMPurify from 'dompurify'
+import { convert } from 'html-to-text'
 import { useEffect, useMemo, useState } from 'react'
+import { Helmet } from 'react-helmet-async'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
 import productApi from '~/apis/product.api'
@@ -103,6 +105,10 @@ const ProductDetail = () => {
 
     return (
         <main className='bg-gray-200 py-6'>
+            <Helmet>
+                <title>{name}</title>
+                <meta name='description' content={convert(description, { limits: { maxInputLength: 200 } })} />
+            </Helmet>
             {/* Summary */}
             <section className='bg-white shadow mx-auto p-4 rounded container'>
                 <div className='gap-x-8 grid grid-cols-12'>
@@ -192,7 +198,7 @@ const ProductDetail = () => {
                         <div className='flex gap-x-4 mt-10'>
                             <button
                                 onClick={handleAddToCart}
-                                className='flex items-center gap-x-2 bg-primary/10 hover:bg-primary/5 px-5 py-2.5 border-[1.5px] border-primary rounded text-primary transition-colors'
+                                className='flex items-center gap-x-2 bg-primary/10 hover:bg-primary/5 px-5 py-2.5 border-[1.5px] border-primary rounded h-12 text-primary transition-colors'
                                 disabled={addCartMutation.isPending}
                             >
                                 <img
@@ -204,9 +210,18 @@ const ProductDetail = () => {
                             </button>
                             <button
                                 onClick={() => buyNow()}
-                                className='bg-primary hover:opacity-80 px-5 py-2.5 rounded text-white capitalize transition-opacity'
+                                className='bg-primary hover:opacity-80 px-8 rounded h-12 text-white transition-opacity'
                             >
-                                {t('buy_now')}
+                                {price_before_discount > price ? (
+                                    <>
+                                        <div className='text-sm capitalize'>{t('buy_voucher')}</div>
+                                        <div className='font-medium text-lg leading-none'>
+                                            đ{productUtil.formatVnd(price_before_discount - price)}
+                                        </div>
+                                    </>
+                                ) : (
+                                    <span>{t('buy_now')}</span>
+                                )}
                             </button>
                         </div>
                     </div>

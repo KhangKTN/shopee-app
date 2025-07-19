@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import cx from 'classix'
+import { Helmet } from 'react-helmet-async'
 import { Link, useSearchParams } from 'react-router-dom'
 import purchaseApi from '~/apis/purchase.api'
 import { SpinnerLoader } from '~/components/Loading'
@@ -195,6 +196,10 @@ const HistoryPurchase = () => {
 
     return (
         <>
+            <Helmet>
+                <title>Shopee Việt Nam | Lịch sử mua hàng</title>
+                <meta name='description' content='Lịch sử đơn hàng đã đặt' />
+            </Helmet>
             {/* Navbav */}
             <section className='grid grid-cols-6 bg-white rounded text-base'>
                 {purchaseNavLinks.map((link) => (
