@@ -13,6 +13,7 @@ const persistAccessToken = (token: string): void => {
 
 const clearPersistedData = (): void => {
     localStorage.removeItem(ACCESS_TOKEN)
+    localStorage.removeItem(REFRESH_TOKEN)
     localStorage.removeItem(PROFILE)
 
     const clearTokenEvent = new Event(CLEAR_TOKEN)
