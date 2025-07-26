@@ -3,6 +3,7 @@ import { HelmetProvider } from 'react-helmet-async'
 import { ToastContainer } from 'react-toastify'
 import { AppContext } from './contexts/app.context'
 import useRouteCompenent from './hooks/useRouteComponent'
+import ErrorBoundary from './pages/ErrorBoundary'
 import { CLEAR_TOKEN, localStorageEvent } from './utils/authUtil'
 
 const App = () => {
@@ -22,10 +23,10 @@ const App = () => {
     }, [setAuthenticated, setProfile])
 
     return (
-        <>
+        <ErrorBoundary>
             <HelmetProvider>{routeComponent}</HelmetProvider>
             <ToastContainer newestOnTop limit={1} />
-        </>
+        </ErrorBoundary>
     )
 }
 
