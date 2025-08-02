@@ -1,6 +1,13 @@
-const ProductLoading = ({ length = 4 }: { length?: number }) => {
+import useCountSkeleton from '~/hooks/useCountSkeleton'
+
+const ProductLoading = ({ isHomepage }: { isHomepage?: true | undefined }) => {
+    let length = useCountSkeleton()
+    if (!isHomepage) {
+        length += 1
+    }
+
     return Array.from({ length }, (_, idx) => (
-        <div key={idx} className='bg-white rounded-sm w-full animate-pulse'>
+        <div key={idx} className='bg-white shadow rounded-sm w-full animate-pulse'>
             <div className='bg-gray-300/50 pt-[100%] w-full'></div>
             <div className='px-2 py-3 overflow-hidden'>
                 <div className='bg-gray-300/50 rounded w-full h-[42px]'></div>

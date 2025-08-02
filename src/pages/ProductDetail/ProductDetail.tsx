@@ -8,13 +8,13 @@ import { useNavigate, useParams } from 'react-router-dom'
 import productApi from '~/apis/product.api'
 import purchaseApi from '~/apis/purchase.api'
 import AlertSuccess from '~/components/AlertSuccess'
-import { ProductDetailLoading, ProductLoading } from '~/components/Loading'
+import { ProductDetailLoading } from '~/components/Loading'
 import QuantityController from '~/components/QuantityController'
+import RelatedProduct from '~/components/RelatedProduct'
 import Star from '~/components/Star'
 import path from '~/constant/path'
 import { PurchaseStatus } from '~/constant/purchase'
 import productUtil from '~/utils/productUtil'
-import { Product } from '../ProductList'
 import ProductImages from './ProductImages'
 import ProductNotFound from './ProductNotFound'
 
@@ -44,6 +44,7 @@ const ProductDetail = () => {
     }, [productLink])
 
     useEffect(() => {
+        setBuyQty('1')
         window.scrollTo({ top: 0, behavior: 'auto' })
     }, [id])
 
@@ -51,16 +52,6 @@ const ProductDetail = () => {
         queryKey: ['product', id],
         queryFn: () => productApi.getProductDetail(id as string),
         enabled: Boolean(id)
-    })
-
-    const queryConfig: ProductQuery = { page: '1', limit: 12, category: product?.data.data.category._id, exclude: id }
-    const { data: productRelateds, isFetching: isFetchingRelatedProduct } = useQuery({
-        queryKey: ['products', queryConfig],
-        queryFn: () => {
-            return productApi.getProductList(queryConfig)
-        },
-        staleTime: 1 * 60 * 1000, // Use cache data, avoid api callback
-        enabled: Boolean(product)
     })
 
     const addCartMutation = useMutation({
@@ -91,7 +82,6 @@ const ProductDetail = () => {
         navigate(path.CART, { state: { productId: res.data.data._id } })
     }
 
-    // const foundRelatedProducts = (productRelateds?.data.data.products.length ?? 0) > 0
     const productData = product?.data.data
 
     if (isFetchingProduct) {
@@ -107,7 +97,10 @@ const ProductDetail = () => {
         <main className='bg-gray-200 py-6'>
             <Helmet>
                 <title>{name}</title>
-                <meta name='description' content={convert(description, { limits: { maxInputLength: 200 } })} />
+                <meta
+                    name='description'
+                    content={convert(description, { limits: { maxInputLength: 200, ellipsis: '...' } })}
+                />
             </Helmet>
             {/* Summary */}
             <section className='bg-white shadow mx-auto p-4 rounded container'>
@@ -235,18 +228,7 @@ const ProductDetail = () => {
                 <p dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(description) }} className='mt-4 px-3'></p>
             </section>
             {/* Related products */}
-            <div className='mx-auto container'>
-                <h2 className='mt-8 font-medium text-gray-500 text-lg uppercase'>{t('may_also_like')}</h2>
-                <div className='gap-x-3 gap-y-2 grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 mt-5'>
-                    {isFetchingRelatedProduct ? (
-                        <ProductLoading />
-                    ) : (
-                        productRelateds?.data.data.products.map((product) => (
-                            <Product key={product._id} product={product} />
-                        ))
-                    )}
-                </div>
-            </div>
+            <RelatedProduct id={id} category={product.data.data.category._id} />
             {/* Show alert when add to cart success */}
             {showAlertSuccess && <AlertSuccess text='Sản phẩm đã được thêm vào giỏ hàng' />}
         </main>

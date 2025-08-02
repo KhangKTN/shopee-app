@@ -47,7 +47,7 @@ const ProductList = () => {
                         <Sort queryConfig={queryConfig} totalPage={totalPage} />
                         <div className='gap-x-3 gap-y-3.5 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 mt-5'>
                             {isPending ? (
-                                <ProductLoading />
+                                <ProductLoading isHomepage />
                             ) : foundProduct ? (
                                 productData?.data.data.products.map((product) => (
                                     <Product key={product._id} product={product} />

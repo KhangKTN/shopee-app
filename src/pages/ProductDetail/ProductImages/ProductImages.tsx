@@ -64,8 +64,8 @@ const ProductImages = ({ images, name }: { images: string[]; name: string }) => 
                         disabled={!canPressNext}
                         onClick={() => setIdxSlider(idxSlider + 1)}
                         className={cx(
-                            'top-1/2 left-full z-10 absolute flex justify-center items-center bg-black/30 backdrop-blur p-4 rounded-full size-8 transition-colors -translate-x-full -translate-y-1/2',
-                            canPressNext ? 'hover:bg-black/20' : 'opacity-25 cursor-not-allowed'
+                            'top-1/2 left-full z-10 absolute flex justify-center items-center bg-black/30 backdrop-blur p-4 rounded-full size-8 transition-all -translate-x-full -translate-y-1/2',
+                            canPressNext ? 'hover:bg-black/20 hover:scale-[135%]' : 'opacity-25 cursor-not-allowed'
                         )}
                     >
                         <i className='fa-chevron-right text-white fa-solid'></i>
@@ -88,8 +88,8 @@ const ProductImages = ({ images, name }: { images: string[]; name: string }) => 
                         disabled={!canPressPrev}
                         onClick={() => setIdxSlider(idxSlider - 1)}
                         className={cx(
-                            'top-1/2 left-0 z-10 absolute flex justify-center items-center bg-black/30 backdrop-blur rounded-full size-8 transition-colors -translate-y-1/2',
-                            canPressPrev ? 'hover:bg-black/20' : 'opacity-25 cursor-not-allowed'
+                            'top-1/2 left-0 z-10 absolute flex justify-center items-center bg-black/30 backdrop-blur rounded-full size-8 transition-all -translate-y-1/2',
+                            canPressPrev ? 'hover:bg-black/20 hover:scale-[135%]' : 'opacity-25 cursor-not-allowed'
                         )}
                     >
                         <i className='fa-chevron-left text-white fa-solid'></i>
