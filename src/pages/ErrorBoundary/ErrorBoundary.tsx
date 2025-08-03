@@ -1,6 +1,6 @@
 import { Component, ErrorInfo, ReactNode } from 'react'
 import { Link } from 'react-router-dom'
-import path from '~/constant/path'
+import path from '~/constants/path.constant'
 
 interface Props {
     children?: ReactNode

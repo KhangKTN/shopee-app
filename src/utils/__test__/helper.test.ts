@@ -1,6 +1,6 @@
 import { AxiosError, HttpStatusCode } from 'axios'
 import { describe, expect, it } from 'vitest'
-import { isAxiosError, isAxiosUnprocessaleEntityError } from '../helper'
+import { isAxiosError, isAxiosUnprocessaleEntityError } from '../axios.util'
 
 /**
  * Describes a set of scenarios or a unit to be tested (function, component)

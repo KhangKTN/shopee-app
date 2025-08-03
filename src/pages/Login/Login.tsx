@@ -7,10 +7,10 @@ import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import authApi from '~/apis/auth.api'
 import Button from '~/components/Button'
 import Input from '~/components/Input'
-import path from '~/constant/path'
+import path from '~/constants/path.constant'
 import { AppContext } from '~/contexts/app.context'
-import { isAxiosUnprocessaleEntityError } from '~/utils/helper'
-import { loginSchema, LoginSchema } from '~/utils/validateField'
+import { isAxiosUnprocessaleEntityError } from '~/utils/axios.util'
+import { loginSchema, LoginSchema } from '~/utils/validate.util'
 
 const Login = () => {
     const { setAuthenticated, setProfile } = useContext(AppContext)

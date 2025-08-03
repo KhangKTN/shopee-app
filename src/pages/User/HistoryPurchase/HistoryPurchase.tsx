@@ -4,7 +4,7 @@ import { Helmet } from 'react-helmet-async'
 import { Link, useSearchParams } from 'react-router-dom'
 import purchaseApi from '~/apis/purchase.api'
 import { SpinnerLoader } from '~/components/Loading'
-import { purchaseNavLinks, PurchaseStatus } from '~/constant/purchase'
+import { purchaseNavLinks, PurchaseStatus } from '~/constants/purchase.constant'
 import PurchaseItem from './PurchaseItem'
 
 interface Shop {

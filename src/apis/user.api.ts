@@ -1,4 +1,4 @@
-import axiosConfig from '~/utils/axios'
+import axiosConfig from '~/configs/axios.config'
 
 interface ProfileUpdate extends Pick<User, 'name' | 'avatar' | 'address' | 'date_of_birth' | 'phone'> {
     password?: string

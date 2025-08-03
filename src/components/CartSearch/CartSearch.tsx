@@ -1,6 +1,6 @@
 import { FormEvent, useState } from 'react'
 import { createSearchParams, useNavigate } from 'react-router-dom'
-import path from '~/constant/path'
+import path from '~/constants/path.constant'
 import useQueryConfig from '~/hooks/useQueryConfig'
 import { QueryConfig } from '~/pages/ProductList/ProductList'
 

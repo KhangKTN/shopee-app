@@ -4,7 +4,7 @@ import { ToastContainer } from 'react-toastify'
 import { AppContext } from './contexts/app.context'
 import useRouteCompenent from './hooks/useRouteComponent'
 import ErrorBoundary from './pages/ErrorBoundary'
-import { CLEAR_TOKEN, localStorageEvent } from './utils/authUtil'
+import { CLEAR_TOKEN, localStorageEvent } from './utils/auth.util'
 
 const App = () => {
     const routeComponent = useRouteCompenent()

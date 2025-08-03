@@ -1,9 +1,9 @@
 import axios, { AxiosError, type AxiosInstance } from 'axios'
 import { toast } from 'react-toastify'
 import Swal from 'sweetalert2'
-import path from '~/constant/path'
-import authUtil from './authUtil'
-import { isAxiosExpiredTokenError, isAxiosUnauthorizedError, isNormalError } from './helper'
+import path from '~/constants/path.constant'
+import authUtil from '~/utils/auth.util'
+import { isAxiosExpiredTokenError, isAxiosUnauthorizedError, isNormalError } from '~/utils/axios.util'
 
 const URL_REFRESH_TOKEN = 'refresh-access-token'
 const DAY_IN_MILISECOND = 24 * 60 * 60

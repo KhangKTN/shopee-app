@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it } from 'vitest'
-import authUtil from '../authUtil'
+import authUtil from '../auth.util'
 
 describe('authUtil', () => {
     const accessToken = 'test-access-token'

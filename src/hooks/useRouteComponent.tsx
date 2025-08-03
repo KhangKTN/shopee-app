@@ -1,6 +1,6 @@
 import { useContext } from 'react'
 import { Navigate, Outlet, useLocation, useRoutes } from 'react-router-dom'
-import path from '~/constant/path'
+import path from '~/constants/path.constant'
 import { AppContext } from '~/contexts/app.context'
 import CartLayout from '~/layouts/CartLayout'
 import HomeLayout from '~/layouts/HomeLayout'

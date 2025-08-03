@@ -2,9 +2,9 @@ import cx from 'classix'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { createSearchParams, useNavigate } from 'react-router-dom'
-import { PrevNextLink } from '~/components/Pagination'
-import path from '~/constant/path'
-import { OrderEnum, SortByEnum } from '~/constant/product'
+import PrevNextLink from '~/components/Pagination/PrevNextLink'
+import path from '~/constants/path.constant'
+import { OrderEnum, SortByEnum } from '~/constants/product.constant'
 import { QueryConfig } from '../ProductList'
 
 interface Prop {

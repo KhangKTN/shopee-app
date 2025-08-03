@@ -1,7 +1,7 @@
 import cx from 'classix'
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { appHeight } from '~/constant/app'
+import { appHeight } from '~/constants/app.constant'
 
 const CommonHeader = ({
     leftComponent,

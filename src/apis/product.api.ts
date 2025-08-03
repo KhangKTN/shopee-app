@@ -1,4 +1,4 @@
-import axiosConfig from '~/utils/axios'
+import axiosConfig from '~/configs/axios.config'
 
 const URL = 'products'
 

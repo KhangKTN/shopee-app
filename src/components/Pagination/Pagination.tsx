@@ -1,6 +1,6 @@
 import cx from 'classix'
 import { createSearchParams, Link } from 'react-router-dom'
-import path from '~/constant/path'
+import path from '~/constants/path.constant'
 import { QueryConfig } from '~/pages/ProductList/ProductList'
 import PrevNextLink from './PrevNextLink'
 

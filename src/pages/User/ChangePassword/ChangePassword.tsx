@@ -8,8 +8,8 @@ import * as yup from 'yup'
 import userApi from '~/apis/user.api'
 import Button from '~/components/Button'
 import Input from '~/components/Input'
-import { isAxiosUnprocessaleEntityError } from '~/utils/helper'
-import { userSchema } from '~/utils/validateField'
+import { isAxiosUnprocessaleEntityError } from '~/utils/axios.util'
+import { userSchema } from '~/utils/validate.util'
 
 const passwordSchema = userSchema.pick(['password', 'new_password', 'confirm_password'])
 type FormData = yup.InferType<typeof passwordSchema>

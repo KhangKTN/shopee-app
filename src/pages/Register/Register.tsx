@@ -7,9 +7,9 @@ import { Link, useNavigate } from 'react-router-dom'
 import authApi from '~/apis/auth.api'
 import Button from '~/components/Button'
 import Input from '~/components/Input'
-import path from '~/constant/path'
-import { isAxiosUnprocessaleEntityError } from '~/utils/helper'
-import { registerSchema, RegisterSchema } from '~/utils/validateField'
+import path from '~/constants/path.constant'
+import { isAxiosUnprocessaleEntityError } from '~/utils/axios.util'
+import { registerSchema, RegisterSchema } from '~/utils/validate.util'
 
 const Register = () => {
     const navigate = useNavigate()

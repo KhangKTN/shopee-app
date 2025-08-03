@@ -1,7 +1,7 @@
 import React from 'react'
 import Footer from '~/components/Footer'
 import Header from '~/components/Header'
-import { appHeight } from '~/constant/app'
+import { appHeight } from '~/constants/app.constant'
 
 const HomeLayout = ({ children }: { children: React.ReactNode }) => {
     return (

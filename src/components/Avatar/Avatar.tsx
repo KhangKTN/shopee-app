@@ -1,7 +1,7 @@
 import cx from 'classix'
 import { useContext, useMemo } from 'react'
 import { AppContext } from '~/contexts/app.context'
-import profileUtil from '~/utils/profileUtil'
+import profileUtil from '~/utils/profile.util'
 
 const Avatar = ({ sizeClass = 'size-5' }: { sizeClass?: string }) => {
     const { profile } = useContext(AppContext)

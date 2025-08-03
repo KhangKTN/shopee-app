@@ -1,8 +1,8 @@
 import cx from 'classix'
 import { memo, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { purchaseNavLinks } from '~/constant/purchase'
-import productUtil from '~/utils/productUtil'
+import { purchaseNavLinks } from '~/constants/purchase.constant'
+import productUtil from '~/utils/product.util'
 import { ItemPurchase } from '../HistoryPurchase'
 
 interface Prop {

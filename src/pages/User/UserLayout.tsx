@@ -1,7 +1,7 @@
 import cx from 'classix'
 import { Link, NavLink, Outlet } from 'react-router-dom'
 import Avatar from '~/components/Avatar'
-import path from '~/constant/path'
+import path from '~/constants/path.constant'
 
 const navLinks: { link: string; name: string }[] = [
     { link: path.PROFILE, name: 'Hồ sơ' },

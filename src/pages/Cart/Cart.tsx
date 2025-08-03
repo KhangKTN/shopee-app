@@ -8,9 +8,9 @@ import purchaseApi from '~/apis/purchase.api'
 import Button from '~/components/Button'
 import Checkbox from '~/components/Checkbox'
 import SpinnerLoader from '~/components/Loading/SpinnerLoader'
-import { PurchaseStatus } from '~/constant/purchase'
-import { useCounterStore } from '~/store/useCartStore'
-import productUtil from '~/utils/productUtil'
+import { PurchaseStatus } from '~/constants/purchase.constant'
+import { useCounterStore } from '~/stores/useCartStore'
+import productUtil from '~/utils/product.util'
 import CartProducts from './CartProducts/CartProducts'
 
 const Cart = () => {

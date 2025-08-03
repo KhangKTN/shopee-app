@@ -1,4 +1,4 @@
-import { appHeight } from '~/constant/app'
+import { appHeight } from '~/constants/app.constant'
 
 const Footer = () => {
     return (

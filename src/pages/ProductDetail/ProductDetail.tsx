@@ -10,13 +10,13 @@ import purchaseApi from '~/apis/purchase.api'
 import AlertSuccess from '~/components/AlertSuccess'
 import { ProductDetailLoading } from '~/components/Loading'
 import QuantityController from '~/components/QuantityController'
-import RelatedProduct from '~/components/RelatedProduct'
 import Star from '~/components/Star'
-import path from '~/constant/path'
-import { PurchaseStatus } from '~/constant/purchase'
-import productUtil from '~/utils/productUtil'
+import path from '~/constants/path.constant'
+import { PurchaseStatus } from '~/constants/purchase.constant'
+import productUtil from '~/utils/product.util'
 import ProductImages from './ProductImages'
 import ProductNotFound from './ProductNotFound'
+import RelatedProduct from './RelatedProduct'
 
 const DAY_IN_MILISECOND = 24 * 60 * 60 * 1000
 

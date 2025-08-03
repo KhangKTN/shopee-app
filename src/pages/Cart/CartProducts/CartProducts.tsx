@@ -3,9 +3,9 @@ import { Link } from 'react-router-dom'
 import purchaseApi from '~/apis/purchase.api'
 import Checkbox from '~/components/Checkbox'
 import QuantityController from '~/components/QuantityController'
-import path from '~/constant/path'
-import { useCounterStore } from '~/store/useCartStore'
-import productUtil from '~/utils/productUtil'
+import path from '~/constants/path.constant'
+import { useCounterStore } from '~/stores/useCartStore'
+import productUtil from '~/utils/product.util'
 
 interface Prop {
     productExtraList: ProductExtra[]

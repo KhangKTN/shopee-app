@@ -1,8 +1,8 @@
 import { Link } from 'react-router-dom'
 import Footer from '~/components/Footer'
 import Header from '~/components/Header'
-import { appHeight } from '~/constant/app'
-import path from '~/constant/path'
+import { appHeight } from '~/constants/app.constant'
+import path from '~/constants/path.constant'
 
 const NotFound = () => {
     return (

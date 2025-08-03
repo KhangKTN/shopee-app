@@ -3,10 +3,10 @@ import { useContext } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 import purchaseApi from '~/apis/purchase.api'
-import path from '~/constant/path'
-import { PurchaseStatus } from '~/constant/purchase'
+import path from '~/constants/path.constant'
+import { PurchaseStatus } from '~/constants/purchase.constant'
 import { AppContext } from '~/contexts/app.context'
-import productUtil from '~/utils/productUtil'
+import productUtil from '~/utils/product.util'
 import Popover from '../Popover'
 
 const CART_ITEM_SHOW = 5

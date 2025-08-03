@@ -1,5 +1,5 @@
 import React, { createContext, Dispatch, SetStateAction, useState } from 'react'
-import authUtil from '~/utils/authUtil'
+import authUtil from '~/utils/auth.util'
 
 interface IAppContext {
     isAuthenticated: boolean

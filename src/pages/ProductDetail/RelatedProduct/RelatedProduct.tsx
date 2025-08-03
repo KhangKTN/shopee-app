@@ -2,8 +2,8 @@ import { useQuery } from '@tanstack/react-query'
 import { memo, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import productApi from '~/apis/product.api'
+import { ProductLoading } from '~/components/Loading'
 import { Product } from '~/pages/ProductList'
-import { ProductLoading } from '../Loading'
 
 interface Prop {
     id: string

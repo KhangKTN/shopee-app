@@ -1,30 +1,16 @@
-import { useEffect, useState } from 'react'
-
 const useCountSkeleton = () => {
-    const [count, setCount] = useState(0)
+    const windowWidth = window.innerWidth
 
-    useEffect(() => {
-        const onResize = () => {
-            const windowWidth = window.innerWidth
-            if (windowWidth >= 1280) {
-                setCount(5)
-                return
-            }
-            if (windowWidth >= 1024) {
-                setCount(4)
-                return
-            }
-            if (windowWidth >= 640) {
-                setCount(3)
-                return
-            }
-            setCount(2)
-        }
-        onResize()
-        window.addEventListener('resize', onResize)
-    }, [])
-
-    return count
+    if (windowWidth >= 1280) {
+        return 5
+    }
+    if (windowWidth >= 1024) {
+        return 4
+    }
+    if (windowWidth >= 640) {
+        return 3
+    }
+    return 2
 }
 
 export default useCountSkeleton

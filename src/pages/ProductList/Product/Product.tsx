@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 import { ImageLoad } from '~/components/Loading'
-import productUtil from '~/utils/productUtil'
+import productUtil from '~/utils/product.util'
 
 const Product = ({ product }: { product: Product }) => {
     const { t } = useTranslation('product')

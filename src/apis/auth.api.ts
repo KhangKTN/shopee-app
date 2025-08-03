@@ -1,7 +1,7 @@
-import axiosConfig from '~/utils/axios'
-import { LoginSchema } from '~/utils/validateField'
+import axiosConfig from '~/configs/axios.config'
+import { LoginSchema } from '~/utils/validate.util'
 
-const registerAccount = (body: { email: string, password: string }) => axiosConfig.post<AuthRes>('/register', body)
+const registerAccount = (body: { email: string; password: string }) => axiosConfig.post<AuthRes>('/register', body)
 
 const loginAccount = (body: LoginSchema) => axiosConfig.post<AuthRes>('/login', body)
 

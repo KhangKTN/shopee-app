@@ -2,7 +2,7 @@ import React from 'react'
 import { useMatch } from 'react-router-dom'
 import Footer from '~/components/Footer'
 import CommonHeader from '~/components/RegisterHeader'
-import { appHeight } from '~/constant/app'
+import { appHeight } from '~/constants/app.constant'
 
 interface Prop {
     children?: React.ReactNode
